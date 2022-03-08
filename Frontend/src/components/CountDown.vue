@@ -1,6 +1,6 @@
 <template>
   <vue3-flip-countdown
-    :deadline="endzeitpunkt"
+    deadline="2023-12-12 00:00:00"
     mainFlipBackgroundColor="#000000"
     secondFlipBackgroundColor="#000000"
     mainColor="#be1622"
@@ -10,5 +10,6 @@
 
 <script>
 import { ref } from 'vue';
-let endzeitpunkt = ref('2023-12-12 00:00:00');
+// let endzeitpunkt = ref('2023-12-12 00:00:00');
+// console.log(endzeitpunkt.value);
 </script>

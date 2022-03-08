@@ -27,23 +27,6 @@
               alt="Workflow"
             />
           </div>
-          <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
-              <a
-                v-for="item in navigation"
-                :key="item.name"
-                :href="item.href"
-                :class="[
-                  item.current
-                    ? 'bg-gray-900 text-white'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                  'px-3 py-2 rounded-md text-sm font-medium',
-                ]"
-                :aria-current="item.current ? 'page' : undefined"
-                >{{ item.name }}</a
-              >
-            </div>
-          </div>
         </div>
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
@@ -55,8 +38,13 @@
               <MenuButton
                 class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
-                <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full" src="../assets/account.png" alt="" />
+                <span class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+                  <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                  </svg>
+                </span>
               </MenuButton>
             </div>
             <transition
@@ -131,10 +119,6 @@
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
-//Router Dinge
-const router = useRouter();
-const route = useRoute();
-
 //Import Tailwind
 import {
   Disclosure,
@@ -145,7 +129,11 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/vue';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/vue/outline';
+import { MenuIcon, XIcon } from '@heroicons/vue/outline';
+
+//Router Dinge
+const router = useRouter();
+const route = useRoute();
 
 //Variablen
 let angemeldet = ref(false);

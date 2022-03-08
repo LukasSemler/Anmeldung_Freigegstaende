@@ -6,9 +6,8 @@ module.exports = {
         htl_grau: '#c6c6c5',
         htl_rot: '#8d1717',
         htl_hellrot: '#be1622',
-        
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
