@@ -129,6 +129,12 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+//Router Dinge
+const router = useRouter();
+const route = useRoute();
+
 //Import Tailwind
 import {
   Disclosure,
