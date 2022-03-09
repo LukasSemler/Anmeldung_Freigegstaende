@@ -1,5 +1,71 @@
 <template>
   <h1 class="text-center text-4xl font-bold mt-2">Neues Freifach erstellen</h1>
+
+  <TransitionRoot as="template" :show="showModal">
+    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModal = false">
+      <div
+        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </TransitionChild>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+          >&#8203;</span
+        >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100 translate-y-0 sm:scale-100"
+          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        >
+          <div
+            class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          >
+            <div>
+              <div
+                class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
+              >
+                <CheckIcon class="h-6 w-6 text-green-600" aria-hidden="true" />
+              </div>
+              <div class="mt-3 text-center sm:mt-5">
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Success
+                </DialogTitle>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    Das Freifach wurde erfolgreich beim Abteilungvorstand eingereicht
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 sm:mt-6">
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-htl_rot text-base font-medium text-white hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot sm:text-sm"
+                @click="router.push('/')"
+              >
+                Zurück zu Home
+              </button>
+            </div>
+          </div>
+        </TransitionChild>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+
   <div class="flex justify-center mt-6">
     <div class="mx-6 w-2/3">
       <form class="space-y-8 divide-y divide-gray-300">
@@ -311,7 +377,7 @@
             <div class="flex justify-center">
               <button
                 @click="fachErstellen"
-                class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot"
+                class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2"
               >
                 Erstellen
               </button>
@@ -319,12 +385,14 @@
           </div>
         </div>
       </form>
-
     </div>
   </div>
 </template>
 
 <script setup>
+//Router impotieren
+import { useRouter, useRoute } from 'vue-router';
+
 //Tailwind Imports
 import {
   Listbox,
@@ -335,9 +403,21 @@ import {
 } from '@headlessui/vue';
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid';
 import { TrashIcon } from '@heroicons/vue/solid';
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue';
+
 import { ref } from 'vue';
 import axios from 'axios';
 
+//router erstellen
+const router = useRouter();
+
+//Variablen
 let titel = ref('');
 let beschreibung = ref('');
 let numberMin = ref(0);
@@ -346,6 +426,8 @@ let selected = ref(0);
 let image = ref(null);
 let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
+
+let showModal = ref(false);
 
 const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
 
@@ -401,6 +483,7 @@ async function sendData(e) {
 }
 
 async function fachErstellen(e) {
+  showModal.value = true;
   //Daten schicken
   sendImage();
   // sendData();
