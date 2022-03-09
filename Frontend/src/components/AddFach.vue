@@ -2,8 +2,8 @@
   <h1 class="text-center text-4xl font-bold mt-2">Neues Freifach erstellen</h1>
   <div class="flex justify-center mt-6">
     <div class="mx-6 w-2/3">
-      <form class="space-y-8 divide-y divide-gray-200">
-        <div class="space-y-8 divide-y divide-gray-200">
+      <form class="space-y-8 divide-y divide-gray-300">
+        <div class="space-y-8 divide-y divide-gray-300">
           <!-- Titel -->
           <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
             <div class="sm:col-span-6">
@@ -38,18 +38,16 @@
               </p>
             </div>
             <!-- ---------------------------------------------------------------------------------------------------------------- -->
-            <img src="http://localhost:2410/images/asdasd.png" alt="" />
 
             <!-- Thumbnail -->
             <div class="sm:col-span-6">
-              <img :src="file" alt="" />
               <label for="thumbnail" class="block text-sm font-medium text-gray-700">
                 Thumbnail
               </label>
               <div
                 class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
               >
-                <div class="space-y-1 text-center">
+                <div v-if="!image" class="space-y-1 text-center">
                   <svg
                     class="mx-auto h-12 w-12 text-gray-400"
                     stroke="currentColor"
@@ -76,12 +74,28 @@
                         type="file"
                         class="sr-only"
                         @change="onFileChanged"
+                        accept="image/*"
                       />
                     </label>
                     <p class="pl-1">or drag and drop</p>
                   </div>
                   <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
                 </div>
+                <div v-else>
+                  <div class="flex justify-center">
+                    <img class="object-scale-down h-48 w-96 mt-3" :src="image" alt="" />
+                  </div>
+                </div>
+              </div>
+              <div v-if="image" class="flex justify-center">
+                <button
+                  @click="image = null"
+                  type="button"
+                  class="mt-2 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot"
+                >
+                  <TrashIcon class="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                  Bild entfernen
+                </button>
               </div>
             </div>
             <!-- ---------------------------------------------------------------------------------------------------------------- -->
@@ -90,7 +104,7 @@
               <label for="titel" class="block text-sm font-medium text-gray-700">
                 Minimale Anzahl / Maximale Anzahl von Schueler
               </label>
-              <div class="flex flex-row">
+              <div class="flex flex-row mt-1">
                 <!-- Minimale Anzahl -->
                 <div class="mt-1 flex rounded-md shadow-sm mr-4">
                   <div class="inline-flex mr-2">
@@ -229,7 +243,7 @@
                       >
                         <li
                           :class="[
-                            active ? 'text-white bg-indigo-600' : 'text-gray-900',
+                            active ? 'text-white bg-htl_rot' : 'text-gray-900',
                             'cursor-default select-none relative py-2 pl-3 pr-9',
                           ]"
                         >
@@ -242,7 +256,7 @@
                           <span
                             v-if="selected"
                             :class="[
-                              active ? 'text-white' : 'text-indigo-600',
+                              active ? 'text-white' : 'text-htl_rot',
                               'absolute inset-y-0 right-0 flex items-center pr-4',
                             ]"
                           >
@@ -265,7 +279,7 @@
                 <legend class="text-lg font-medium text-gray-900">
                   Welche Jahgänge dürfen teilnehmen
                 </legend>
-                <div class="mt-4 border-t border-b border-gray-200 divide-y divide-gray-200">
+                <div class="mt-4 border-t border-b border-gray-300 divide-y divide-gray-200">
                   <div
                     v-for="klasse in klassen"
                     :key="klasse"
@@ -280,10 +294,12 @@
                     </div>
                     <div class="ml-3 flex items-center h-5">
                       <input
-                        :id="`person-${klasse}`"
-                        :name="`person-${klasse}`"
+                        v-model="voraussetzungen"
+                        :id="`${klasse}`"
+                        :name="`${klasse}`"
+                        :value="`${klasse}`"
                         type="checkbox"
-                        class="focus:ring-htl_rot h-4 w-4 text-htl_rot border-gray-300 rounded"
+                        class="focus:ring-htl_rot h-4 w-4 text-htl_rot border-gray-300 rounded bg-gray-400"
                       />
                     </div>
                   </div>
@@ -292,17 +308,18 @@
             </div>
           </div>
           <div class="pt-5">
-            <div class="flex justify-end">
+            <div class="flex justify-center">
               <button
-                @click="sendFach"
-                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot"
+                @click="fachErstellen"
+                class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot"
               >
-                Save
+                Erstellen
               </button>
             </div>
           </div>
         </div>
       </form>
+
     </div>
   </div>
 </template>
@@ -317,43 +334,50 @@ import {
   ListboxOptions,
 } from '@headlessui/vue';
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid';
+import { TrashIcon } from '@heroicons/vue/solid';
 import { ref } from 'vue';
 import axios from 'axios';
 
 let titel = ref('');
 let beschreibung = ref('');
-let thumbnail = ref(null);
 let numberMin = ref(0);
 let numberMax = ref(0);
 let selected = ref(0);
-let selectedFile = ref(null);
-let file = ref(null);
+let image = ref(null);
+let imageSchicken = ref(null);
+let voraussetzungen = ref([]);
 
 const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
 
 //Variablen:
 const stunden = [1, 2];
 
-//Objekt welches zu der DB geschickt wird
-const fachObj = {
-  titel,
-  beschreibung,
-  numberMin,
-  numberMax,
-  selected,
-};
-
-//Image hochladen
+//Bild hochladen
 function onFileChanged(event) {
-  selectedFile.value = event.target.files[0];
-  console.log(selectedFile.value);
+  {
+    // Reference to the DOM input element
+    let input = event.target;
+    imageSchicken.value = event.target.files[0];
+    // Ensure that you have a file before attempting to read it
+    if (input.files && input.files[0]) {
+      // create a new FileReader to read this image and convert to base64 format
+      let reader = new FileReader();
+      // Define a callback function to run, when FileReader finishes its job
+      reader.onload = (e) => {
+        // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+        // Read image as base64 and set to imageData
+        image.value = e.target.result;
+      };
+      // Start the reader job - read file as a data url (base64 format)
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 }
 
 //Daten + Bild an Backend schicken
-async function sendFach(e) {
-  console.log(fachObj);
+async function sendImage() {
   let formData = new FormData();
-  formData.append('image', selectedFile.value);
+  formData.append('image', imageSchicken.value);
   formData.append('titel', titel.value);
 
   axios.post('http://localhost:2410/fachErstellen', formData, {
@@ -361,7 +385,25 @@ async function sendFach(e) {
       'Content-Type': 'multipart/form-data',
     },
   });
+}
 
+async function sendData(e) {
+  const fachObj = {
+    titel: titel.value,
+    beschreibung: beschreibung.value,
+    numberMin: numberMin.value,
+    numberMax: numberMax.value,
+    selected: selected.value,
+    voraussetzungen: voraussetzungen.value,
+  };
+
+  axios.post('http://localhost:2410/fachErstellen', fachObj);
+}
+
+async function fachErstellen(e) {
+  //Daten schicken
+  sendImage();
+  // sendData();
   e.preventDefault();
 }
 

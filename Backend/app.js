@@ -20,6 +20,7 @@ app.use(helmet());
 app.use(cors());
 app.use(fileUpload());
 
+
 const dirname = path.resolve();
 
 app.use(express.static(path.join(dirname, 'public')));
