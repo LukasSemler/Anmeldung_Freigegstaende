@@ -37,8 +37,12 @@
                 Schreiben Sie ein paar Infos ueber Ihr Freifach.
               </p>
             </div>
+            <!-- ---------------------------------------------------------------------------------------------------------------- -->
+            <img src="http://localhost:2410/images/asdasd.png" alt="" />
 
+            <!-- Thumbnail -->
             <div class="sm:col-span-6">
+              <img :src="file" alt="" />
               <label for="thumbnail" class="block text-sm font-medium text-gray-700">
                 Thumbnail
               </label>
@@ -80,9 +84,9 @@
                 </div>
               </div>
             </div>
-
+            <!-- ---------------------------------------------------------------------------------------------------------------- -->
             <!-- Anzahlen -->
-            <div class="sm:col-span-6">
+            <div class="sm:col-span-6 mt-5">
               <label for="titel" class="block text-sm font-medium text-gray-700">
                 Minimale Anzahl / Maximale Anzahl von Schueler
               </label>
@@ -190,15 +194,15 @@
                 </div>
               </div>
             </div>
-
-            <div class="sm:col-span-1">
+            <!-- ---------------------------------------------------------------------------------------------------------------- -->
+            <div class="sm:col-span-1 mt-5">
               <Listbox as="div" v-model="selected">
                 <ListboxLabel class="block text-sm font-medium text-gray-700">
                   Benoetigte Stunden
                 </ListboxLabel>
                 <div class="mt-1 relative">
                   <ListboxButton
-                    class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-htl_rot focus:border-htl_hellrot sm:text-sm"
                   >
                     <span class="block truncate">{{ selected }}</span>
                     <span
@@ -251,17 +255,51 @@
                 </div>
               </Listbox>
             </div>
+            <!-- ---------------------------------------------------------------------------------------------------------------- -->
+            <!-- Platzhalter div -->
+            <div class="sm:col-span-5"></div>
+            <!-- ---------------------------------------------------------------------------------------------------------------- -->
+            <!-- Vorausetzungen -->
+            <div class="sm:col-span-3 mt-5">
+              <fieldset>
+                <legend class="text-lg font-medium text-gray-900">
+                  Welche Jahgänge dürfen teilnehmen
+                </legend>
+                <div class="mt-4 border-t border-b border-gray-200 divide-y divide-gray-200">
+                  <div
+                    v-for="klasse in klassen"
+                    :key="klasse"
+                    class="relative flex items-start py-4"
+                  >
+                    <div class="min-w-0 flex-1 text-sm">
+                      <label
+                        :for="`person-${klasse}`"
+                        class="font-medium text-gray-700 select-none"
+                        >{{ klasse }}</label
+                      >
+                    </div>
+                    <div class="ml-3 flex items-center h-5">
+                      <input
+                        :id="`person-${klasse}`"
+                        :name="`person-${klasse}`"
+                        type="checkbox"
+                        class="focus:ring-htl_rot h-4 w-4 text-htl_rot border-gray-300 rounded"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
           </div>
-        </div>
-
-        <div class="pt-5">
-          <div class="flex justify-end">
-            <button
-              type="submit"
-              class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot"
-            >
-              Save
-            </button>
+          <div class="pt-5">
+            <div class="flex justify-end">
+              <button
+                @click="sendFach"
+                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       </form>
@@ -289,6 +327,9 @@ let numberMin = ref(0);
 let numberMax = ref(0);
 let selected = ref(0);
 let selectedFile = ref(null);
+let file = ref(null);
+
+const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
 
 //Variablen:
 const stunden = [1, 2];
@@ -309,16 +350,19 @@ function onFileChanged(event) {
 }
 
 //Daten + Bild an Backend schicken
-async function sendFach() {
+async function sendFach(e) {
+  console.log(fachObj);
   let formData = new FormData();
   formData.append('image', selectedFile.value);
-  formData.append('daten', fachObj);
+  formData.append('titel', titel.value);
 
-  axios.post('', formData, {
+  axios.post('http://localhost:2410/fachErstellen', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
+
+  e.preventDefault();
 }
 
 //#region Increase and Decrease
