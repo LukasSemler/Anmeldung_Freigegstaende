@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center text-4xl font-bold mt-2">Neues Freifach erstellen</h1>
+  <h1 class="text-center text-4xl font-bold mt-2">{{Überschrift}}</h1>
 
   <TransitionRoot as="template" :show="showModal">
     <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModal = false">
@@ -107,7 +107,6 @@
 
             <!-- Thumbnail -->
             <div class="sm:col-span-6">
-            <img src="http://localhost:2410/images/asdasd.png" alt="">
               <label for="thumbnail" class="block text-sm font-medium text-gray-700">
                 Thumbnail
               </label>
@@ -150,7 +149,12 @@
                 </div>
                 <div v-else>
                   <div class="flex justify-center">
-                    <img class="object-scale-down h-48 w-96 mt-3" :src="image" alt="" />
+                    <img
+                      crossorigin="anonymous"
+                      class="object-scale-down h-48 w-96 mt-3"
+                      :src="image"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
@@ -197,7 +201,7 @@
 
                     <input
                       class="shadow-sm focus:ring-htl_rot focus:border-htl_rot block w-full sm:text-sm border-gray-300 rounded-md mx-2"
-                      type="text"
+                      type="number"
                       v-model="numberMin"
                       name="Anzahl"
                     />
@@ -248,7 +252,7 @@
 
                     <input
                       class="shadow-sm focus:ring-htl_rot focus:border-htl_rot block w-full sm:text-sm border-gray-300 rounded-md mx-2"
-                      type="text"
+                      type="number"
                       v-model="numberMax"
                       name="Anzahl"
                     />
@@ -380,7 +384,7 @@
                 @click="fachErstellen"
                 class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2"
               >
-                Erstellen
+                {{ nameButton }}
               </button>
             </div>
           </div>
@@ -412,7 +416,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 //router erstellen
@@ -427,13 +431,34 @@ let selected = ref(0);
 let image = ref(null);
 let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
-
 let showModal = ref(false);
 
 const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
 
 //Variablen:
 const stunden = [1, 2];
+let nameButton = ref('Erstellen');
+let Überschrift = ref('Neues Freifach erstellen');
+
+onMounted(() => {
+  try {
+    let fach = JSON.parse(localStorage.getItem('changeFach'));
+    titel.value = fach.titel;
+    beschreibung.value = fach.beschreibung;
+    image.value = fach.bild;
+    numberMin.value = fach.minSchueler;
+    numberMax.value = fach.maxSchueler
+    selected.value = fach.stunden;
+    voraussetzungen.value = fach.jahrgänge;
+
+    nameButton.value = 'ändern';
+    Überschrift.value = 'Freifach ändern';
+
+    localStorage.clearItem('changeFach');
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 //Bild hochladen
 function onFileChanged(event) {

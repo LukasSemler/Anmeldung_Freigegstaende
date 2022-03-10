@@ -50,7 +50,7 @@
 
 <script setup>
 //Imports
-import { XIcon, ThumbUpIcon, UserIcon } from '@heroicons/vue/solid';
+import { XIcon, CheckIcon } from '@heroicons/vue/solid';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -60,10 +60,10 @@ const timeline = [
     id: 1,
     content: 'Frist zum Einreichen und anmelden von Fächern  ',
     target: 'setzen',
-    date: 'nicht erledigt',
+    date: '10.03.2022',
     datetime: null,
-    icon: XIcon,
-    iconBackground: 'bg-htl_rot',
+    icon: CheckIcon,
+    iconBackground: 'bg-green-600',
   },
   {
     id: 2,

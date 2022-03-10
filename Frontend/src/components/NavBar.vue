@@ -14,17 +14,21 @@
             <XIcon v-else class="block h-6 w-6" aria-hidden="true" />
           </DisclosureButton>
         </div>
-        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+        <div
+          class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start cursor-pointer"
+        >
           <div class="flex-shrink-0 flex items-center">
             <img
+              @click="router.push('/')"
               class="block lg:hidden h-8 w-auto"
               src="../assets/Logo HTL Wien West.png"
-              alt="Workflow"
+              alt="HTL Logo"
             />
             <img
+              @click="router.push('/')"
               class="hidden lg:block h-8 w-auto"
               src="../assets/Logo HTL Wien West.png"
-              alt="Workflow"
+              alt="HTL Logo"
             />
           </div>
         </div>
