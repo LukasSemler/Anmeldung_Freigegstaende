@@ -53,41 +53,27 @@
 import { XIcon, CheckIcon } from '@heroicons/vue/solid';
 import { useRouter } from 'vue-router';
 import { onMounted, reactive, ref } from 'vue';
+import state from '../composables/Store.js';
 import axios from 'axios';
 
 const router = useRouter();
 
-// const timelineAlt = [
-//   {
-//     id: 1,
-//     content: 'Frist zum Einreichen und anmelden von Fächern  ',
-//     target: 'setzen',
-//     date: '10.03.2022',
-//     datetime: null,
-//     icon: CheckIcon,
-//     iconBackground: 'bg-green-600',
-//   },
-//   {
-//     id: 2,
-//     content: 'Eingereicht Fächer',
-//     target: 'überprüfen und bestätigen',
-//     date: 'nicht erledigt',
-//     datetime: null,
-//     icon: XIcon,
-//     iconBackground: 'bg-htl_rot',
-//   },
-// ];
-
 let timeline = ref(null);
+let fristEinreichen = ref(null);
+let fristAnmelden = ref(null);
 
 onMounted(async () => {
   const { data } = await axios.get('http://localhost:2410/getAdminTimeLine');
-  // console.table(data.rows);
   timeline.value = data;
 
   for (const iterator of timeline.value) {
-    console.log(iterator);
     if (iterator.icon == 'XIcon') iterator.icon = XIcon;
+    else iterator.icon = CheckIcon;
+  }
+
+  if (state.fristAnmelden && state.fristEinreichen) {
+    fristEinreichen.value = state.fristEinreichen;
+    fristAnmelden.value = state.fristAnmelden;
   }
 });
 

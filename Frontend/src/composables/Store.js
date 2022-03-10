@@ -14,6 +14,8 @@ const state = reactive({
   //   isAdmin: false,
   //   isLehrer: false,
   // },
+  fristEinreichen: null,
+  fristAnmelden: null,
 });
 
 const getters = {};

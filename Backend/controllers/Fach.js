@@ -57,10 +57,42 @@ const fachThumbnail = (req, res) => {
 const getAdminTimeLine = async (req, res) => {
   DatenbankVerbinden();
 
-  const result = await aktiverClient.query('SELECT * FROM admintimeline_tbl; ');
+  const result = await aktiverClient.query('SELECT * FROM admintimeline_tbl ORDER BY t_id ASC ; ');
   console.log(result.rows);
 
   res.status(200).json(result.rows);
 };
 
-export { fachErstellen, fachThumbnail, getAdminTimeLine };
+const changeTimeLine = async (req, res) => {
+  DatenbankVerbinden();
+
+  const daten = req.body;
+  console.log(daten);
+
+  let result = await aktiverClient.query(
+    'UPDATE admintimeline_tbl SET data = $1, icon = $2, iconbackground = $3 WHERE t_id = 1;',
+    [daten.datum, daten.icon, daten.iconbackground],
+  );
+};
+
+const setFristen = async (req, res) => {
+  const fristen = req.body;
+  console.log(fristen);
+  DatenbankVerbinden();
+
+  let result = aktiverClient.query(
+    'INSERT INTO fristen (frist_einreichen, frist_anmelden) VALUES ($1, $2);',
+    [fristen.fristEinreichen, fristen.fristAnmelden],
+  );
+};
+
+const getFristen = async (req, res) => {
+  DatenbankVerbinden();
+
+  const result = await aktiverClient.query('SELECT * FROM fristen');
+  console.log(result.rows);
+
+  res.status(200).json(result.rows);
+};
+
+export { fachErstellen, fachThumbnail, getAdminTimeLine, changeTimeLine, setFristen, getFristen };
