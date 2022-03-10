@@ -33,7 +33,7 @@
         >
           <!-- Schaue ob der User angemeldet ist oder nicht -->
           <!-- Profile dropdown -->
-          <Menu v-if="angemeldet" as="div" class="ml-3 relative">
+          <Menu v-if="state.aktiverUser" as="div" class="ml-3 relative">
             <div>
               <MenuButton
                 class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
@@ -60,14 +60,14 @@
               >
                 <MenuItem v-slot="{ active }">
                   <a
-                    href="#"
+                    @click="router.push('/Account')"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                     >Dein Account</a
                   >
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
                   <a
-                    href="#"
+                    @click="abmelden"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                     >Abmelden</a
                   >
@@ -79,6 +79,7 @@
           <!-- Button zum anmelden anzeigen -->
           <button
             v-else
+            @click="anmelden"
             class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
           >
             Anmelden
@@ -107,12 +108,6 @@
     </DisclosurePanel>
   </Disclosure>
   <br />
-  <button
-    @click="changeAngemeldet"
-    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-black hover:bg-htl_rot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-  >
-    Change Status
-  </button>
 </template>
 
 <script setup>
@@ -130,15 +125,24 @@ import {
   MenuItems,
 } from '@headlessui/vue';
 import { MenuIcon, XIcon } from '@heroicons/vue/outline';
+import state from '../composables/Store.js';
 
 //Router Dinge
 const router = useRouter();
-const route = useRoute();
 
-//Variablen
-let angemeldet = ref(false);
+function abmelden() {
+  router.push('/');
+  state.aktiverUser = null;
+}
 
-function changeAngemeldet() {
-  angemeldet.value = !angemeldet.value;
+function anmelden() {
+  state.aktiverUser = {
+    name: 'Herbert Sasshofer',
+    email: 'herbert.sasshofer@htlwienwest.at',
+    isAdmin: true,
+    isLehrer: true,
+  };
+
+  router.push('/Account');
 }
 </script>

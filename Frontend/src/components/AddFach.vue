@@ -107,6 +107,7 @@
 
             <!-- Thumbnail -->
             <div class="sm:col-span-6">
+            <img src="http://localhost:2410/images/asdasd.png" alt="">
               <label for="thumbnail" class="block text-sm font-medium text-gray-700">
                 Thumbnail
               </label>
