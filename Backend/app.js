@@ -20,11 +20,10 @@ app.use(helmet());
 app.use(cors());
 app.use(fileUpload());
 
-
 const dirname = path.resolve();
 
 app.use(express.static(path.join(dirname, 'public')));
-// app.use(express.json()); // body parser
+app.use(express.json()); // body parser
 app.use(express.urlencoded({ extended: false }));
 app.use('/', customerRoutes);
 

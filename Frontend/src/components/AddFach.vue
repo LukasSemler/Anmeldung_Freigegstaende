@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center text-4xl font-bold mt-2">{{Überschrift}}</h1>
+  <h1 class="text-center text-4xl font-bold mt-2">{{ Überschrift }}</h1>
 
   <TransitionRoot as="template" :show="showModal">
     <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModal = false">
@@ -416,8 +416,11 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 
+//Ref und Axios impotieren
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+
+import state from '../composables/Store.js';
 
 //router erstellen
 const router = useRouter();
@@ -447,7 +450,7 @@ onMounted(() => {
     beschreibung.value = fach.beschreibung;
     image.value = fach.bild;
     numberMin.value = fach.minSchueler;
-    numberMax.value = fach.maxSchueler
+    numberMax.value = fach.maxSchueler;
     selected.value = fach.stunden;
     voraussetzungen.value = fach.jahrgänge;
 
@@ -488,14 +491,14 @@ async function sendImage() {
   formData.append('image', imageSchicken.value);
   formData.append('titel', titel.value);
 
-  axios.post('http://localhost:2410/fachErstellen', formData, {
+  axios.post('http://localhost:2410/fachThumbnail', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
 }
 
-async function sendData(e) {
+async function sendData() {
   const fachObj = {
     titel: titel.value,
     beschreibung: beschreibung.value,
@@ -503,6 +506,8 @@ async function sendData(e) {
     numberMax: numberMax.value,
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
+    linkThumbnail: `http://localhost:2410/images/${titel.value}.jpg`,
+    lehrer: state.aktiverUser,
   };
 
   axios.post('http://localhost:2410/fachErstellen', fachObj);
@@ -512,7 +517,7 @@ async function fachErstellen(e) {
   showModal.value = true;
   //Daten schicken
   sendImage();
-  // sendData();
+  sendData();
   e.preventDefault();
 }
 
