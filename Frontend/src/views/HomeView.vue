@@ -1,5 +1,6 @@
 <template>
   <h1 class="text-center text-4xl">Anmeldung Freifächer</h1>
+  <!-- <img crossorigin="anonymous" src="http://localhost:2410/images/asdasd.png" alt=""> -->
   <br />
   <CountDown></CountDown>
 </template>

@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import addFachView from '../views/AddFachView.vue';
 import Error404 from '../views/Error404.vue';
-import Account from '../views/Account.vue';
+import AccountView from '../views/AccountView.vue';
+import setFristView from '../views/setFristView.vue';
+import adminCheckFaecherViewVue from '../views/adminCheckFaecherView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +27,17 @@ const router = createRouter({
     {
       path: '/Account',
       name: 'account',
-      component: Account,
+      component: AccountView,
+    },
+    {
+      path: '/setFrist',
+      name: 'setFrist',
+      component: setFristView,
+    },
+    {
+      path: '/adminCheckFaecher',
+      name: 'adminCheckFaecher',
+      component: adminCheckFaecherViewVue,
     },
   ],
 });
