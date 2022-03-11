@@ -43,7 +43,7 @@
                 class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 <span class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-                  <img :src="Store.getters.getAktivenUser().icon" alt="Icon" />
+                  <img async :src="Store.getters.getAktivenUser().icon" alt="Icon" />
                 </span>
               </MenuButton>
             </div>
@@ -80,7 +80,7 @@
           <!-- Button zum anmelden anzeigen -->
           <button
             @click="anmelden"
-            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white transform ease-in-out bg-htl_rot hover:bg-htl_hellrot ring-red-700 hover:scale-110 focus:ring-red-700"
             v-if="Store.getters.getAktivenUser() == null"
           >
             Anmelden
