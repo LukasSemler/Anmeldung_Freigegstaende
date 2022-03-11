@@ -1,25 +1,33 @@
-import { reactive } from 'vue';
+import { reactive, readonly } from 'vue';
 
 const state = reactive({
   aktiverUser: null,
-  // aktiverUser: {
-  //   name: 'Robert Baumgartner',
-  //   email: 'robert.baumgartner@htlwienwest.at',
-  //   isAdmin: false,
-  //   isLehrer: true,
-  // },
-  // schuelerUser: {
-  //   name: 'Lukas semler',
-  //   email: 'semler.l04@htlwienwest.at',
-  //   isAdmin: false,
-  //   isLehrer: false,
-  // },
+  gAuth: null,
+
   fristEinreichen: null,
   fristAnmelden: null,
 });
 
-const getters = {};
+const getters = {
+  getAktivenUser() {
+    return readonly(state.aktiverUser);
+  },
+};
 
-const actions = {};
+const actions = {
+  //Setzt User als Aktiv
+  aktivenUserSetzen(neuerUser) {
+    state.aktiverUser = neuerUser;
+  },
 
-export default state;
+  //Entfernt aktiven User
+  AktivenUserAbmelden() {
+    state.aktiverUser = null;
+  },
+};
+
+export default {
+  getters,
+  actions,
+  state,
+};

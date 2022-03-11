@@ -37,17 +37,13 @@
         >
           <!-- Schaue ob der User angemeldet ist oder nicht -->
           <!-- Profile dropdown -->
-          <Menu v-if="state.aktiverUser" as="div" class="ml-3 relative">
+          <Menu v-if="Store.getters.getAktivenUser()" as="div" class="ml-3 relative">
             <div>
               <MenuButton
                 class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 <span class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-                  <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                      d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
+                  <img :src="Store.getters.getAktivenUser().icon" alt="Icon" />
                 </span>
               </MenuButton>
             </div>
@@ -71,6 +67,7 @@
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
                   <a
+                    href="/"
                     @click="abmelden"
                     :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
                     >Abmelden</a
@@ -82,9 +79,9 @@
 
           <!-- Button zum anmelden anzeigen -->
           <button
-            v-else
             @click="anmelden"
             class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+            v-if="Store.getters.getAktivenUser() == null"
           >
             Anmelden
           </button>
@@ -111,11 +108,10 @@
       </div>
     </DisclosurePanel>
   </Disclosure>
-  <br />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
 //Import Tailwind
@@ -129,24 +125,49 @@ import {
   MenuItems,
 } from '@headlessui/vue';
 import { MenuIcon, XIcon } from '@heroicons/vue/outline';
-import state from '../composables/Store.js';
+import Store from '../composables/Store.js';
 
 //Router Dinge
 const router = useRouter();
 
-function abmelden() {
-  router.push('/');
-  state.aktiverUser = null;
+const Vue3GoogleOauth = inject('Vue3GoogleOauth');
+
+async function abmelden() {
+  console.log('Abmelden');
+
+  //Google Logout
+  await Store.state.gAuth.signOut();
+
+  //Aktiven User entfernen
+  Store.actions.AktivenUserAbmelden();
+  localStorage.removeItem('User');
 }
 
-function anmelden() {
-  state.aktiverUser = {
-    name: 'Herbert Sasshofer',
-    email: 'herbert.sasshofer@htlwienwest.at',
+async function anmelden() {
+  //Google einloggen
+  const googleUser = await Store.state.gAuth.signIn();
+  const basicProfile = googleUser.getBasicProfile();
+
+  const { sf: name, yv: email, zN: icon } = basicProfile;
+
+  //Google-Uservariablen bekommen
+  const checkIfTeacher = (emailString) => (/\d/.test(emailString) ? false : true);
+  const User = {
+    name,
+    email,
+    icon,
+    isLehrer: checkIfTeacher(email),
+    //ADMIN MUSS MAN DANN NOCH ÄNDERN
     isAdmin: true,
-    isLehrer: true,
   };
 
+  //User im Store setzen
+  Store.actions.aktivenUserSetzen(User);
+
+  //User im LS setzen
+  localStorage.setItem('User', JSON.stringify(User));
+
+  //Weiterleitung zur Accountseite
   router.push('/Account');
 }
 </script>

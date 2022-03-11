@@ -9,19 +9,21 @@
 //Components einbinden
 import NavBar from '../components/NavBar.vue';
 import CountDown from '../components/CountDown.vue';
-import state from '../composables/Store.js';
+import Store from '../composables/Store.js';
 import { onMounted } from 'vue';
 import axios from 'axios';
 
 onMounted(async () => {
   const { data } = await axios.get('http://localhost:2410/getFristen');
 
-  if (!state.fristAnmelden && !state.fristEinreichen) {
-    state.fristEinreichen = data.frist_einreichen;
-    state.fristAnmelden = data.frist_anmelden;
+  Store.state
+
+  if (!Store.state.fristAnmelden && !Store.state.fristEinreichen) {
+    Store.state.fristEinreichen = data.frist_einreichen;
+    Store.state.fristAnmelden = data.frist_anmelden;
   }
 
-  console.log(state.fristAnmelden);
+  console.log(Store.state.fristAnmelden);
 });
 </script>
 

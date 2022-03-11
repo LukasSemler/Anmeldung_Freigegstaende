@@ -53,7 +53,7 @@
 import { XIcon, CheckIcon } from '@heroicons/vue/solid';
 import { useRouter } from 'vue-router';
 import { onMounted, reactive, ref } from 'vue';
-import state from '../composables/Store.js';
+import Store from '../composables/Store.js';
 import axios from 'axios';
 
 const router = useRouter();
@@ -71,9 +71,9 @@ onMounted(async () => {
     else iterator.icon = CheckIcon;
   }
 
-  if (state.fristAnmelden && state.fristEinreichen) {
-    fristEinreichen.value = state.fristEinreichen;
-    fristAnmelden.value = state.fristAnmelden;
+  if (Store.state.fristAnmelden && Store.state.fristEinreichen) {
+    fristEinreichen.value = Store.state.fristEinreichen;
+    fristAnmelden.value = Store.state.fristAnmelden;
   }
 });
 
