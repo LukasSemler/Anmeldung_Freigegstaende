@@ -4,6 +4,7 @@
     v-if="Store.getters.getAktivenUser().isAdmin && Store.getters.getAktivenUser().isLehrer"
   ></AdminAccount>
   <LehrerAccount
+    :aktiverUser="Store.getters.getAktivenUser()"
     v-else-if="Store.getters.getAktivenUser().isLehrer && !Store.getters.getAktivenUser().isAdmin"
   ></LehrerAccount>
   <SchuelerAccount v-else></SchuelerAccount>

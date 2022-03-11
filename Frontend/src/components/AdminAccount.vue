@@ -1,6 +1,41 @@
 <template>
   <div>
-    <h1 class="text-center text-4xl">Willkommen {{ aktiverUser.name }}</h1>
+    <div>
+      <div class="sm:hidden">
+        <label for="tabs" class="sr-only">Select a tab</label>
+        <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+        <select
+          id="tabs"
+          name="tabs"
+          class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-htl_rot focus:border-htl_rot sm:text-sm rounded-md"
+        >
+          <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">
+            {{ tab.name }}
+          </option>
+        </select>
+      </div>
+      <div class="hidden sm:block">
+        <div class="border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8 ml-2" aria-label="Tabs">
+            <a
+              v-for="tab in tabs"
+              :key="tab.name"
+              @click="router.push(tab.link)"
+              :class="[
+                tab.current
+                  ? 'border-htl_rot text-htl_rot'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+                'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+              ]"
+              :aria-current="tab.current ? 'page' : undefined"
+            >
+              {{ tab.name }}
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <h1 class="text-center text-4xl mt-3">Willkommen {{ aktiverUser.name }}</h1>
     <br />
     <br />
     <div class="flex justify-center mt-5">
@@ -45,6 +80,12 @@
         </ul>
       </div>
     </div>
+    <br />
+    <br />
+    <ul>
+      <li>Frist fuer das Einreichen: {{ fristEinreichen }}</li>
+      <li>Frist fuer das Anmelden: {{ fristAnmelden }}</li>
+    </ul>
   </div>
 </template>
 
@@ -61,19 +102,31 @@ const router = useRouter();
 let timeline = ref(null);
 let fristEinreichen = ref(null);
 let fristAnmelden = ref(null);
+let fristenGesetzt = ref(false);
+
+const tabs = [
+  { name: 'Mein Account', link: '/Account', current: true },
+  { name: 'Fristen setzen', link: '/setFrist', current: false },
+  { name: 'Check Faecher', link: '/', current: false },
+];
 
 onMounted(async () => {
+  //Werte der TimeLine holen und setzen
   const { data } = await axios.get('http://localhost:2410/getAdminTimeLine');
   timeline.value = data;
 
+  //Icons der TimeLine setzen
   for (const iterator of timeline.value) {
     if (iterator.icon == 'XIcon') iterator.icon = XIcon;
     else iterator.icon = CheckIcon;
   }
 
+  //Fristen holen und zuweisen
   if (Store.state.fristAnmelden && Store.state.fristEinreichen) {
     fristEinreichen.value = Store.state.fristEinreichen;
     fristAnmelden.value = Store.state.fristAnmelden;
+
+    fristenGesetzt.value = true;
   }
 });
 

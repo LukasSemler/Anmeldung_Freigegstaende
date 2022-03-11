@@ -1,5 +1,40 @@
 <template>
-  <h1 class="text-center text-4xl font-bold mt-2">{{ Überschrift }}</h1>
+  <div>
+    <div class="sm:hidden">
+      <label for="tabs" class="sr-only">Select a tab</label>
+      <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+      <select
+        id="tabs"
+        name="tabs"
+        class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-htl_rot focus:border-htl_rot sm:text-sm rounded-md"
+      >
+        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">
+          {{ tab.name }}
+        </option>
+      </select>
+    </div>
+    <div class="hidden sm:block">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8 ml-2" aria-label="Tabs">
+          <a
+            v-for="tab in tabs"
+            :key="tab.name"
+            @click="router.push(tab.link)"
+            :class="[
+              tab.current
+                ? 'border-htl_rot text-htl_rot'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+              'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            ]"
+            :aria-current="tab.current ? 'page' : undefined"
+          >
+            {{ tab.name }}
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <h1 class="text-center text-4xl font-bold mt-3">{{ Überschrift }}</h1>
 
   <TransitionRoot as="template" :show="showModal">
     <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModal = false">
@@ -420,7 +455,7 @@ import {
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-import state from '../composables/Store.js';
+import Store from '../composables/Store.js';
 
 //router erstellen
 const router = useRouter();
@@ -436,12 +471,15 @@ let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
 let showModal = ref(false);
 
-const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
-
 //Variablen:
 const stunden = [1, 2];
 let nameButton = ref('Erstellen');
 let Überschrift = ref('Neues Freifach erstellen');
+const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
+const tabs = [
+  { name: 'Mein Account', link: '/Account', current: false },
+  { name: 'Fach erstellen', link: '/addFach', current: true },
+];
 
 onMounted(() => {
   try {
@@ -459,7 +497,7 @@ onMounted(() => {
 
     localStorage.clearItem('changeFach');
   } catch (error) {
-    console.log(error);
+    console.log('Fach neu erstellen');
   }
 });
 
@@ -507,7 +545,7 @@ async function sendData() {
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
     linkThumbnail: `http://localhost:2410/images/${titel.value}.jpg`,
-    lehrer: state.aktiverUser,
+    lehrer: Store.state.aktiverUser,
   };
 
   axios.post('http://localhost:2410/fachErstellen', fachObj);
