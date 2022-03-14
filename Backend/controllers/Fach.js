@@ -121,30 +121,45 @@ const getFreifaecher = async (req, res) => {
   //Datenbank verbinden
   DatenbankVerbinden();
 
-  try {
-    const result = await aktiverClient.query(
-      `SELECT f_id,
-         titel,
-         beschreibung,
-         thumbnail,
-         anzahl_stunden,
-         min_schueler,
-         max_schueler,
-         genehmigt,
-         vorname,
-         nachname,
-         email, 
-         voraussetzungen
-  from freifach_tbl
-           JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
-           JOIN lehrer_tbl lt on lt.l_id = fb.l_fk WHERE email = $1;`,
-      [email],
-    );
+  //Wenn Email-Query dabei ist
+  if (email) {
+    try {
+      const result = await aktiverClient.query(
+        `SELECT f_id,
+           titel,
+           beschreibung,
+           thumbnail,
+           anzahl_stunden,
+           min_schueler,
+           max_schueler,
+           genehmigt,
+           vorname,
+           nachname,
+           email, 
+           voraussetzungen
+    from freifach_tbl
+             JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
+             JOIN lehrer_tbl lt on lt.l_id = fb.l_fk WHERE email = $1;`,
+        [email],
+      );
 
-    console.log(result.rows);
-    res.status(200).json(result.rows);
-  } catch {
-    res.status(500).send('Fehler');
+      console.log(result.rows);
+      res.status(200).json(result.rows);
+    } catch {
+      res.status(500).send('Fehler');
+    }
+  } else {
+    //Hier bekommt man alle Freifächer die es gibt zurück!
+    await aktiverClient.query(
+      'SELECT f_id, titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, genehmigt, voraussetzungen FROM freifach_tbl',
+      (err, results) => {
+        if (!err) {
+          res.status(200).json(results.rows);
+        } else {
+          res.status(210).send('Fehler beim bekommen aller Freifächer');
+        }
+      },
+    );
   }
 };
 
@@ -291,6 +306,71 @@ const lehrerSchülerAnmelden = async (req, res) => {
   }
 };
 
+const getFreifaecherAdmin = async (req, res) => {
+  //Datenbank verbinden
+  DatenbankVerbinden();
+
+  try {
+    const result = await aktiverClient.query(
+      `SELECT f_id,
+         titel,
+         beschreibung,
+         thumbnail,
+         anzahl_stunden,
+         min_schueler,
+         max_schueler,
+         genehmigt,
+         vorname,
+         nachname,
+         email, 
+         voraussetzungen
+  from freifach_tbl
+           JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
+           JOIN lehrer_tbl lt on lt.l_id = fb.l_fk;`,
+    );
+
+    console.log(result.rows);
+    res.status(200).json(result.rows);
+  } catch {
+    res.status(500).send('Fehler');
+  }
+};
+
+const acceptFach = (req, res) => {
+  const id = req.params.id;
+  const state = String(req.body.genehmigt);
+
+  console.log(state);
+
+  DatenbankVerbinden();
+  try {
+    aktiverClient.query('UPDATE freifach_tbl SET genehmigt = $1 WHERE f_id = $2; ', [state, id]);
+    res.status(200).send('Success');
+  } catch (error) {}
+};
+
+const adminChangeFach = (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+
+  console.log(body);
+
+  DatenbankVerbinden();
+
+  aktiverClient.query(
+    'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6 WHERE f_id = $7',
+    [
+      body.titel,
+      body.beschreibung,
+      body.selected,
+      body.numberMax,
+      body.numberMin,
+      body.voraussetzungen,
+      id,
+    ],
+  );
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -299,4 +379,7 @@ export {
   getFristen,
   getFreifaecher,
   lehrerSchülerAnmelden,
+  getFreifaecherAdmin,
+  acceptFach,
+  adminChangeFach,
 };

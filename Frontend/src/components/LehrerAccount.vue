@@ -114,13 +114,13 @@
                 </p>
                 <br />
                 <span
-                  v-if="fach.genehmigt == false"
+                  v-if="fach.genehmigt == 'false'"
                   class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-red-600 text-black"
                 >
                   Abgelehnt
                 </span>
                 <span
-                  v-else-if="fach.genehmigt"
+                  v-else-if="fach.genehmigt == 'true'"
                   class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-green-600 text-black"
                 >
                   Angenommen

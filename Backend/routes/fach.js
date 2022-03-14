@@ -9,6 +9,9 @@ import {
   getFristen,
   getFreifaecher,
   lehrerSchülerAnmelden,
+  getFreifaecherAdmin,
+  acceptFach,
+  adminChangeFach,
 } from '../controllers/Fach.js';
 
 router.post('/fachErstellen', fachErstellen);
@@ -21,5 +24,11 @@ router.get('/getFristen', getFristen);
 router.get('/getFreifaecher', getFreifaecher);
 
 router.post('/lehrerSchuelerAnmelden', lehrerSchülerAnmelden);
+
+router.get('/getFaecherAdmin', getFreifaecherAdmin);
+
+router.patch('/acceptFach/:id', acceptFach);
+
+router.patch('/adminChangeFach/:id', adminChangeFach);
 
 export default router;

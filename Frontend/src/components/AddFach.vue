@@ -470,6 +470,8 @@ let image = ref(null);
 let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
 let showModal = ref(false);
+let state = ref('add');
+let id = ref(null);
 
 //Variablen:
 const stunden = [1, 2];
@@ -484,13 +486,16 @@ const tabs = [
 onMounted(() => {
   try {
     let fach = JSON.parse(localStorage.getItem('changeFach'));
+    state.value = 'change';
+    //Werte setzen
+    id.value = fach.f_id;
     titel.value = fach.titel;
     beschreibung.value = fach.beschreibung;
-    image.value = fach.bild;
-    numberMin.value = fach.minSchueler;
-    numberMax.value = fach.maxSchueler;
-    selected.value = fach.stunden;
-    voraussetzungen.value = fach.jahrgänge;
+    image.value = fach.thumbnail;
+    numberMin.value = fach.min_schueler;
+    numberMax.value = fach.max_schueler;
+    selected.value = fach.anzahl_stunden;
+    voraussetzungen.value = fach.voraussetzungen;
 
     nameButton.value = 'ändern';
     Überschrift.value = 'Freifach ändern';
@@ -551,12 +556,32 @@ async function sendData() {
   axios.post('http://localhost:2410/fachErstellen', fachObj);
 }
 
+async function changeData() {
+  const fachObj = {
+    id: id.value,
+    titel: titel.value,
+    beschreibung: beschreibung.value,
+    numberMin: numberMin.value,
+    numberMax: numberMax.value,
+    selected: selected.value,
+    voraussetzungen: voraussetzungen.value,
+    // linkThumbnail: `http://localhost:2410/images/${titel.value}.jpg`,
+  };
+
+  const res = await axios.patch(`http://localhost:2410/adminChangeFach/${fachObj.id}`, fachObj);
+}
+
 async function fachErstellen(e) {
-  showModal.value = true;
-  //Daten schicken
-  sendImage();
-  sendData();
-  e.preventDefault();
+  if (state.value == 'add') {
+    showModal.value = true;
+    //Daten schicken
+    sendImage();
+    sendData();
+    e.preventDefault();
+  } else {
+    changeData();
+    e.preventDefault();
+  }
 }
 
 //#region Increase and Decrease

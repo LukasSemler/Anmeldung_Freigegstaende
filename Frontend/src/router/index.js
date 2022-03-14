@@ -6,6 +6,7 @@ import AccountView from '../views/AccountView.vue';
 import setFristView from '../views/setFristView.vue';
 import adminCheckFaecherViewVue from '../views/adminCheckFaecherView.vue';
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

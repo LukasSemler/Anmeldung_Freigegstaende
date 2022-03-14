@@ -137,7 +137,7 @@ import {
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: false },
   { name: 'Fristen setzen', link: '/setFrist', current: true },
-  { name: 'Check Faecher', link: '/', current: false },
+  { name: 'Check Faecher', link: '/adminCheckFaecher', current: false },
 ];
 
 const router = useRouter();
