@@ -5,6 +5,7 @@ import Countdown from 'vue3-flip-countdown';
 import router from './router';
 import gAuthPlguin from './googleLoginScript';
 
+
 const app = createApp(App);
 
 app.use(Countdown);
@@ -14,5 +15,7 @@ app.use(gAuthPlguin, {
   scope: 'email',
   prompt: 'consent',
 });
+
+// app.use(vueMoment)
 
 app.mount('#app');

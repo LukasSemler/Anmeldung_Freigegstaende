@@ -73,7 +73,7 @@
       </button>
     </div>
   </div>
-  <div v-else class="relativ pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
+  <div v-else class="flex flex-wrap justify-center bg-lime-400">
     <div class="relative max-w-7xl mx-auto">
       <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
         <div
@@ -170,7 +170,7 @@ onMounted(async () => {
 
   console.log(data);
   //schauen ob Faecher vorhanden sind
-  if (!data) showAddFach.value = true;
+  if (data.length == 0) showAddFach.value = true;
   else faecher.value = data;
 });
 

@@ -164,6 +164,24 @@
               {{ item.anzahl_stunden }} Stunden
             </dd>
           </div>
+          <div class="ml-3 mt-6 flex items-center">
+            <div class="flex-shrink-0">
+              <a>
+                <span class="sr-only">{{ item.vorname }} {{ item.nachname }}</span>
+                <img class="h-10 w-10 rounded-full" :src="item.icon" alt="" />
+              </a>
+            </div>
+            <div class="ml-3">
+              <p class="text-sm font-medium text-gray-900">
+                <a class="hover:underline"> {{ item.vorname }} {{ item.nachname }} </a>
+              </p>
+              <div class="flex space-x-1 text-sm text-gray-500">
+                <p>Email:</p>
+                <span aria-hidden="true"> &middot; </span>
+                <span> {{ item.email }} </span>
+              </div>
+            </div>
+          </div>
           <div
             v-if="item.genehmigt == 'pending'"
             class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
@@ -216,6 +234,8 @@ import { ref, reactive, onMounted } from 'vue';
 import router from '../router';
 import axios from 'axios';
 import Store from '../composables/Store.js';
+import vueMoment from 'vue-moment';
+import moment from 'moment';
 
 import {
   Dialog,
@@ -239,40 +259,24 @@ const tabs = [
 ];
 
 onMounted(async () => {
+  //Daten holen
   fristAnmelden.value = Store.state.fristAnmelden.original;
   aktuellesDatum = new Date();
 
+  //Schauen ob das Datum vor oder nach der Frist ist
+  const erg = moment(fristAnmelden.value).isBefore(aktuellesDatum);
 
-  console.log(fristAnmelden.value);
-  console.log('-----', aktuellesDatum.toISOString());
-
-  if (+fristAnmelden.value < +aktuellesDatum) {
-    console.log('Sie können checken');
-  } else {
+  if (!erg) {
     console.log('Sie können noch nicht checken');
     showModalWarning.value = true;
   }
 
+  //Daten holen
   getData();
 });
 
-function formateDate(date) {
-  Number.prototype.padLeft = function (base, chr) {
-    var len = String(base || 10).length - String(this).length + 1;
-    return len > 0 ? new Array(len).join(chr || '0') + this : this;
-  };
-
-  let d = new Date(date);
-
-  return (
-    [d.getFullYear(), (d.getMonth() + 1).padLeft(), d.getDate().padLeft()].join('-') +
-    ' ' +
-    [d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':')
-  );
-}
-
 async function annehmen(fach) {
-  if (+fristAnmelden.value < +aktuellesDatum.value) {
+  if (erg) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: true,
@@ -287,7 +291,7 @@ async function annehmen(fach) {
 }
 
 async function ablehnen(fach) {
-  if (+fristAnmelden.value < +aktuellesDatum.value) {
+  if (erg) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: false,
@@ -302,7 +306,7 @@ async function ablehnen(fach) {
 }
 
 function change(fach) {
-  if (+fristAnmelden.value < +aktuellesDatum.value) {
+  if (erg) {
     console.log('Sie können checken');
     try {
       localStorage.clearItem('changeFach');
@@ -317,7 +321,8 @@ function change(fach) {
 }
 
 async function getData() {
-  const { data } = await axios.get('http://localhost:2410/getFreifaecher');
+  const { data } = await axios.get('http://localhost:2410/getFaecherAdmin');
+  console.log(data);
   faecher.value = data;
 }
 

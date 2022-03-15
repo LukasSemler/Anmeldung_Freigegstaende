@@ -76,7 +76,6 @@ const getAdminTimeLine = async (req, res) => {
   DatenbankVerbinden();
 
   const result = await aktiverClient.query('SELECT * FROM admintimeline_tbl ORDER BY t_id ASC ; ');
-  console.log(result.rows);
 
   res.status(200).json(result.rows);
 };
@@ -136,7 +135,8 @@ const getFreifaecher = async (req, res) => {
            vorname,
            nachname,
            email, 
-           voraussetzungen
+           voraussetzungen, 
+           icon
     from freifach_tbl
              JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
              JOIN lehrer_tbl lt on lt.l_id = fb.l_fk WHERE email = $1;`,
@@ -323,7 +323,8 @@ const getFreifaecherAdmin = async (req, res) => {
          vorname,
          nachname,
          email, 
-         voraussetzungen
+         voraussetzungen, 
+         icon
   from freifach_tbl
            JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
            JOIN lehrer_tbl lt on lt.l_id = fb.l_fk;`,

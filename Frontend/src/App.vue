@@ -26,8 +26,8 @@ onMounted(async () => {
   if (data.length !== 0) {
     if (!Store.state.fristAnmelden && !Store.state.fristEinreichen) {
       Store.state.fristEinreichen = {
-        formatiert: formateDate(data[0].frist_einreichen),
-        original: data[0].frist_einreichen,
+          formatiert: formateDate(data[0].frist_einreichen),
+          original: data[0].frist_einreichen,
       };
       Store.state.fristAnmelden = {
         formatiert: formateDate(data[0].frist_anmelden),
