@@ -2,7 +2,10 @@
   <h1 class="text-center text-4xl mt-3">Anmeldung Freifächer</h1>
   <!-- <img crossorigin="anonymous" src="http://localhost:2410/images/asdasd.png" alt=""> -->
   <br />
-  <CountDown></CountDown>
+  <!-- Countdown mit Endzeitpunkt anmelden anzeigen -->
+  <div v-if="Store.state.fristAnmelden">
+    <CountDown :endzeitpunkt="Store.state.fristAnmelden.formatiert"></CountDown>
+  </div>
 
   <div class="bg-gray-50">
     <!-- Mobile filter dialog -->
@@ -98,24 +101,15 @@
       </Dialog>
     </TransitionRoot>
 
-    <div class="max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
-      <div class="py-24">
-        <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">New Arrivals</h1>
-        <p class="mt-4 max-w-3xl mx-auto text-base text-gray-500">
-          Thoughtfully designed objects for the workspace, home, and travel.
-        </p>
-      </div>
-
+    <div class="mt-10 max-w-3xl mx-auto px-4 text-center sm:px-6 lg:max-w-7xl lg:px-8">
       <section aria-labelledby="filter-heading" class="border-t border-gray-200 py-6">
-        <h2 id="filter-heading" class="sr-only">Product filters</h2>
-
         <div class="flex items-center justify-between">
           <Menu as="div" class="relative z-10 inline-block text-left">
             <div>
               <MenuButton
                 class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
               >
-                Sort
+                Sortieren
                 <ChevronDownIcon
                   class="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                   aria-hidden="true"
@@ -142,6 +136,7 @@
                         active ? 'bg-gray-100' : '',
                         'block px-4 py-2 text-sm font-medium text-gray-900',
                       ]"
+                      @click="SortierenFunction(option.sortArg)"
                     >
                       {{ option.name }}
                     </a>
@@ -156,13 +151,13 @@
             class="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden"
             @click="open = true"
           >
-            Filters
+            Filtern
           </button>
 
           <PopoverGroup class="hidden sm:flex sm:items-baseline sm:space-x-8">
             <Popover
               as="div"
-              v-for="(section, sectionIdx) in filters"
+              v-for="section in filters"
               :key="section.name"
               id="desktop-menu"
               class="relative z-10 inline-block text-left"
@@ -173,9 +168,9 @@
                 >
                   <span>{{ section.name }}</span>
                   <span
-                    v-if="sectionIdx === 0"
+                    v-if="AktivFilter.length != 0"
                     class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums"
-                    >1</span
+                    >{{ AktivFilter.length }}</span
                   >
                   <ChevronDownIcon
                     class="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
@@ -204,9 +199,10 @@
                       <input
                         :id="`filter-${section.id}-${optionIdx}`"
                         :name="`${section.id}[]`"
-                        :value="option.value"
+                        v-model="option.checked"
                         type="checkbox"
                         class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                        @change="FilterChanged"
                       />
                       <label
                         :for="`filter-${section.id}-${optionIdx}`"
@@ -224,10 +220,11 @@
       </section>
     </div>
   </div>
+
   <!--Anzeigecontainer für alle Freifächer-->
   <div class="flex-row flex-wrap flex justify-center mt-8">
     <div
-      v-for="(item, i) of Freifaecherliste"
+      v-for="(item, i) of FreifaecherGefiltert"
       class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4"
     >
       <div class="px-4 py-5 sm:px-6 flex justify-center">
@@ -298,56 +295,65 @@ import { ChevronDownIcon } from '@heroicons/vue/solid';
 //Components einbinden
 import CountDown from '../components/CountDown.vue';
 import Store from '../composables/Store.js';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 
 let Freifaecherliste = ref([]);
+let AktivFilter = ref([]);
+const open = ref(false);
+
+//Sortieren
 const sortOptions = [
-  { name: 'Most Popular', href: '#' },
-  { name: 'Best Rating', href: '#' },
-  { name: 'Newest', href: '#' },
+  { name: `Name aufsteigend⬆`, sortArg: 'auf' },
+  { name: `Name absteigend ⬇`, sortArg: 'ab' },
 ];
 
+function SortierenFunction(SortArg) {
+  if (SortArg == 'auf')
+    Freifaecherliste.value.sort((a, b) => {
+      if (a.titel > b.titel) return 1;
+      else if (a.titel == b.titel) return 0;
+      else return -1;
+    });
+  else if (SortArg == 'ab') {
+    Freifaecherliste.value.sort((a, b) => {
+      if (a.titel > b.titel) return -1;
+      else if (a.titel == b.titel) return 0;
+      else return 1;
+    });
+  }
+}
+
+//Filtern
 const filters = [
   {
-    id: 'category',
-    name: 'Category',
+    id: 'Filter',
+    name: 'Filter',
     options: [
-      { value: 'tees', label: 'Tees' },
-      { value: 'crewnecks', label: 'Crewnecks' },
-      { value: 'hats', label: 'Hats' },
-    ],
-  },
-  {
-    id: 'brand',
-    name: 'Brand',
-    options: [
-      { value: 'clothing-company', label: 'Clothing Company' },
-      { value: 'fashion-inc', label: 'Fashion Inc.' },
-      { value: 'shoes-n-more', label: "Shoes 'n More" },
-    ],
-  },
-  {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White' },
-      { value: 'black', label: 'Black' },
-      { value: 'grey', label: 'Grey' },
-    ],
-  },
-  {
-    id: 'sizes',
-    name: 'Sizes',
-    options: [
-      { value: 's', label: 'S' },
-      { value: 'm', label: 'M' },
-      { value: 'l', label: 'L' },
+      { value: 1, label: '1 Stunde', checked: false },
+      { value: 2, label: '2 Stunden', checked: false },
     ],
   },
 ];
 
-const open = ref(false);
+const FreifaecherGefiltert = computed(() => {
+  if (AktivFilter.value.length > 0) {
+    return Freifaecherliste.value.filter(({ anzahl_stunden }) =>
+      AktivFilter.value.includes(anzahl_stunden),
+    );
+  } else {
+    return Freifaecherliste.value;
+  }
+});
+
+function FilterChanged() {
+  //Resettet Filter
+  AktivFilter.value = [];
+  //Aktuallisiert die aktiven Filterungsmethoden
+  filters[0].options.forEach(({ checked, value }) => {
+    if (checked) AktivFilter.value.push(value);
+  });
+}
 
 onMounted(async () => {
   //Bekommen und anzeigen aller Freifächer

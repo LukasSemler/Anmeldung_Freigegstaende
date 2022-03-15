@@ -1,4 +1,70 @@
 <template>
+  <!-- Warning Modal -->
+  <TransitionRoot as="template" :show="showModalWarning">
+    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="closeModal">
+      <div
+        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </TransitionChild>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+          >&#8203;</span
+        >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100 translate-y-0 sm:scale-100"
+          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        >
+          <div
+            class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          >
+            <div>
+              <div
+                class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100"
+              >
+                <ExclamationIcon class="h-6 w-6 text-orange-600" aria-hidden="true" />
+              </div>
+              <div class="mt-3 text-center sm:mt-5">
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Warning
+                </DialogTitle>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    Da die Frist zum Einreichen noch nicht abgelaufen ist, können noch keine Fächer
+                    angenommen, abgelehnt oder geändert werden
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 sm:mt-6">
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white hover:bg-orange-500 focus:outline-none sm:text-sm"
+                @click="showModalWarning = false"
+              >
+                Akzeptieren
+              </button>
+            </div>
+          </div>
+        </TransitionChild>
+      </div>
+    </Dialog>
+  </TransitionRoot>
   <div>
     <div class="sm:hidden">
       <label for="tabs" class="sr-only">Select a tab</label>
@@ -149,9 +215,23 @@
 import { ref, reactive, onMounted } from 'vue';
 import router from '../router';
 import axios from 'axios';
+import Store from '../composables/Store.js';
+
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue';
+import { ExclamationIcon } from '@heroicons/vue/outline';
 
 let faecher = ref([]);
+let fristAnmelden = ref(null);
+let showModalWarning = ref(false);
+let aktuellesDatum = reactive[null];
 
+// Tabs erstellen
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: false },
   { name: 'Fristen setzen', link: '/setFrist', current: false },
@@ -159,41 +239,89 @@ const tabs = [
 ];
 
 onMounted(async () => {
+  fristAnmelden.value = Store.state.fristAnmelden.original;
+  aktuellesDatum = new Date();
+
+
+  console.log(fristAnmelden.value);
+  console.log('-----', aktuellesDatum.toISOString());
+
+  if (+fristAnmelden.value < +aktuellesDatum) {
+    console.log('Sie können checken');
+  } else {
+    console.log('Sie können noch nicht checken');
+    showModalWarning.value = true;
+  }
+
   getData();
 });
 
-async function annehmen(fach) {
-  try {
-    const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
-      genehmigt: true,
-    });
+function formateDate(date) {
+  Number.prototype.padLeft = function (base, chr) {
+    var len = String(base || 10).length - String(this).length + 1;
+    return len > 0 ? new Array(len).join(chr || '0') + this : this;
+  };
 
-    getData();
-  } catch (error) {}
+  let d = new Date(date);
+
+  return (
+    [d.getFullYear(), (d.getMonth() + 1).padLeft(), d.getDate().padLeft()].join('-') +
+    ' ' +
+    [d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':')
+  );
+}
+
+async function annehmen(fach) {
+  if (+fristAnmelden.value < +aktuellesDatum.value) {
+    try {
+      const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
+        genehmigt: true,
+      });
+
+      getData();
+    } catch (error) {}
+  } else {
+    console.log('Sie können noch nicht checken');
+    showModalWarning.value = true;
+  }
 }
 
 async function ablehnen(fach) {
-  try {
-    const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
-      genehmigt: false,
-    });
+  if (+fristAnmelden.value < +aktuellesDatum.value) {
+    try {
+      const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
+        genehmigt: false,
+      });
 
-    getData();
-  } catch (error) {}
+      getData();
+    } catch (error) {}
+  } else {
+    console.log('Sie können noch nicht checken');
+    showModalWarning.value = true;
+  }
 }
 
 function change(fach) {
-  try {
-    localStorage.clearItem('changeFach');
-  } catch {
-    localStorage.setItem('changeFach', JSON.stringify(fach));
-    router.push('/addFach');
+  if (+fristAnmelden.value < +aktuellesDatum.value) {
+    console.log('Sie können checken');
+    try {
+      localStorage.clearItem('changeFach');
+    } catch {
+      localStorage.setItem('changeFach', JSON.stringify(fach));
+      router.push('/addFach');
+    }
+  } else {
+    console.log('Sie können noch nicht checken');
+    showModalWarning.value = true;
   }
 }
 
 async function getData() {
   const { data } = await axios.get('http://localhost:2410/getFreifaecher');
-  console.log(data);
   faecher.value = data;
+}
+
+function closeModal() {
+  showModalWarning.value = false;
 }
 </script>

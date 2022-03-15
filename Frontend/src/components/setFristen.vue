@@ -185,7 +185,11 @@
   </div>
 
   <div class="mt-3" v-if="datenVorhanden">
-    <CountDown endzeitpunkt="2022-03-20 00:00:00"></CountDown>
+    <h1>Endzeitpunkt Einreichen</h1>
+    <CountDown :endzeitpunkt="fristEinreichenFormated"></CountDown>
+
+    <h1>Endzeitpunkt Anmelden</h1>
+    <CountDown :endzeitpunkt="fristAnmeldenFormated"></CountDown>
   </div>
 </template>
 
@@ -217,16 +221,41 @@ let fristAnmelden = ref(null);
 let showModal = ref(false);
 let datenVorhanden = ref(false);
 let showModalError = ref(false);
+let fristEinreichenFormated = ref(null);
+let fristAnmeldenFormated = ref(null);
 
 onMounted(async () => {
   const { data } = await axios.get('http://localhost:2410/getFristen');
+  console.log(data);
   if (data.length > 0) {
+    console.log('if');
     datenVorhanden.value = true;
-  }
+    fristEinreichen.value = data[0].frist_einreichen;
+    fristAnmelden.value = data[0].frist_anmelden;
 
-  console.log(datenVorhanden.value);
+    fristEinreichenFormated.value = formateDate(fristEinreichen.value);
+    fristAnmeldenFormated.value = formateDate(fristAnmelden.value);
+
+    console.log(fristEinreichenFormated.value);
+  } else {
+    console.log('else');
+  }
 });
 
+function formateDate(date) {
+  Number.prototype.padLeft = function (base, chr) {
+    var len = String(base || 10).length - String(this).length + 1;
+    return len > 0 ? new Array(len).join(chr || '0') + this : this;
+  };
+
+  let d = new Date(date);
+
+  return (
+    [d.getFullYear(), (d.getMonth() + 1).padLeft(), d.getDate().padLeft()].join('-') +
+    ' ' +
+    [d.getHours().padLeft(), d.getMinutes().padLeft(), d.getSeconds().padLeft()].join(':')
+  );
+}
 async function setFristen() {
   //Schauen ob die Daten schon vorhanden sind
   if (!datenVorhanden.value) {

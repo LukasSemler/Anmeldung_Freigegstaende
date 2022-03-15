@@ -1,6 +1,6 @@
 <template>
   <vue3-flip-countdown
-    deadline="2022-03-20 00:00:00"
+    :deadline="endzeitpunkt"
     mainFlipBackgroundColor="#000000"
     secondFlipBackgroundColor="#000000"
     mainColor="#be1622"
@@ -8,10 +8,9 @@
   ></vue3-flip-countdown>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 
 const props = defineProps({ endzeitpunkt: String });
 
-console.log(props);
 </script>

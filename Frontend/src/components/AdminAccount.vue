@@ -82,10 +82,6 @@
     </div>
     <br />
     <br />
-    <ul>
-      <li>Frist fuer das Einreichen: {{ fristEinreichen }}</li>
-      <li>Frist fuer das Anmelden: {{ fristAnmelden }}</li>
-    </ul>
   </div>
 </template>
 
@@ -104,12 +100,14 @@ let fristEinreichen = ref(null);
 let fristAnmelden = ref(null);
 let fristenGesetzt = ref(false);
 
+//Tabs für das Menü anzeigen
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: true },
   { name: 'Fristen setzen', link: '/setFrist', current: false },
   { name: 'Check Faecher', link: '/adminCheckFaecher', current: false },
 ];
 
+//Mounted
 onMounted(async () => {
   //Werte der TimeLine holen und setzen
   const { data } = await axios.get('http://localhost:2410/getAdminTimeLine');
@@ -130,9 +128,11 @@ onMounted(async () => {
   }
 });
 
+//aktiven User über Props bekommen
 const props = defineProps({
   aktiverUser: {},
 });
+
 
 function changeSite(elem) {
   if (elem.target === 'setzen') router.push('/setFrist');
