@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <h1 class="text-center text-4xl">Check Fächer</h1>
+  <h1 class="text-center text-4xl mt-2">Check Fächer</h1>
   <br />
   <br />
   <div class="flex flex-wrap justify-center">
@@ -192,7 +192,7 @@ function change(fach) {
 }
 
 async function getData() {
-  const { data } = await axios.get('http://localhost:2410/getFaecherAdmin');
+  const { data } = await axios.get('http://localhost:2410/getFreifaecher');
   console.log(data);
   faecher.value = data;
 }
