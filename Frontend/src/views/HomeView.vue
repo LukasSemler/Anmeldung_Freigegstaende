@@ -297,10 +297,12 @@ import CountDown from '../components/CountDown.vue';
 import Store from '../composables/Store.js';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 let Freifaecherliste = ref([]);
 let AktivFilter = ref([]);
 const open = ref(false);
+const router = useRouter();
 
 //Sortieren
 const sortOptions = [
@@ -361,5 +363,12 @@ onMounted(async () => {
   Freifaecherliste.value = data;
 });
 
-function detail() {}
+function detail(freifachItem) {
+  //Freifach im LocalStorage setzen
+  localStorage.removeItem('AuswahlFreifach');
+  localStorage.setItem('AuswahlFreifach', JSON.stringify(freifachItem));
+
+  //Weiterleitung auf Detailseite
+  router.push('/freifachDetail');
+}
 </script>

@@ -5,7 +5,7 @@ import Error404 from '../views/Error404.vue';
 import AccountView from '../views/AccountView.vue';
 import setFristView from '../views/setFristView.vue';
 import adminCheckFaecherViewVue from '../views/adminCheckFaecherView.vue';
-
+import FreifachDetailVue from '../views/FreifachDetail.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +39,11 @@ const router = createRouter({
       path: '/adminCheckFaecher',
       name: 'adminCheckFaecher',
       component: adminCheckFaecherViewVue,
+    },
+    {
+      path: '/freifachDetail',
+      name: 'FreifachDetail',
+      component: FreifachDetailVue,
     },
   ],
 });
