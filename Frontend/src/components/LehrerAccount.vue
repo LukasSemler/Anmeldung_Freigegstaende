@@ -134,6 +134,13 @@
               </a>
             </div>
           </div>
+          <!-- TODO Button -->
+          <button
+            @click="detail(fach)"
+            class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          >
+            Detailansicht
+          </button>
         </div>
       </div>
     </div>
@@ -177,4 +184,9 @@ onMounted(async () => {
 const props = defineProps({
   aktiverUser: {},
 });
+
+function detail(fach) {
+  localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
+  router.push('/freifachDetailLehrer')
+}
 </script>

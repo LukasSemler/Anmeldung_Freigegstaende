@@ -372,6 +372,56 @@ const adminChangeFach = (req, res) => {
   );
 };
 
+const getSchuelerFaecher = async (req, res) => {
+  const id = req.query.id;
+  console.log(id);
+  try {
+
+    let result = await aktiverClient.query(
+      `SELECT s_id,
+       vorname,
+       nachname,
+       klasse,
+       email,
+       icon,
+       titel,
+       beschreibung,
+       status
+from schueler_tbl
+         JOIN freifach_bucht fb on schueler_tbl.s_id = fb.s_fk
+         JOIN freifach_tbl ft on ft.f_id = fb.f_fk
+WHERE f_id = $1`,
+      [id],
+    );
+
+    console.log(result.rows);
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error');
+  }
+};
+
+const accepDeclineStudent = (req, res) => {
+  const { id } = req.params;
+  const { status, fachID } = req.body;
+
+  console.log(fachID, typeof status, id);
+  if (!id || !status) rest.status(404).send('User not found');
+  try {
+    DatenbankVerbinden();
+    aktiverClient.query(`UPDATE freifach_bucht SET status = $1 WHERE s_fk = $2 and f_fk = $3;`, [
+      status,
+      id,
+      fachID,
+    ]);
+    res.status(200).send('success');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('error');
+  }
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -383,4 +433,6 @@ export {
   getFreifaecherAdmin,
   acceptFach,
   adminChangeFach,
+  getSchuelerFaecher,
+  accepDeclineStudent,
 };

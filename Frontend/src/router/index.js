@@ -6,6 +6,7 @@ import AccountView from '../views/AccountView.vue';
 import setFristView from '../views/setFristView.vue';
 import adminCheckFaecherViewVue from '../views/adminCheckFaecherView.vue';
 import FreifachDetailVue from '../views/FreifachDetail.vue';
+import DetailAnsichtView from '../views/DetailAnsichtView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,11 @@ const router = createRouter({
       path: '/freifachDetail',
       name: 'FreifachDetail',
       component: FreifachDetailVue,
+    },
+    {
+      path: '/freifachDetailLehrer',
+      name: 'FreifachDetailLehrer',
+      component: DetailAnsichtView,
     },
   ],
 });
