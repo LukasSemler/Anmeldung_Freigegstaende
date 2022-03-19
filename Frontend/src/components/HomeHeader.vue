@@ -1,5 +1,5 @@
 <template>
-  <div class="relative bg-indigo-800">
+  <div class="relative">
     <div class="absolute inset-0">
       <img
         class="w-full h-full object-cover"

@@ -14,6 +14,7 @@ import {
   adminChangeFach,
   getSchuelerFaecher,
   accepDeclineStudent,
+  fachDel
 } from '../controllers/Fach.js';
 
 router.post('/fachErstellen', fachErstellen);
@@ -36,4 +37,5 @@ router.patch('/adminChangeFach/:id', adminChangeFach);
 router.get('/getSchuelerFaecher', getSchuelerFaecher);
 router.patch('/accepDeclineStudent/:id', accepDeclineStudent);
 
+router.delete('/delFach/:id', fachDel);
 export default router;

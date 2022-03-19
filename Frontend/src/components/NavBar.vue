@@ -55,6 +55,7 @@
                 </MenuButton>
               </div>
               <transition
+                class="z-40"
                 enter-active-class="transition ease-out duration-100"
                 enter-from-class="transform opacity-0 scale-95"
                 enter-to-class="transform opacity-100 scale-100"

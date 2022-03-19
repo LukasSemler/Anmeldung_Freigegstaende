@@ -376,7 +376,6 @@ const getSchuelerFaecher = async (req, res) => {
   const id = req.query.id;
   console.log(id);
   try {
-
     let result = await aktiverClient.query(
       `SELECT s_id,
        vorname,
@@ -422,6 +421,17 @@ const accepDeclineStudent = (req, res) => {
   }
 };
 
+const fachDel = (req, res) => {
+  const { id } = req.params;
+  const { lehrerID } = req.query;
+
+  if (id) {
+    aktiverClient.query(`DELETE FROM freifach_tbl WHERE f_id = $1;`, [id]);
+
+    aktiverClient.query('DELETE FROM freifach_betreut WHERE l_fk = $1;', [lehrerID]);
+  }
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -435,4 +445,5 @@ export {
   adminChangeFach,
   getSchuelerFaecher,
   accepDeclineStudent,
+  fachDel,
 };

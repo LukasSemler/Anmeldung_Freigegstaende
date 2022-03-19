@@ -1,4 +1,145 @@
 <template>
+  <!-- Modal warning -->
+  <TransitionRoot as="template" :show="showModalWarning">
+    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="closeModal">
+      <div
+        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </TransitionChild>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+          >&#8203;</span
+        >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100 translate-y-0 sm:scale-100"
+          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        >
+          <div
+            class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          >
+            <div>
+              <div
+                class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100"
+              >
+                <ExclamationIcon class="h-6 w-6 text-orange-600" aria-hidden="true" />
+              </div>
+              <div class="mt-3 text-center sm:mt-5">
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Warning
+                </DialogTitle>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    Die Frist zum Einreichen der Fächer ist abgelaufen, daher können Sie keine
+                    Fächer mehr erstellen, ändern oder löschen
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 sm:mt-6">
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white hover:bg-orange-500 focus:outline-none sm:text-sm"
+                @click="showModalWarning = false"
+              >
+                Akzeptieren
+              </button>
+            </div>
+          </div>
+        </TransitionChild>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+
+  <!--Modal delete -->
+  <TransitionRoot as="template" :show="showModalDel">
+    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModalDel = false">
+      <div
+        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </TransitionChild>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+          >&#8203;</span
+        >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100 translate-y-0 sm:scale-100"
+          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        >
+          <div
+            class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+          >
+            <div class="sm:flex sm:items-start">
+              <div
+                class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+              >
+                <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+              </div>
+              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Freifach löschen
+                </DialogTitle>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    Sind Sie sicher, dass Sie das Freifach löschen wollen, Sie können dies nicht
+                    mehr Rückgängig machen!
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+              <button
+                type="button"
+                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:ml-3 sm:w-auto sm:text-sm"
+                @click="fachDel"
+              >
+                Löschen
+              </button>
+              <button
+                type="button"
+                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                @click="showModalDel = false"
+                ref="cancelButtonRef"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </TransitionChild>
+      </div>
+    </Dialog>
+  </TransitionRoot>
   <div>
     <div class="sm:hidden">
       <label for="tabs" class="sr-only">Select a tab</label>
@@ -34,7 +175,9 @@
       </div>
     </div>
   </div>
-  <h1 class="text-center text-4xl mt-3">Willkommen {{ aktiverUser.name }}</h1>
+  <h1 class="text-center text-4xl mt-3">
+    Willkommen {{ aktiverUser.vorname }} {{ aktiverUser.nachname }}
+  </h1>
   <br />
   <p class="text-center text-">
     Hier koennen Sie alle Ihre Freifaecher und derern Status anzeigen. Ausserdem koennen Sie neue
@@ -73,7 +216,7 @@
       </button>
     </div>
   </div>
-  <div v-else class="flex flex-wrap justify-center bg-lime-400">
+  <div v-else class="flex flex-wrap justify-cente">
     <div class="relative max-w-7xl mx-auto">
       <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
         <div
@@ -134,28 +277,48 @@
               </a>
             </div>
           </div>
-          <!-- TODO Button -->
-          <button
-            @click="detail(fach)"
-            class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          <div
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
           >
-            Detailansicht
-          </button>
+            <button
+              @click="bearbeiten(fach)"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black"
+            >
+              Bearbeiten
+            </button>
+            <button
+              @click="openModalError(fach)"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-500 hover:text-black"
+            >
+              Löschen
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
+  <br />
 </template>
 
 <script setup>
 //Tailwind Imports
 import { PlusIcon } from '@heroicons/vue/solid';
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue';
+import { ExclamationIcon } from '@heroicons/vue/outline';
 
 //Vue imports
 import { ref, onMounted, reactive } from 'vue';
 
 //sonstige imports
 import axios from 'axios';
+import Store from '../composables/Store.js';
+import moment from 'moment';
 
 //Router impotieren
 import { useRouter } from 'vue-router';
@@ -163,6 +326,11 @@ const router = useRouter();
 
 let showAddFach = ref(false);
 let faecher = ref([]);
+let showModalWarning = ref(false);
+let showModalDel = ref(false);
+let fristEinreichen = ref(null);
+let aktuellesDatum = reactive[null];
+let fachZuLöschen = ref(null);
 
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: true },
@@ -185,8 +353,46 @@ const props = defineProps({
   aktiverUser: {},
 });
 
-function detail(fach) {
-  localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
-  router.push('/freifachDetailLehrer')
+function bearbeiten(fach) {
+  //Daten holen
+  fristEinreichen.value = Store.state.fristEinreichen.original;
+  aktuellesDatum = new Date();
+
+  //Schauen ob das Datum vor oder nach der Frist ist
+  const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
+
+  if (!erg) {
+    showModalWarning.value = true;
+  }
 }
+
+function openModalError(fach) {
+  console.log('test');
+  //Daten holen
+  fristEinreichen.value = Store.state.fristEinreichen.original;
+  aktuellesDatum = new Date();
+
+  //Schauen ob das Datum vor oder nach der Frist ist
+  const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
+
+  if (!erg) {
+    showModalWarning.value = true;
+  }
+
+  showModalDel.value = true;
+  fachZuLöschen.value = fach;
+}
+
+async function fachDel() {
+  const fachZuDel = fachZuLöschen.value;
+  const res = await axios.delete(
+    `http://localhost:2410/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`,
+  );
+}
+
+//! Was macht das ?
+//! function detail(fach) {
+//!   localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
+//!   router.push('/freifachDetailLehrer');
+//! }
 </script>
