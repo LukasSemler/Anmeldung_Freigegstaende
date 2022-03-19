@@ -1,6 +1,5 @@
 <template>
-  <h1 class="text-center text-4xl mt-3">Anmeldung Freifächer</h1>
-  <!-- <img crossorigin="anonymous" src="http://localhost:2410/images/asdasd.png" alt=""> -->
+  <HomeHeader></HomeHeader>
   <br />
   <!-- Countdown mit Endzeitpunkt anmelden anzeigen -->
   <div v-if="Store.state.fristAnmelden">
@@ -269,6 +268,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script setup>
@@ -294,6 +294,8 @@ import { XIcon } from '@heroicons/vue/outline';
 import { ChevronDownIcon } from '@heroicons/vue/solid';
 //Components einbinden
 import CountDown from '../components/CountDown.vue';
+import HomeHeader from '../components/HomeHeader.vue';
+import FooterComp from '../components/FooterComp.vue';
 import Store from '../composables/Store.js';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';

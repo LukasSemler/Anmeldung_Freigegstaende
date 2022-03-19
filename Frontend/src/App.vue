@@ -2,6 +2,8 @@
   <div>
     <NavBar></NavBar>
     <RouterView />
+    <hr class="my-2 bg-gray-300">
+    <FooterComp></FooterComp>
   </div>
 </template>
 
@@ -11,6 +13,7 @@ import NavBar from './components/NavBar.vue';
 import Store from './composables/Store';
 import { onMounted } from 'vue';
 import axios from 'axios';
+import FooterComp from './components/FooterComp.vue';
 
 onMounted(async () => {
   //Wenn User im Localstorage, dann laden
@@ -26,8 +29,8 @@ onMounted(async () => {
   if (data.length !== 0) {
     if (!Store.state.fristAnmelden && !Store.state.fristEinreichen) {
       Store.state.fristEinreichen = {
-          formatiert: formateDate(data[0].frist_einreichen),
-          original: data[0].frist_einreichen,
+        formatiert: formateDate(data[0].frist_einreichen),
+        original: data[0].frist_einreichen,
       };
       Store.state.fristAnmelden = {
         formatiert: formateDate(data[0].frist_anmelden),
