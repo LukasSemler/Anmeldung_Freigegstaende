@@ -14,27 +14,28 @@ import {
   adminChangeFach,
   getSchuelerFaecher,
   accepDeclineStudent,
-  fachDel
+  fachDel,
+  getFreifaecherLehrer,
+  SchuelerInFreifachAnmelden,
+  SchuelerInFreifachAbmelden,
 } from '../controllers/Fach.js';
+
+router.get('/getAdminTimeLine', getAdminTimeLine);
+router.get('/getFristen', getFristen);
+router.get('/getFreifaecher', getFreifaecher);
+router.get('/getFreifaecherLehrer', getFreifaecherLehrer);
+router.get('/getFaecherAdmin', getFreifaecherAdmin);
+router.get('/getSchuelerFaecher', getSchuelerFaecher);
 
 router.post('/fachErstellen', fachErstellen);
 router.post('/fachThumbnail', fachThumbnail);
-
-router.get('/getAdminTimeLine', getAdminTimeLine);
 router.post('/setFristenChangeTimeLine', setFristenChangeTimeLine);
-router.get('/getFristen', getFristen);
-
-router.get('/getFreifaecher', getFreifaecher);
-
 router.post('/lehrerSchuelerAnmelden', lehrerSchülerAnmelden);
-
-router.get('/getFaecherAdmin', getFreifaecherAdmin);
+router.post('/SchuelerInFreifachAnmelden', SchuelerInFreifachAnmelden);
+router.post('/SchuelerInFreifachAbmelden', SchuelerInFreifachAbmelden);
 
 router.patch('/acceptFach/:id', acceptFach);
-
 router.patch('/adminChangeFach/:id', adminChangeFach);
-
-router.get('/getSchuelerFaecher', getSchuelerFaecher);
 router.patch('/accepDeclineStudent/:id', accepDeclineStudent);
 
 router.delete('/delFach/:id', fachDel);

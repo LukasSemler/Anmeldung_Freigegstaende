@@ -37,7 +37,6 @@ const dirname = path.resolve();
 
 const fachErstellen = async (req, res) => {
   const daten = req.body;
-  console.log(daten);
   //Datenbank Verbindung herstellen
   DatenbankVerbinden();
 
@@ -52,11 +51,23 @@ const fachErstellen = async (req, res) => {
       daten.numberMax,
       daten.voraussetzungen,
     ],
-  );
-
-  aktiverClient.query(
-    'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
-    [daten.lehrer.email, daten.titel],
+    (errFreifach) => {
+      if (!errFreifach) {
+        aktiverClient.query(
+          'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
+          [daten.lehrer.email, daten.titel],
+          (errFreifachBetreut) => {
+            if (!errFreifachBetreut) {
+              res.status(200).send('Freifach erfolgreich erstellt!');
+            } else {
+              res.status(210).send('Fehler beim erstellen des Freifaches --> BETREUT');
+            }
+          },
+        );
+      } else {
+        res.status(210).send('Fehler beim erstellen des Freifaches --> FREIFACH');
+      }
+    },
   );
 };
 
@@ -116,7 +127,6 @@ const getFristen = async (req, res) => {
 
 const getFreifaecher = async (req, res) => {
   const email = req.query.email;
-  console.log(email);
   //Datenbank verbinden
   DatenbankVerbinden();
 
@@ -143,7 +153,6 @@ const getFreifaecher = async (req, res) => {
         [email],
       );
 
-      console.log(result.rows);
       res.status(200).json(result.rows);
     } catch {
       res.status(500).send('Fehler');
@@ -259,7 +268,6 @@ const lehrerSchülerAnmelden = async (req, res) => {
               ],
               (errorEintrag, resultEintrag) => {
                 if (!errorEintrag) {
-                  console.log('Schüler erfolgreich in die Datenbank eingespeichert!');
                   //Schüler nach Eintrag zurückgeben
                   aktiverClient.query(
                     'SELECT * FROM schueler_tbl WHERE email = $1',
@@ -330,7 +338,6 @@ const getFreifaecherAdmin = async (req, res) => {
            JOIN lehrer_tbl lt on lt.l_id = fb.l_fk;`,
     );
 
-    console.log(result.rows);
     res.status(200).json(result.rows);
   } catch {
     res.status(500).send('Fehler');
@@ -340,8 +347,6 @@ const getFreifaecherAdmin = async (req, res) => {
 const acceptFach = (req, res) => {
   const id = req.params.id;
   const state = String(req.body.genehmigt);
-
-  console.log(state);
 
   DatenbankVerbinden();
   try {
@@ -353,8 +358,6 @@ const acceptFach = (req, res) => {
 const adminChangeFach = (req, res) => {
   const id = req.params.id;
   const body = req.body;
-
-  console.log(body);
 
   DatenbankVerbinden();
 
@@ -374,7 +377,7 @@ const adminChangeFach = (req, res) => {
 
 const getSchuelerFaecher = async (req, res) => {
   const id = req.query.id;
-  console.log(id);
+
   try {
     let result = await aktiverClient.query(
       `SELECT s_id,
@@ -393,7 +396,6 @@ WHERE f_id = $1`,
       [id],
     );
 
-    console.log(result.rows);
     res.status(200).json(result.rows);
   } catch (error) {
     console.log(error);
@@ -405,7 +407,6 @@ const accepDeclineStudent = (req, res) => {
   const { id } = req.params;
   const { status, fachID } = req.body;
 
-  console.log(fachID, typeof status, id);
   if (!id || !status) rest.status(404).send('User not found');
   try {
     DatenbankVerbinden();
@@ -432,6 +433,91 @@ const fachDel = (req, res) => {
   }
 };
 
+const getFreifaecherLehrer = (req, res) => {
+  //Freifach über query bekommen
+  const { freifachname } = req.query;
+  console.log(`Name: ${freifachname}`);
+
+  //Datenbankverbinden
+  DatenbankVerbinden();
+
+  //Lehrerdaten bekommen
+  aktiverClient.query(
+    `SELECT lt.vorname, lt.nachname, lt.email, lt.icon
+    FROM freifach_tbl
+    INNER JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
+    INNER JOIN lehrer_tbl lt on lt.l_id = fb.l_fk
+    WHERE titel = $1`,
+    [freifachname],
+    (err, result) => {
+      if (!err) {
+        let LehrerGefunden = result.rows[0];
+
+        //Feedback vom Server
+        res.status(200).json(LehrerGefunden);
+      } else {
+        res
+          //Feedback vom Server
+          .status(210)
+          .send(
+            'Leider ist beim bekommen des Lehrers über ein Freifach ein Fehler aufgetreten (Funktion: getFreifaecherLehrer',
+          );
+      }
+    },
+  );
+};
+
+const SchuelerInFreifachAnmelden = (req, res) => {
+  //Variablen bekommen
+  const { s_id, f_id } = req.body;
+
+  //Mit Datenbank verbinden
+  DatenbankVerbinden();
+
+  //Schüler ins Freifach eintragen
+  aktiverClient.query(
+    'INSERT INTO freifach_bucht (f_fk, s_fk) VALUES ($1, $2)',
+    [f_id, s_id],
+    (AnemeldenError) => {
+      if (!AnemeldenError) {
+        res.status(200).send('Schüler Erfolgreich ins Freifach angemeldet!');
+      } else {
+        res
+          .status(210)
+          .send(
+            'Fehler beim Anmelden des Schülers ins Freifach --> Funktion: SchuelerInFreifachAnmelden',
+          );
+      }
+    },
+  );
+};
+
+const SchuelerInFreifachAbmelden = (req, res) => {
+  //Variablen bekommen
+  const { s_id, f_id } = req.body;
+  
+  //Mit Datenbank verbinden
+  DatenbankVerbinden();
+  
+  //Schüler ins Freifach eintragen
+  aktiverClient.query(
+    'DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2;',
+    [f_id, s_id],
+    (AnemeldenError) => {
+      if (!AnemeldenError) {
+        res.status(200).send('Schüler Erfolgreich beim Freifach abgemeldet!');
+      } else {
+        res
+          .status(210)
+          .send(
+            'Fehler beim Abemlden des Schülers vom Freifach --> Funktion: SchuelerInFreifachAbmelden',
+          );
+      }
+    },
+  );
+
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -446,4 +532,7 @@ export {
   getSchuelerFaecher,
   accepDeclineStudent,
   fachDel,
+  getFreifaecherLehrer,
+  SchuelerInFreifachAnmelden,
+  SchuelerInFreifachAbmelden
 };

@@ -2,7 +2,7 @@
   <div>
     <NavBar></NavBar>
     <RouterView />
-    <hr class="my-2 bg-gray-300">
+    <hr class="my-2 bg-gray-300" />
     <FooterComp></FooterComp>
   </div>
 </template>
