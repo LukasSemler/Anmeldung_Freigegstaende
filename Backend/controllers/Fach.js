@@ -495,10 +495,10 @@ const SchuelerInFreifachAnmelden = (req, res) => {
 const SchuelerInFreifachAbmelden = (req, res) => {
   //Variablen bekommen
   const { s_id, f_id } = req.body;
-  
+
   //Mit Datenbank verbinden
   DatenbankVerbinden();
-  
+
   //Schüler ins Freifach eintragen
   aktiverClient.query(
     'DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2;',
@@ -515,7 +515,37 @@ const SchuelerInFreifachAbmelden = (req, res) => {
       }
     },
   );
+};
 
+const getFaecherSchueler = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+
+  try {
+    const result = await aktiverClient.query(
+      `SELECT f_id,
+       titel,
+       beschreibung,
+       thumbnail,
+       anzahl_stunden,
+       min_schueler,
+       max_schueler,
+       vorname,
+       nachname,
+       email,
+       voraussetzungen,
+       icon
+from freifach_tbl
+         JOIN freifach_bucht fb on freifach_tbl.f_id = fb.f_fk
+         JOIN schueler_tbl st on st.s_id = fb.s_fk
+WHERE s_fk = $1 `,
+      [id],
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).send('Error');
+  }
 };
 
 export {
@@ -534,5 +564,6 @@ export {
   fachDel,
   getFreifaecherLehrer,
   SchuelerInFreifachAnmelden,
-  SchuelerInFreifachAbmelden
+  SchuelerInFreifachAbmelden,
+  getFaecherSchueler,
 };

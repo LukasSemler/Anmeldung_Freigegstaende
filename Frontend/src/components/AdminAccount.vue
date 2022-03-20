@@ -35,7 +35,9 @@
         </div>
       </div>
     </div>
-    <h1 class="text-center text-4xl mt-3">Willkommen {{ aktiverUser.name }}</h1>
+    <h1 class="text-center text-4xl mt-3">
+      Willkommen {{ aktiverUser.vorname }} {{ aktiverUser.nachname }}
+    </h1>
     <br />
     <br />
     <div class="flex justify-center mt-5">
@@ -132,7 +134,6 @@ onMounted(async () => {
 const props = defineProps({
   aktiverUser: {},
 });
-
 
 function changeSite(elem) {
   if (elem.target === 'setzen') router.push('/setFrist');

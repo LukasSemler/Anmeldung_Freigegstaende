@@ -18,6 +18,7 @@ import {
   getFreifaecherLehrer,
   SchuelerInFreifachAnmelden,
   SchuelerInFreifachAbmelden,
+  getFaecherSchueler,
 } from '../controllers/Fach.js';
 
 router.get('/getAdminTimeLine', getAdminTimeLine);
@@ -39,4 +40,6 @@ router.patch('/adminChangeFach/:id', adminChangeFach);
 router.patch('/accepDeclineStudent/:id', accepDeclineStudent);
 
 router.delete('/delFach/:id', fachDel);
+
+router.get('/getFaecherSchueler/:id', getFaecherSchueler);
 export default router;

@@ -7,7 +7,7 @@
     :aktiverUser="Store.getters.getAktivenUser()"
     v-else-if="Store.getters.getAktivenUser().isLehrer && !Store.getters.getAktivenUser().isAdmin"
   ></LehrerAccount>
-  <SchuelerAccount v-else></SchuelerAccount>
+  <SchuelerAccount :aktiverUser="Store.getters.getAktivenUser()" v-else></SchuelerAccount>
 </template>
 
 <script setup>
