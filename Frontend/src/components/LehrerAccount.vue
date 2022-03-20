@@ -281,6 +281,12 @@
             class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
           >
             <button
+              @click="detail(fach)"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black"
+            >
+              Detail
+            </button>
+            <button
               @click="bearbeiten(fach)"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black"
             >
@@ -391,8 +397,8 @@ async function fachDel() {
 }
 
 //! Was macht das ?
-//! function detail(fach) {
-//!   localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
-//!   router.push('/freifachDetailLehrer');
-//! }
+ function detail(fach) {
+  localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
+   router.push('/freifachDetailLehrer');
+ }
 </script>
