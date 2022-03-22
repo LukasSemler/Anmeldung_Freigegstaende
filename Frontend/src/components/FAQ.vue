@@ -3,9 +3,10 @@
     <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
       <div class="lg:grid lg:grid-cols-3 lg:gap-8">
         <div>
-          <h2 class="text-3xl font-extrabold text-gray-900">Frequently asked questions</h2>
+          <h2 class="text-3xl font-extrabold text-gray-900">Häufig gestellte Fragen</h2>
           <p class="mt-4 text-lg text-gray-500">
-            Kannst du deine Frage nicht finden, informiere dich am besten bei deinem
+            Bitte informiere dich zuerst hier, bevor du deine Lehrer um hilfe bittest. Kannst du
+            deine Frage noch immer nicht beantwortet werden, informiere dich am besten bei deinem
             <span class="text-htl_rot">Klassenvorstand</span> oder beim
             <span class="text-htl_rot">Abteilungsvorstand.</span>
           </p>

@@ -106,7 +106,7 @@ let fristenGesetzt = ref(false);
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: true },
   { name: 'Fristen setzen', link: '/setFrist', current: false },
-  { name: 'Check Faecher', link: '/adminCheckFaecher', current: false },
+  { name: 'Fächer überprüfen', link: '/adminCheckFaecher', current: false },
 ];
 
 //Mounted

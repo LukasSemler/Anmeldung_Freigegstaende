@@ -43,7 +43,7 @@
                           class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-htl_hellrot"
                         >
                           <MailIcon class="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-                          <span>Nachricht an Schüler senden</span>
+                          <span>Nachricht an Schüler*innen senden</span>
                         </button>
                       </div>
                     </div>
@@ -69,14 +69,14 @@
                         </dd>
                       </div>
                       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                        <dt class="text-sm font-medium text-gray-500">Benoetigte Wochenstunden</dt>
+                        <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                           {{ freifachRef.anzahl_stunden }}
                         </dd>
                       </div>
                       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                         <dt class="text-sm font-medium text-gray-500">
-                          Maximale Anzahl von Schuelern
+                          Maximale Anzahl von Schülern*innen
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                           {{ freifachRef.max_schueler }}
@@ -84,7 +84,7 @@
                       </div>
                       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                         <dt class="text-sm font-medium text-gray-500">
-                          Minimale Anzahl von Schuelern
+                          Minimale Anzahl von Schüler*innen
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                           {{ freifachRef.min_schueler }}
@@ -92,7 +92,7 @@
                       </div>
 
                       <div class="py-4 sm:py-5 sm:grid sm:grid-cols-6 sm:gap-0">
-                        <dt class="text-sm font-medium text-gray-500">Jahrgeange</dt>
+                        <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
                         <div
                           class="mt-1 text-gray-900 font-bold"
                           v-for="(klasse, i) in freifachRef.voraussetzungen"
@@ -110,7 +110,7 @@
 
               <!-- Team member list -->
               <div class="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
-                <h2 class="text-sm font-medium text-gray-500">Angenomme Schueler:</h2>
+                <h2 class="text-sm font-medium text-gray-500">Angenomme Schüler*innen:</h2>
                 <div class="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <div
                     v-if="angenommen.length > 0"
@@ -140,7 +140,7 @@
                       </div>
                     </div>
                   </div>
-                  <div v-else><h1>Es wurde noch niemand angenommen</h1></div>
+                  <div v-else><h1>Es wurde noch kein Schüler*inn angenommen</h1></div>
                 </div>
               </div>
             </article>
@@ -203,8 +203,8 @@
 </template>
 
 <script setup>
-import { CheckCircleIcon, ChevronRightIcon, MailIcon } from '@heroicons/vue/solid';
-import { onMounted, reactive, ref } from 'vue';
+import { MailIcon } from '@heroicons/vue/solid';
+import { onMounted, ref } from 'vue';
 import Store from '../composables/Store.js';
 import axios from 'axios';
 

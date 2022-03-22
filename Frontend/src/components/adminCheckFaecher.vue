@@ -100,12 +100,12 @@
       </div>
     </div>
   </div>
-  <h1 class="text-center text-4xl mt-2">Check Fächer</h1>
+  <h1 class="text-center text-4xl mt-2">Fächer überprüfen</h1>
   <br />
   <br />
   <div class="flex flex-wrap justify-center">
     <div
-      v-for="(item, i) of faecher"
+      v-for="item of faecher"
       class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4"
     >
       <div class="px-4 py-5 sm:px-6 flex justify-center">
@@ -133,7 +133,7 @@
             </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Beschreibung</dt>
+            <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               Min Schüler: {{ item.min_schueler }} | Max Schüler: {{ item.max_schueler }}
             </dd>
@@ -159,7 +159,7 @@
             </dd>
           </div>
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Benötigte Stunden</dt>
+            <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               {{ item.anzahl_stunden }} Stunden
             </dd>
@@ -256,7 +256,7 @@ let erg = ref(null);
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: false },
   { name: 'Fristen setzen', link: '/setFrist', current: false },
-  { name: 'Check Faecher', link: '/adminCheckFaecher', current: true },
+  { name: 'Fächer überprüfen', link: '/adminCheckFaecher', current: true },
 ];
 
 onMounted(async () => {

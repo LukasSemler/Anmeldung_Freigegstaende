@@ -132,7 +132,7 @@
                 @click="showModalDel = false"
                 ref="cancelButtonRef"
               >
-                Cancel
+                Abbrechen
               </button>
             </div>
           </div>
@@ -180,8 +180,8 @@
   </h1>
   <br />
   <p class="text-center text-">
-    Hier koennen Sie alle Ihre Freifaecher und derern Status anzeigen. Ausserdem koennen Sie neue
-    hinzufuegen und bereits eingereicht aendern
+    Hier können Sie alle Ihre Freifaecher und derern Status anzeigen. Außerdem können Sie neue
+    hinzufügen und bereits erstelle Fächer ändern
   </p>
   <br />
   <br />

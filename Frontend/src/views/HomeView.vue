@@ -272,7 +272,7 @@
   </div>
 
   <div v-else>
-    <h1 class="text-center font-black text-3xl">Es sind noch keine Freifächer vorhanden</h1>
+    <h1 class="text-center font-black text-3xl mt-5">Es sind noch keine Freifächer vorhanden</h1>
     <br />
     <br />
     <div class="flex justify-center">

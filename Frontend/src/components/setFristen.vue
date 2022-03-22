@@ -80,7 +80,7 @@
                 </DialogTitle>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
-                    Die Fristen zum einreichen von den Freifaechern und zum Anmelden wurden gesetzt
+                    Die Fristen zum Einreichen von den Freifächer und zum Anmelden wurden gesetzt
                   </p>
                 </div>
               </div>
@@ -91,7 +91,7 @@
                 class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-htl_rot text-base font-medium text-white hover:bg-htl_hellrot focus:outline-none focus:ring-htl_rot sm:text-sm"
                 @click="router.push('/Account')"
               >
-                Zurück zu Account
+                Zurück zum Account
               </button>
             </div>
           </div>
@@ -157,7 +157,7 @@
                 class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-htl_rot text-base font-medium text-white hover:bg-htl_hellrot focus:outline-none focus:ring-htl_rot sm:text-sm"
                 @click="router.push('/Account')"
               >
-                Zurück zu Account
+                Zurück zum Account
               </button>
             </div>
           </div>
@@ -170,9 +170,9 @@
     <h1 class="text-center text-4xl mt-3">Fristen setzen</h1>
     <div class="flex flex-col justify-center">
       <div class="w-2/3" v-if="!datenVorhanden">
-        <label for="einreichen">Frist fuer das Einreichen von Faechern</label>
+        <label for="einreichen">Frist für das Einreichen von Fächern</label>
         <input v-model="fristEinreichen" type="date" id="einreichen" name="einreichen" />
-        <label for="einreichen">Frist fuer das Anmelden von Faechern</label>
+        <label for="einreichen">Frist für das Anmelden von Fächern</label>
         <input v-model="fristAnmelden" type="date" id="einreichen" name="einreichen" />
         <button
           @click="setFristen"
@@ -185,10 +185,10 @@
   </div>
 
   <div class="mt-3" v-if="datenVorhanden">
-    <h1>Endzeitpunkt Einreichen</h1>
+    <h1>Endzeitpunkt fürs Einreichen</h1>
     <CountDown :endzeitpunkt="fristEinreichenFormated"></CountDown>
 
-    <h1>Endzeitpunkt Anmelden</h1>
+    <h1>Endzeitpunkt fürs Anmelden</h1>
     <CountDown :endzeitpunkt="fristAnmeldenFormated"></CountDown>
   </div>
 </template>

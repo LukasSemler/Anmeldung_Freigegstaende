@@ -31,13 +31,13 @@
               Anzahl der Stunden: <span class="text-black">{{ fach.anzahl_stunden }}</span>
             </p>
             <p class="mt-3 text-base text-gray-500">
-              Benoetigte Schueler: <span class="text-black">{{ fach.min_schueler }}</span>
+              Minimale Anzahl Schüler*innen: <span class="text-black">{{ fach.min_schueler }}</span>
             </p>
             <p class="mt-3 text-base text-gray-500">
-              Maximale Schueler: <span class="text-black">{{ fach.max_schueler }}</span>
+              Maximale Anzahl Schüler*innen: <span class="text-black">{{ fach.max_schueler }}</span>
             </p>
             <p class="mt-3 text-base text-gray-500">
-              Jahrgaenge:
+              Jahrgänge:
               <span class="text-black">{{ fach.voraussetzungen }}</span>
             </p>
             <br />

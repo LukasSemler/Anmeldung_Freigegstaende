@@ -94,7 +94,7 @@
                   class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-htl_rot text-base font-medium text-white hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot sm:text-sm"
                   @click="ZurHomeModalClick"
                 >
-                  Zurück zu Home
+                  Zurück zur Home Seite
                 </button>
               </div>
             </div>
@@ -137,7 +137,7 @@
                   />
                 </div>
                 <p class="mt-2 text-sm text-gray-500">
-                  Schreiben Sie ein paar Infos ueber Ihr Freifach.
+                  Schreiben Sie ein paar Infos über Ihr Freifach.
                 </p>
               </div>
               <!-- ---------------------------------------------------------------------------------------------------------------- -->
@@ -210,7 +210,7 @@
               <!-- Anzahlen -->
               <div class="sm:col-span-6 mt-5">
                 <label for="titel" class="block text-sm font-medium text-gray-700">
-                  Minimale Anzahl / Maximale Anzahl von Schueler
+                  Minimale Anzahl / Maximale Anzahl von Schüler*innen
                 </label>
                 <div class="flex flex-row mt-1">
                   <!-- Minimale Anzahl -->
@@ -320,7 +320,7 @@
               <div class="sm:col-span-1 mt-5">
                 <Listbox as="div" v-model="selected">
                   <ListboxLabel class="block text-sm font-medium text-gray-700">
-                    Benoetigte Stunden
+                    Benötigte Wochenstunden
                   </ListboxLabel>
                   <div class="mt-1 relative">
                     <ListboxButton
@@ -388,7 +388,7 @@
               <div class="sm:col-span-3 mt-5">
                 <fieldset>
                   <legend class="text-lg font-medium text-gray-900">
-                    Welche Jahgänge dürfen teilnehmen
+                    Welche Jahgänge dürfen teilnehmen?
                   </legend>
                   <div class="mt-4 border-t border-b border-gray-300 divide-y divide-gray-200">
                     <div
@@ -437,7 +437,7 @@
 
 <script setup>
 //Router impotieren
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 //Tailwind Imports
 import {
@@ -551,8 +551,6 @@ async function sendImage() {
 
 //Sendet eingegebenen Daten an den Server, der diese dann in der DB speichert
 async function sendData() {
-
-
   const fachObj = {
     titel: titel.value,
     beschreibung: beschreibung.value,
@@ -564,7 +562,7 @@ async function sendData() {
     lehrer: Store.state.aktiverUser,
   };
 
-  console.log(fachObj.voraussetzungen)
+  console.log(fachObj.voraussetzungen);
 
   axios.post('http://localhost:2410/fachErstellen', fachObj);
 }
