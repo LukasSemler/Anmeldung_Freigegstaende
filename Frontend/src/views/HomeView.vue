@@ -382,10 +382,16 @@ function FilterChanged() {
   });
 }
 
+//Mounted
 onMounted(async () => {
   //Bekommen und anzeigen aller Freifächer
-  const { data } = await axios.get('http://localhost:2410/getFreifaecher');
-  Freifaecherliste.value = data;
+  const { data, status } = await axios.get('http://localhost:2410/getFreifaecher');
+  if (status == 200) {
+    //Zeigt nur Freifächer an die angenommen wurden
+    Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');
+  } else {
+    alert('Fehler beim Laden der Freigegenstände');
+  }
 });
 
 function detail(freifachItem) {

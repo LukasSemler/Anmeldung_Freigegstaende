@@ -43,7 +43,7 @@
                           class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-htl_hellrot"
                         >
                           <MailIcon class="-ml-1 mr-2 h-5 w-5 text-gray-400" aria-hidden="true" />
-                          <span>Nachricht an Schueler senden</span>
+                          <span>Nachricht an Schüler senden</span>
                         </button>
                       </div>
                     </div>
@@ -90,11 +90,16 @@
                           {{ freifachRef.min_schueler }}
                         </dd>
                       </div>
-                      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+
+                      <div class="py-4 sm:py-5 sm:grid sm:grid-cols-6 sm:gap-0">
                         <dt class="text-sm font-medium text-gray-500">Jahrgeange</dt>
-                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                          {{ freifachRef.voraussetzungen }}
-                        </dd>
+                        <div
+                          class="mt-1 text-gray-900 font-bold"
+                          v-for="(klasse, i) in freifachRef.voraussetzungen"
+                          :key="i"
+                        >
+                          <p>{{ klasse }}</p>
+                        </div>
                       </div>
                     </dl>
                   </div>
@@ -213,9 +218,12 @@ onMounted(async () => {
   try {
     const freifach = JSON.parse(localStorage.getItem('detailAnsichtLehrer'));
     freifachRef.value = freifach;
-    console.log(freifachRef.value);
-  } catch {
-    console.error('Es wurde kein Freifach gefunden');
+
+    //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+    VoraussetzungenVonDbNutzbarMachen();
+  } catch (err) {
+    console.log(err);
+    // console.error('Es wurde kein Freifach gefunden');
   }
 
   schueler.value = await getData();
@@ -224,6 +232,19 @@ onMounted(async () => {
     if (iterator.status == 'true') angenommen.value.push(iterator);
   }
 });
+
+//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+function VoraussetzungenVonDbNutzbarMachen() {
+  let vor = freifachRef.value.voraussetzungen
+    .slice(1, freifachRef.value.voraussetzungen.length - 1)
+    .split(',');
+
+  freifachRef.value.voraussetzungen = [];
+
+  for (const key of vor) {
+    freifachRef.value.voraussetzungen.push(key.slice(1, key.length - 1));
+  }
+}
 
 async function annehmen(s) {
   const res = await axios.patch(`http://localhost:2410/accepDeclineStudent/${s.s_id}`, {
