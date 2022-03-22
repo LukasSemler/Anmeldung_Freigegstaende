@@ -247,9 +247,10 @@ import {
 import { ExclamationIcon } from '@heroicons/vue/outline';
 
 let faecher = ref([]);
-let fristAnmelden = ref(null);
+let fristEinreichen = ref(null);
 let showModalWarning = ref(false);
 let aktuellesDatum = reactive[null];
+let erg = ref(null);
 
 // Tabs erstellen
 const tabs = [
@@ -260,13 +261,13 @@ const tabs = [
 
 onMounted(async () => {
   //Daten holen
-  fristAnmelden.value = Store.state.fristAnmelden.original;
+  fristEinreichen.value = Store.state.fristEinreichen.original;
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-  const erg = moment(fristAnmelden.value).isBefore(aktuellesDatum);
+   erg.value = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
-  if (!erg) {
+  if (!erg.value) {
     console.log('Sie können noch nicht checken');
     showModalWarning.value = true;
   }
@@ -276,7 +277,7 @@ onMounted(async () => {
 });
 
 async function annehmen(fach) {
-  if (erg) {
+  if (erg.value) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: true,
@@ -291,7 +292,7 @@ async function annehmen(fach) {
 }
 
 async function ablehnen(fach) {
-  if (erg) {
+  if (erg.value) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: false,
@@ -306,7 +307,7 @@ async function ablehnen(fach) {
 }
 
 function change(fach) {
-  if (erg) {
+  if (erg.value) {
     console.log('Sie können checken');
     try {
       localStorage.clearItem('changeFach');
