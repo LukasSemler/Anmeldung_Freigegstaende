@@ -384,6 +384,12 @@ function FilterChanged() {
 
 //Mounted
 onMounted(async () => {
+  try {
+    localStorage.removeItem('AuswahlFreifach');
+    localStorage.removeItem('detailAnsichtLehrer');
+  } catch (error) {
+    console.log('Nichts im LS gesetzt');
+  }
   //Bekommen und anzeigen aller Freifächer
   const { data, status } = await axios.get('http://localhost:2410/getFreifaecher');
   if (status == 200) {
