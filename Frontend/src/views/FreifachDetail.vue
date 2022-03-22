@@ -153,26 +153,26 @@
                     </dd>
                   </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                    <dt class="text-sm font-medium text-gray-500">Benoetigte Wochenstunden</dt>
+                    <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {{ FreifachDatenObjekt.anzahl_stunden }}
                     </dd>
                   </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                    <dt class="text-sm font-medium text-gray-500">Maximale Anzahl von Schuelern</dt>
+                    <dt class="text-sm font-medium text-gray-500">Maximale Anzahl von Schüler*innen</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {{ FreifachDatenObjekt.max_schueler }}
                     </dd>
                   </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                    <dt class="text-sm font-medium text-gray-500">Minimale Anzahl von Schuelern</dt>
+                    <dt class="text-sm font-medium text-gray-500">Minimale Anzahl von Schüler*innen</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {{ FreifachDatenObjekt.min_schueler }}
                     </dd>
                   </div>
 
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-6 sm:gap-0">
-                    <dt class="text-sm font-medium text-gray-500">Jahrgeange</dt>
+                    <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
                     <div
                       class="mt-1 text-gray-900 font-bold"
                       v-for="(klasse, i) in FreifachDatenObjekt.voraussetzungen"

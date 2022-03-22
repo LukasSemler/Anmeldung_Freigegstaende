@@ -5,8 +5,8 @@
         <div>
           <h2 class="text-3xl font-extrabold text-gray-900">Häufig gestellte Fragen</h2>
           <p class="mt-4 text-lg text-gray-500">
-            Bitte informiere dich zuerst hier, bevor du deine Lehrer um hilfe bittest. Kannst du
-            deine Frage noch immer nicht beantwortet werden, informiere dich am besten bei deinem
+            Bitte informiere Dich zuerst hier, bevor du Deine Lehrer*in um Hilfe bittest. Kann
+            Deine Frage noch immer nicht beantwortet werden, informiere Dich am besten bei Deinem
             <span class="text-htl_rot">Klassenvorstand</span> oder beim
             <span class="text-htl_rot">Abteilungsvorstand.</span>
           </p>

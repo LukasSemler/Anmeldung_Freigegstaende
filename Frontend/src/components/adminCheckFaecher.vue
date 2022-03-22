@@ -135,7 +135,7 @@
           <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              Min Schüler: {{ item.min_schueler }} | Max Schüler: {{ item.max_schueler }}
+              Minimale Anzahl Schüler: {{ item.min_schueler }} | Maximale Anzahl Schüler: {{ item.max_schueler }}
             </dd>
           </div>
           <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -234,7 +234,6 @@ import { ref, reactive, onMounted } from 'vue';
 import router from '../router';
 import axios from 'axios';
 import Store from '../composables/Store.js';
-import vueMoment from 'vue-moment';
 import moment from 'moment';
 
 import {

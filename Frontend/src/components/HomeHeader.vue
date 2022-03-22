@@ -17,7 +17,7 @@
 
       <div class="rounded-md w-2/3 bg-opacity-50 bg-gray-300">
         <p class="mt-6 text-xl text-black max-w-3xl p-2 opacity-100 z-50 font-bold">
-          Hier kannst du dich als Schüler für die Freifächer deiner Wahl anmelden, oder als Lehrer
+          Hier kannst du Dich als Schüler für die Freifächer Deiner Wahl anmelden, oder als Lehrer
           ein Freifach erstellen und verwalten.
         </p>
       </div>

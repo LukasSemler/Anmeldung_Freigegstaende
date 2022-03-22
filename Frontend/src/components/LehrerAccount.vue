@@ -113,7 +113,7 @@
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
                     Sind Sie sicher, dass Sie das Freifach löschen wollen, Sie können dies nicht
-                    mehr Rückgängig machen!
+                    mehr rückgängig machen!
                   </p>
                 </div>
               </div>
@@ -180,12 +180,12 @@
   </h1>
   <br />
   <p class="text-center text-">
-    Hier können Sie alle Ihre Freifaecher und derern Status anzeigen. Außerdem können Sie neue
-    hinzufügen und bereits erstelle Fächer ändern
+    Hier können Sie alle Ihre Freifächer und deren Status anzeigen. Außerdem können Sie neue
+    Freifächer hinzufügen und bereits erstelle Fächer ändern
   </p>
   <br />
   <br />
-  <h3 class="ml-40 text-xl">Ihre Freifaecher:</h3>
+  <h3 class="max-w-7xl mx-auto text-2xl font-bold">Ihre Freifächer:</h3>
   <br />
   <div v-if="showAddFach" class="text-center">
     <svg
@@ -217,7 +217,7 @@
     </div>
   </div>
   <div v-else class="flex flex-wrap justify-cente">
-    <div class="relative max-w-7xl mx-auto">
+    <div class="bg-lime-400 relative max-w-7xl mx-auto">
       <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
         <div
           v-for="fach of faecher"
@@ -246,14 +246,14 @@
                   Anzahl der Stunden: <span class="text-black">{{ fach.anzahl_stunden }}</span>
                 </p>
                 <p class="mt-3 text-base text-gray-500">
-                  Benoetigte Schueler: <span class="text-black">{{ fach.min_schueler }}</span>
+                  Benötigte Schüler: <span class="text-black">{{ fach.min_schueler }}</span>
                 </p>
                 <p class="mt-3 text-base text-gray-500">
-                  Maximale Schueler: <span class="text-black">{{ fach.max_schueler }}</span>
+                  Maximale Schüler: <span class="text-black">{{ fach.max_schueler }}</span>
                 </p>
                 <p class="mt-3 text-base text-gray-500">
-                  Jahrgaenge:
-                  <span class="text-black">{{ fach.voraussetzungen }}</span>
+                  Jahrgänge:
+                  <span class="text-black" v-for="jahrgang of fach.voraussetzungen">{{jahrgang}}, </span>
                 </p>
                 <br />
                 <span
@@ -270,7 +270,7 @@
                 </span>
                 <span
                   v-else
-                  class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-600 text-black"
+                  class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-600 text-white"
                 >
                   Pending
                 </span>
@@ -350,9 +350,22 @@ onMounted(async () => {
   );
 
   console.log(data);
+
   //schauen ob Faecher vorhanden sind
   if (data.length == 0) showAddFach.value = true;
-  else faecher.value = data;
+  else {
+    faecher.value = data;
+    for (const iterator of faecher.value) {
+      let vor = iterator.voraussetzungen.slice(1, iterator.voraussetzungen.length - 1).split(',');
+
+      iterator.voraussetzungen = [];
+
+      for (const key of vor) {
+        iterator.voraussetzungen.push(key.slice(1, key.length - 1));
+      }
+    }
+    console.log(faecher.value);
+  }
 });
 
 const props = defineProps({
@@ -396,9 +409,8 @@ async function fachDel() {
   );
 }
 
-//! Was macht das ?
- function detail(fach) {
+function detail(fach) {
   localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
-   router.push('/freifachDetailLehrer');
- }
+  router.push('/freifachDetailLehrer');
+}
 </script>

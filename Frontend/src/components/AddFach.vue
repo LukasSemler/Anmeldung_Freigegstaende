@@ -87,14 +87,14 @@
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> 
               <div class="mt-5 sm:mt-6">
                 <button
                   type="button"
                   class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-htl_rot text-base font-medium text-white hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot sm:text-sm"
                   @click="ZurHomeModalClick"
                 >
-                  Zurück zur Home Seite
+                  Zurück zu Home
                 </button>
               </div>
             </div>
@@ -137,7 +137,7 @@
                   />
                 </div>
                 <p class="mt-2 text-sm text-gray-500">
-                  Schreiben Sie ein paar Infos über Ihr Freifach.
+                  Schreiben Sie ein paar Informationen über Ihr Freifach
                 </p>
               </div>
               <!-- ---------------------------------------------------------------------------------------------------------------- -->
@@ -210,7 +210,7 @@
               <!-- Anzahlen -->
               <div class="sm:col-span-6 mt-5">
                 <label for="titel" class="block text-sm font-medium text-gray-700">
-                  Minimale Anzahl / Maximale Anzahl von Schüler*innen
+                  minimale Anzahl / maximale Anzahl von Schüler*innen
                 </label>
                 <div class="flex flex-row mt-1">
                   <!-- Minimale Anzahl -->
@@ -388,7 +388,7 @@
               <div class="sm:col-span-3 mt-5">
                 <fieldset>
                   <legend class="text-lg font-medium text-gray-900">
-                    Welche Jahgänge dürfen teilnehmen?
+                    Welche Jahrgänge dürfen teilnehmen?
                   </legend>
                   <div class="mt-4 border-t border-b border-gray-300 divide-y divide-gray-200">
                     <div

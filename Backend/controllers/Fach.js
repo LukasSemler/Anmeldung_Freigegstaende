@@ -69,6 +69,7 @@ const fachErstellen = async (req, res) => {
       }
     },
   );
+  DatenbankTrennen();
 };
 
 const fachThumbnail = (req, res) => {
@@ -89,6 +90,8 @@ const getAdminTimeLine = async (req, res) => {
   const result = await aktiverClient.query('SELECT * FROM admintimeline_tbl ORDER BY t_id ASC ; ');
 
   res.status(200).json(result.rows);
+
+  DatenbankTrennen();
 };
 
 const setFristenChangeTimeLine = async (req, res) => {
@@ -115,6 +118,8 @@ const setFristenChangeTimeLine = async (req, res) => {
   } catch (error) {
     res.status(500).send('Etwas ist schief gelaufen');
   }
+
+  DatenbankTrennen();
 };
 
 const getFristen = async (req, res) => {
@@ -548,6 +553,20 @@ WHERE s_fk = $1 `,
   }
 };
 
+const schuelerAbmelden = (req, res) => {
+  const { id } = req.params;
+  DatenbankVerbinden();
+
+  try {
+    aktiverClient.query(`DELETE FROM freifach_bucht WHERE f_fk = ${id};`);
+    res.status(200).send('User Deleted');
+  } catch (error) {
+    res.status(500).send('Error');
+  }
+
+  DatenbankTrennen();
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -566,4 +585,5 @@ export {
   SchuelerInFreifachAnmelden,
   SchuelerInFreifachAbmelden,
   getFaecherSchueler,
+  schuelerAbmelden,
 };

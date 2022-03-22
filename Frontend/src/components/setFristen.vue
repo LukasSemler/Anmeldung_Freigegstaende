@@ -80,7 +80,7 @@
                 </DialogTitle>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
-                    Die Fristen zum Einreichen von den Freifächer und zum Anmelden wurden gesetzt
+                    Die Fristen zum Einreichen von den Freifächer und für die Anmeldung wurden gesetzt
                   </p>
                 </div>
               </div>
@@ -211,7 +211,7 @@ import {
 const tabs = [
   { name: 'Mein Account', link: '/Account', current: false },
   { name: 'Fristen setzen', link: '/setFrist', current: true },
-  { name: 'Check Faecher', link: '/adminCheckFaecher', current: false },
+  { name: 'Fächer überprüfen', link: '/adminCheckFaecher', current: false },
 ];
 
 const router = useRouter();

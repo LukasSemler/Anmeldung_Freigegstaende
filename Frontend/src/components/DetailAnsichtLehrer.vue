@@ -140,7 +140,7 @@
                       </div>
                     </div>
                   </div>
-                  <div v-else><h1>Es wurde noch kein Schüler*inn angenommen</h1></div>
+                  <div v-else><h1>Es wurde noch kein(e) Schüler*in angenommen</h1></div>
                 </div>
               </div>
             </article>
