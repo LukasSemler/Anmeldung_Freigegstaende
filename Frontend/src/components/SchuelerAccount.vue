@@ -136,9 +136,9 @@
     Willkommen {{ aktiverUser.vorname }} {{ aktiverUser.nachname }}
   </h1>
 
-  <div class="flex flex-wrap justify-center">
-    <div v-if="faecher.length > 0" class="relative max-w-7xl mx-auto">
-      <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+  <div class="flex-row flex-wrap flex justify-center mt-8">
+    <div v-if="faecher.length > 0" class=" max-w-7xl mx-auto">
+      <div >
         <div
           v-for="fach of faecher"
           :key="fach.f_id"

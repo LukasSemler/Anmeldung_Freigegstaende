@@ -251,7 +251,7 @@
                   >
                     <ShieldExclamationIcon class="text-white w-4 h-4 mr-2" />
                     Du erfüllst leider noch nicht die Voraussetzungen, um an diesem Freifach
-                    teilzunehmen
+                    teilzunehmen, oder bist bereits angemeldet
                     <div class="tooltip-arrow" data-popper-arrow></div>
                   </div>
                 </div>
