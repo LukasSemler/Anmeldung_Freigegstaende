@@ -106,7 +106,7 @@
   <div class="flex flex-row">
     <div class="flex flex-row justify-center flex-wrap">
       <div
-        v-for="item of faecher"
+        v-for="fach of faecher"
         class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4 w-4/12"
       >
         <div class="px-4 py-5 sm:px-6 flex justify-center">
@@ -114,100 +114,97 @@
             class="h-48 w-96 object-scale-down"
             crossorigin="anonymous"
             async
-            :src="item.thumbnail"
+            :src="fach.thumbnail"
           />
         </div>
         <div class="px-4 py-5 sm:px-6">
-          <h3 class="text-lg font-bold leading-6 text-gray-900">{{ item.titel }}</h3>
+          <h3 class="text-lg font-bold leading-6 text-gray-900">{{ fach.titel }}</h3>
         </div>
         <div class="border-t border-gray-200">
           <dl>
             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-500">Titel</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ item.titel }}</dd>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ fach.titel }}</dd>
             </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 h-28">
               <dt class="text-sm font-medium text-gray-500">Beschreibung</dt>
               <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ item.beschreibung }}
+                {{ fach.beschreibung }}
               </dd>
             </div>
             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
               <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                Minimale Anzahl Schüler: {{ item.min_schueler }} | Maximale Anzahl Schüler:
-                {{ item.max_schueler }}
+                Minimale Anzahl Schüler: {{ fach.min_schueler }} | Maximale Anzahl Schüler:
+                {{ fach.max_schueler }}
               </dd>
             </div>
-            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 h-32">
               <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
-              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                <nav class="space-y-1" aria-label="Sidebar">
-                  <a
-                    v-for="fach in item.jahrgänge"
-                    :key="fach"
-                    :class="[
-                      fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
-                      'flex items-center px-3 py-2 text-sm font-medium rounded-md',
-                    ]"
-                    :aria-current="fach ? 'page' : undefined"
-                  >
-                    <span class="truncate">
-                      {{ fach }}
-                    </span>
-                  </a>
-                </nav>
-              </dd>
+              <div v-for="(voraussetzung, i) of fach.voraussetzungen" :key="i">
+                <dd
+                  class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                  :class="[
+                    fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
+                    'flex items-center px-3 py-2 text-sm font-medium rounded-md',
+                  ]"
+                  :aria-current="fach ? 'page' : undefined"
+                >
+                  <span class="truncate">
+                    {{ voraussetzung }}
+                  </span>
+                </dd>
+              </div>
             </div>
             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
               <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {{ item.anzahl_stunden }} Stunden
+                {{ fach.anzahl_stunden }} Stunden
               </dd>
             </div>
-            <div class=" bg-blue-400">
+            <div class="bg-blue-400">
               <div class="ml-3 mt-6 flex items-center bg-lime-300">
                 <div class="flex-shrink-0">
                   <a>
-                    <span class="sr-only">{{ item.vorname }} {{ item.nachname }}</span>
-                    <img class="h-10 w-10 rounded-full" :src="item.icon" alt="" />
+                    <span class="sr-only">{{ fach.vorname }} {{ fach.nachname }}</span>
+                    <img class="h-10 w-10 rounded-full" :src="fach.icon" alt="" />
                   </a>
                 </div>
                 <div class="ml-3">
                   <p class="text-sm font-medium text-gray-900">
-                    <a class="hover:underline"> {{ item.vorname }} {{ item.nachname }} </a>
+                    <a class="hover:underline"> {{ fach.vorname }} {{ fach.nachname }} </a>
                   </p>
                   <div class="flex space-x-1 text-sm text-gray-500">
                     <p>Email:</p>
                     <span aria-hidden="true"> &middot; </span>
-                    <span> {{ item.email }} </span>
+                    <span> {{ fach.email }} </span>
                   </div>
                 </div>
               </div>
               <div
-                v-if="item.genehmigt == 'pending'"
+                v-if="fach.genehmigt == 'pending'"
                 class="bg-red-300 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
               >
                 <button
-                  @click="annehmen(item)"
+                  @click="annehmen(fach)"
                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
                 >
                   Annehmen
                 </button>
                 <button
-                  @click="ablehnen(item)"
+                  @click="ablehnen(fach)"
                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
                 >
                   Ablehnen
                 </button>
                 <button
-                  @click="change(item)"
+                  @click="change(fach)"
                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
                 >
                   Ändern
                 </button>
               </div>
-              <div class="flex justify-center mt-3" v-else-if="item.genehmigt == 'false'">
+              <div class="flex justify-center mt-3" v-else-if="fach.genehmigt == 'false'">
                 <button
                   disabled
                   class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
@@ -263,7 +260,7 @@ const tabs = [
 
 onMounted(async () => {
   //Daten holen
-  fristEinreichen.value = Store.state.fristEinreichen.original;
+  fristEinreichen.value = Store.state.fristEinreichen;
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
@@ -274,9 +271,21 @@ onMounted(async () => {
     showModalWarning.value = true;
   }
 
-  //Daten holen
+  //Daten holen + Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
   getData();
 });
+
+//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+function VoraussetzungenVonDbNutzbarMachen() {
+  for (const fach of faecher.value) {
+    let vor = fach.voraussetzungen.slice(1, fach.voraussetzungen.length - 1).split(',');
+    fach.voraussetzungen = [];
+    for (const key of vor) {
+      let abc = key.replaceAll('"', '');
+      fach.voraussetzungen.push(abc);
+    }
+  }
+}
 
 async function annehmen(fach) {
   if (erg.value) {
@@ -324,9 +333,12 @@ function change(fach) {
 }
 
 async function getData() {
+  //Daten holen
   const { data } = await axios.get('http://localhost:2410/getFaecherAdmin');
-  console.log(data);
   faecher.value = data;
+
+  //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+  VoraussetzungenVonDbNutzbarMachen();
 }
 
 function closeModal() {

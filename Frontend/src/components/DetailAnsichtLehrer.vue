@@ -218,9 +218,6 @@ onMounted(async () => {
   try {
     const freifach = JSON.parse(localStorage.getItem('detailAnsichtLehrer'));
     freifachRef.value = freifach;
-
-    //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
-    VoraussetzungenVonDbNutzbarMachen();
   } catch (err) {
     console.log(err);
     // console.error('Es wurde kein Freifach gefunden');
@@ -232,19 +229,6 @@ onMounted(async () => {
     if (iterator.status == 'true') angenommen.value.push(iterator);
   }
 });
-
-//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
-function VoraussetzungenVonDbNutzbarMachen() {
-  let vor = freifachRef.value.voraussetzungen
-    .slice(1, freifachRef.value.voraussetzungen.length - 1)
-    .split(',');
-
-  freifachRef.value.voraussetzungen = [];
-
-  for (const key of vor) {
-    freifachRef.value.voraussetzungen.push(key.slice(1, key.length - 1));
-  }
-}
 
 async function annehmen(s) {
   const res = await axios.patch(`http://localhost:2410/accepDeclineStudent/${s.s_id}`, {

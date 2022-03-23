@@ -223,11 +223,11 @@
 
     <!--Anzeigecontainer für alle Freifächer-->
     <div class="flex-row flex-wrap flex justify-center mt-8">
-      <div
+      <!-- <div
         v-for="(item, i) of FreifaecherGefiltert"
         class=" shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4"
       >
-        <div class="px-4 py-5 sm:px-6 flex justify-center">
+        <div class="px-4 py-5 sm:px-6 flex justify-center w-4/12">
           <img
             class="h-48 w-96 object-scale-down"
             crossorigin="anonymous"
@@ -266,6 +266,63 @@
               </button>
             </div>
           </dl>
+        </div>
+      </div> -->
+      <div class="flex flex-wrap justify-center">
+        <div class="relative max-w-7xl mx-auto">
+          <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+            <div
+              v-for="fach of FreifaecherGefiltert"
+              :key="fach.f_id"
+              class="flex flex-col rounded-lg shadow-lg overflow-hidden"
+            >
+              <div class="flex-shrink-0">
+                <img
+                  crossorigin="anynomous"
+                  class="h-48 w-full object-cover"
+                  :src="fach.thumbnail"
+                  alt=""
+                />
+              </div>
+              <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                <div class="flex-1">
+                  <a class="block mt-2">
+                    <p class="text-xl font-semibold text-gray-900">
+                      {{ fach.titel }}
+                    </p>
+                    <p class="mt-3 text-base text-gray-500 mb-2">
+                      {{ fach.beschreibung }}
+                    </p>
+                    <hr />
+                    <p class="mt-3 text-base text-gray-500">
+                      Anzahl der Stunden: <span class="text-black">{{ fach.anzahl_stunden }}</span>
+                    </p>
+                    <p class="mt-3 text-base text-gray-500">
+                      Benötigte Schüler: <span class="text-black">{{ fach.min_schueler }}</span>
+                    </p>
+                    <p class="mt-3 text-base text-gray-500">
+                      Maximale Schüler: <span class="text-black">{{ fach.max_schueler }}</span>
+                    </p>
+                    <p class="mt-3 text-base text-gray-500">
+                      Jahrgänge:
+                      <span class="text-black" v-for="jahrgang of fach.voraussetzungen"
+                        >{{ jahrgang }},
+                      </span>
+                    </p>
+                    <br />
+                  </a>
+                </div>
+              </div>
+              <div class="bg-white px-4 py-5 flex justify-center">
+                <button
+                  @click="detail(fach)"
+                  class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Detailansicht
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -390,15 +447,33 @@ onMounted(async () => {
   } catch (error) {
     console.log('Nichts im LS gesetzt');
   }
+
   //Bekommen und anzeigen aller Freifächer
   const { data, status } = await axios.get('http://localhost:2410/getFreifaecher');
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');
+
+    //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+    VoraussetzungenVonDbNutzbarMachen();
   } else {
     alert('Fehler beim Laden der Freigegenstände');
   }
 });
+
+//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+function VoraussetzungenVonDbNutzbarMachen() {
+  for (const fach of Freifaecherliste.value) {
+    let vor = fach.voraussetzungen.slice(1, fach.voraussetzungen.length - 1).split(',');
+
+    fach.voraussetzungen = [];
+
+    for (const key of vor) {
+      let abc = key.replaceAll('"', '');
+      fach.voraussetzungen.push(abc);
+    }
+  }
+}
 
 function detail(freifachItem) {
   //Freifach im LocalStorage setzen

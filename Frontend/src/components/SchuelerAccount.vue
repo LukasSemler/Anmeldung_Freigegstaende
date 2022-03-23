@@ -137,9 +137,9 @@
   </h1>
 
   <div class="flex-row flex-wrap flex justify-center mt-8">
-    <div v-if="faecher.length > 0" class=" max-w-7xl mx-auto">
-      <div >
-        <div
+    <div v-if="faecher.length > 0" class="max-w-7xl mx-auto">
+      <div>
+        <!-- <div
           v-for="fach of faecher"
           :key="fach.f_id"
           class="flex flex-col rounded-lg shadow-lg overflow-hidden"
@@ -196,6 +196,107 @@
               Abmelden
             </button>
           </div>
+        </div> -->
+        <div class="flex flex-row">
+          <div class="flex flex-row justify-center flex-wrap">
+            <div
+              v-for="fach of faecher"
+              class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4 w-4/12"
+            >
+              <div class="px-4 py-5 sm:px-6 flex justify-center">
+                <img
+                  class="h-48 w-96 object-scale-down"
+                  crossorigin="anonymous"
+                  async
+                  :src="fach.thumbnail"
+                />
+              </div>
+              <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg font-bold leading-6 text-gray-900">{{ fach.titel }}</h3>
+              </div>
+              <div class="border-t border-gray-200">
+                <dl>
+                  <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Titel</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {{ fach.titel }}
+                    </dd>
+                  </div>
+                  <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 h-32">
+                    <dt class="text-sm font-medium text-gray-500">Beschreibung</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {{ fach.beschreibung }}
+                    </dd>
+                  </div>
+                  <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      Minimale Anzahl Schüler: {{ fach.min_schueler }} | Maximale Anzahl Schüler:
+                      {{ fach.max_schueler }}
+                    </dd>
+                  </div>
+                  <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 h-32">
+                    <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
+                    <div v-for="(voraussetzung, i) of fach.voraussetzungen" :key="i">
+                      <dd
+                        class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                        :class="[
+                          fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
+                          'flex items-center px-3 py-2 text-sm font-medium rounded-md',
+                        ]"
+                        :aria-current="fach ? 'page' : undefined"
+                      >
+                        <span class="truncate">
+                          {{ voraussetzung }}
+                        </span>
+                      </dd>
+                    </div>
+                  </div>
+                  <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {{ fach.anzahl_stunden }} Stunden
+                    </dd>
+                  </div>
+                  <div class="bg-blue-400">
+                    <div class="ml-3 mt-6 flex items-center bg-lime-300">
+                      <div class="flex-shrink-0">
+                        <a>
+                          <span class="sr-only">{{ fach.vorname }} {{ fach.nachname }}</span>
+                          <img class="h-10 w-10 rounded-full" :src="fach.icon" alt="" />
+                        </a>
+                      </div>
+                      <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-900">
+                          <a class="hover:underline"> {{ fach.vorname }} {{ fach.nachname }} </a>
+                        </p>
+                        <div class="flex space-x-1 text-sm text-gray-500">
+                          <p>Email:</p>
+                          <span aria-hidden="true"> &middot; </span>
+                          <span> {{ fach.email }} </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="flex justify-center mt-3 mb-3">
+                      <button
+                        @click="detail(fach)"
+                        class="inline-flex justify-center mr-14 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black"
+                      >
+                        Detail
+                      </button>
+                      <button
+                        @click="abmelden(fach)"
+                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-500 hover:text-black"
+                      >
+                        Abmelden
+                      </button>
+                    </div>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -227,21 +328,29 @@ let fristAnmelden = ref(null);
 let showModalWarning = ref(false);
 let showModalSuccess = ref(false);
 
+const props = defineProps({ aktiverUser: {} });
+
 onMounted(async () => {
   const { data } = await axios.get(
     `http://localhost:2410/getFaecherSchueler/${props.aktiverUser.s_id}`,
   );
   faecher.value = data;
-  for (const iterator of faecher.value) {
-    let vor = iterator.voraussetzungen.slice(1, iterator.voraussetzungen.length - 1).split(',');
 
-    iterator.voraussetzungen = [];
+  //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+  VoraussetzungenVonDbNutzbarMachen();
+});
 
+//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+function VoraussetzungenVonDbNutzbarMachen() {
+  for (const fach of faecher.value) {
+    let vor = fach.voraussetzungen.slice(1, fach.voraussetzungen.length - 1).split(',');
+    fach.voraussetzungen = [];
     for (const key of vor) {
-      iterator.voraussetzungen.push(key.slice(1, key.length - 1));
+      let abc = key.replaceAll('"', '');
+      fach.voraussetzungen.push(abc);
     }
   }
-});
+}
 
 function detail(fach) {
   try {
@@ -274,6 +383,4 @@ async function abmelden(fach) {
     showModalSuccess.value = true;
   }
 }
-
-const props = defineProps({ aktiverUser: {} });
 </script>

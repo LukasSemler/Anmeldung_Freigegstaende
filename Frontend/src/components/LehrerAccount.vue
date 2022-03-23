@@ -217,7 +217,7 @@
     </div>
   </div>
   <div v-else class="flex flex-wrap justify-center">
-    <div class=" relative max-w-7xl mx-auto">
+    <div class="relative max-w-7xl mx-auto">
       <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
         <div
           v-for="fach of faecher"
@@ -351,22 +351,13 @@ onMounted(async () => {
     `http://localhost:2410/getFreifaecher?email=${props.aktiverUser.email}`,
   );
 
-  console.log(data);
-
   //schauen ob Faecher vorhanden sind
   if (data.length == 0) showAddFach.value = true;
   else {
     faecher.value = data;
-    for (const iterator of faecher.value) {
-      let vor = iterator.voraussetzungen.slice(1, iterator.voraussetzungen.length - 1).split(',');
 
-      iterator.voraussetzungen = [];
-
-      for (const key of vor) {
-        iterator.voraussetzungen.push(key.slice(1, key.length - 1));
-      }
-    }
-    console.log(faecher.value);
+    //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+    VoraussetzungenVonDbNutzbarMachen();
   }
 });
 
@@ -384,6 +375,21 @@ function bearbeiten(fach) {
 
   if (!erg) {
     showModalWarning.value = true;
+  }
+}
+
+//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
+function VoraussetzungenVonDbNutzbarMachen() {
+  for (const fach of faecher.value) {
+    let vor = fach.voraussetzungen.slice(1, fach.voraussetzungen.length - 1).split(',');
+
+    fach.voraussetzungen = [];
+
+    for (const key of vor) {
+      let abc = key.replaceAll('"', '');
+
+      fach.voraussetzungen.push(abc);
+    }
   }
 }
 

@@ -147,6 +147,12 @@
               <div class="mt-5 border-t border-gray-200">
                 <dl class="sm:divide-y sm:divide-gray-200">
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
+                    <dt class="text-sm font-medium text-gray-500">Professor*in:</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {{ FreifachLehrerDaten.vorname }} {{ FreifachLehrerDaten.nachname }}
+                    </dd>
+                  </div>
+                  <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
                     <dt class="text-sm font-medium text-gray-500">Beschreibung:</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {{ FreifachDatenObjekt.beschreibung }}
@@ -159,13 +165,17 @@
                     </dd>
                   </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                    <dt class="text-sm font-medium text-gray-500">Maximale Anzahl von Schüler*innen</dt>
+                    <dt class="text-sm font-medium text-gray-500">
+                      Maximale Anzahl von Schüler*innen
+                    </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {{ FreifachDatenObjekt.max_schueler }}
                     </dd>
                   </div>
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
-                    <dt class="text-sm font-medium text-gray-500">Minimale Anzahl von Schüler*innen</dt>
+                    <dt class="text-sm font-medium text-gray-500">
+                      Minimale Anzahl von Schüler*innen
+                    </dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {{ FreifachDatenObjekt.min_schueler }}
                     </dd>
@@ -328,9 +338,6 @@ onMounted(async () => {
   let ausgaehltesFreifach = JSON.parse(localStorage.getItem('AuswahlFreifach'));
   Object.assign(FreifachDatenObjekt, ausgaehltesFreifach);
 
-  //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
-  VoraussetzungenVonDbNutzbarMachen();
-
   //Leitender Lehrer bekommen
   let { data: Lehrerdata, status } = await axios.get(
     `http://localhost:2410/getFreifaecherLehrer?freifachname=${ausgaehltesFreifach.titel}`,
@@ -414,19 +421,6 @@ async function FreifachAbmelden() {
   }
   //Feedback-Modal anzeigen
   showModal.value = true;
-}
-
-//Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
-function VoraussetzungenVonDbNutzbarMachen() {
-  let vor = FreifachDatenObjekt.voraussetzungen
-    .slice(1, FreifachDatenObjekt.voraussetzungen.length - 1)
-    .split(',');
-
-  FreifachDatenObjekt.voraussetzungen = [];
-
-  for (const key of vor) {
-    FreifachDatenObjekt.voraussetzungen.push(key.slice(1, key.length - 1));
-  }
 }
 
 //Wenn Klick auf Nachricht senden Button
