@@ -103,127 +103,130 @@
   <h1 class="text-center text-4xl mt-2">Fächer überprüfen</h1>
   <br />
   <br />
-  <div class="flex flex-wrap justify-center">
-    <div
-      v-for="item of faecher"
-      class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4"
-    >
-      <div class="px-4 py-5 sm:px-6 flex justify-center">
-        <img
-          class="h-48 w-96 object-scale-down"
-          crossorigin="anonymous"
-          async
-          :src="item.thumbnail"
-        />
-      </div>
-      <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">{{ item.titel }}</h3>
-        <p class="mt-1 max-w-2xl text-sm text-gray-500">{{ item.lehrer }}</p>
-      </div>
-      <div class="border-t border-gray-200">
-        <dl>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Titel</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ item.titel }}</dd>
-          </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Beschreibung</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ item.beschreibung }}
-            </dd>
-          </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              Minimale Anzahl Schüler: {{ item.min_schueler }} | Maximale Anzahl Schüler: {{ item.max_schueler }}
-            </dd>
-          </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <nav class="space-y-1" aria-label="Sidebar">
-                <a
-                  v-for="fach in item.jahrgänge"
-                  :key="fach"
-                  :class="[
-                    fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
-                    'flex items-center px-3 py-2 text-sm font-medium rounded-md',
-                  ]"
-                  :aria-current="fach ? 'page' : undefined"
-                >
-                  <span class="truncate">
-                    {{ fach }}
-                  </span>
-                </a>
-              </nav>
-            </dd>
-          </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {{ item.anzahl_stunden }} Stunden
-            </dd>
-          </div>
-          <div class="ml-3 mt-6 flex items-center">
-            <div class="flex-shrink-0">
-              <a>
-                <span class="sr-only">{{ item.vorname }} {{ item.nachname }}</span>
-                <img class="h-10 w-10 rounded-full" :src="item.icon" alt="" />
-              </a>
+  <div class="flex flex-row">
+    <div class="flex flex-row justify-center flex-wrap">
+      <div
+        v-for="item of faecher"
+        class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4 w-4/12"
+      >
+        <div class="px-4 py-5 sm:px-6 flex justify-center">
+          <img
+            class="h-48 w-96 object-scale-down"
+            crossorigin="anonymous"
+            async
+            :src="item.thumbnail"
+          />
+        </div>
+        <div class="px-4 py-5 sm:px-6">
+          <h3 class="text-lg font-bold leading-6 text-gray-900">{{ item.titel }}</h3>
+        </div>
+        <div class="border-t border-gray-200">
+          <dl>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Titel</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ item.titel }}</dd>
             </div>
-            <div class="ml-3">
-              <p class="text-sm font-medium text-gray-900">
-                <a class="hover:underline"> {{ item.vorname }} {{ item.nachname }} </a>
-              </p>
-              <div class="flex space-x-1 text-sm text-gray-500">
-                <p>Email:</p>
-                <span aria-hidden="true"> &middot; </span>
-                <span> {{ item.email }} </span>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Beschreibung</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ item.beschreibung }}
+              </dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                Minimale Anzahl Schüler: {{ item.min_schueler }} | Maximale Anzahl Schüler:
+                {{ item.max_schueler }}
+              </dd>
+            </div>
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <nav class="space-y-1" aria-label="Sidebar">
+                  <a
+                    v-for="fach in item.jahrgänge"
+                    :key="fach"
+                    :class="[
+                      fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
+                      'flex items-center px-3 py-2 text-sm font-medium rounded-md',
+                    ]"
+                    :aria-current="fach ? 'page' : undefined"
+                  >
+                    <span class="truncate">
+                      {{ fach }}
+                    </span>
+                  </a>
+                </nav>
+              </dd>
+            </div>
+            <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ item.anzahl_stunden }} Stunden
+              </dd>
+            </div>
+            <div class=" bg-blue-400">
+              <div class="ml-3 mt-6 flex items-center bg-lime-300">
+                <div class="flex-shrink-0">
+                  <a>
+                    <span class="sr-only">{{ item.vorname }} {{ item.nachname }}</span>
+                    <img class="h-10 w-10 rounded-full" :src="item.icon" alt="" />
+                  </a>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm font-medium text-gray-900">
+                    <a class="hover:underline"> {{ item.vorname }} {{ item.nachname }} </a>
+                  </p>
+                  <div class="flex space-x-1 text-sm text-gray-500">
+                    <p>Email:</p>
+                    <span aria-hidden="true"> &middot; </span>
+                    <span> {{ item.email }} </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                v-if="item.genehmigt == 'pending'"
+                class="bg-red-300 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
+              >
+                <button
+                  @click="annehmen(item)"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Annehmen
+                </button>
+                <button
+                  @click="ablehnen(item)"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Ablehnen
+                </button>
+                <button
+                  @click="change(item)"
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Ändern
+                </button>
+              </div>
+              <div class="flex justify-center mt-3" v-else-if="item.genehmigt == 'false'">
+                <button
+                  disabled
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Wurde bereits abgelehnt
+                </button>
+              </div>
+
+              <div class="flex justify-center mt-3 mb-3" v-else>
+                <button
+                  disabled
+                  class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                >
+                  Wurde bereits genehmigt
+                </button>
               </div>
             </div>
-          </div>
-          <div
-            v-if="item.genehmigt == 'pending'"
-            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
-          >
-            <button
-              @click="annehmen(item)"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Annehmen
-            </button>
-            <button
-              @click="ablehnen(item)"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Ablehnen
-            </button>
-            <button
-              @click="change(item)"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Ändern
-            </button>
-          </div>
-
-          <div class="flex justify-center mt-3" v-else-if="item.genehmigt == 'false'">
-            <button
-              disabled
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Wurde bereits abgelehnt
-            </button>
-          </div>
-
-          <div class="flex justify-center mt-3 mb-3" v-else>
-            <button
-              disabled
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-            >
-              Wurde bereits genehmigt
-            </button>
-          </div>
-        </dl>
+          </dl>
+        </div>
       </div>
     </div>
   </div>
@@ -264,7 +267,7 @@ onMounted(async () => {
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-   erg.value = moment(fristEinreichen.value).isBefore(aktuellesDatum);
+  erg.value = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
   if (!erg.value) {
     console.log('Sie können noch nicht checken');

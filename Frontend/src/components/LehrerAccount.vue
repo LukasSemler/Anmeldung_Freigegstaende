@@ -1,7 +1,7 @@
 <template>
   <!-- Modal warning -->
   <TransitionRoot as="template" :show="showModalWarning">
-    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="closeModal">
+    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModalWarning = false">
       <div
         class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
       >
@@ -185,7 +185,7 @@
   </p>
   <br />
   <br />
-  <h3 class="max-w-7xl mx-auto text-2xl font-bold">Ihre Freifächer:</h3>
+  <h3 class="max-w-6xl mx-auto text-2xl font-bold">Ihre Freifächer:</h3>
   <br />
   <div v-if="showAddFach" class="text-center">
     <svg
@@ -216,8 +216,8 @@
       </button>
     </div>
   </div>
-  <div v-else class="flex flex-wrap justify-cente">
-    <div class="bg-lime-400 relative max-w-7xl mx-auto">
+  <div v-else class="flex flex-wrap justify-center">
+    <div class=" relative max-w-7xl mx-auto">
       <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
         <div
           v-for="fach of faecher"
@@ -253,7 +253,9 @@
                 </p>
                 <p class="mt-3 text-base text-gray-500">
                   Jahrgänge:
-                  <span class="text-black" v-for="jahrgang of fach.voraussetzungen">{{jahrgang}}, </span>
+                  <span class="text-black" v-for="jahrgang of fach.voraussetzungen"
+                    >{{ jahrgang }},
+                  </span>
                 </p>
                 <br />
                 <span
@@ -386,20 +388,20 @@ function bearbeiten(fach) {
 }
 
 function openModalError(fach) {
-  console.log('test');
   //Daten holen
   fristEinreichen.value = Store.state.fristEinreichen.original;
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
   const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
+  console.log(erg);
 
   if (!erg) {
     showModalWarning.value = true;
+  } else {
+    showModalDel.value = true;
+    fachZuLöschen.value = fach;
   }
-
-  showModalDel.value = true;
-  fachZuLöschen.value = fach;
 }
 
 async function fachDel() {

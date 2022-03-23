@@ -225,7 +225,7 @@
     <div class="flex-row flex-wrap flex justify-center mt-8">
       <div
         v-for="(item, i) of FreifaecherGefiltert"
-        class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4"
+        class=" shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4"
       >
         <div class="px-4 py-5 sm:px-6 flex justify-center">
           <img
