@@ -57,6 +57,7 @@ const router = createRouter({
       name: 'FAQ',
       component: FAQView,
     },
+    { path: '/:pathmatch(.*)*', name: 'not-found', component: Error404 },
   ],
 });
 
