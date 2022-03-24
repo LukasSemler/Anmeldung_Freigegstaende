@@ -109,12 +109,12 @@
         v-for="fach of faecher"
         class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4 w-4/12"
       >
-        <div class="px-4 py-5 sm:px-6 flex justify-center">
+        <div class="flex-shrink-0">
           <img
-            class="h-48 w-96 object-scale-down"
-            crossorigin="anonymous"
-            async
+            crossorigin="anynomous"
+            class="h-60 w-full object-cover"
             :src="fach.thumbnail"
+            alt=""
           />
         </div>
         <div class="px-4 py-5 sm:px-6">
@@ -339,6 +339,27 @@ async function getData() {
 
   //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
   VoraussetzungenVonDbNutzbarMachen();
+  let alleAccepted = true;
+
+  for (const iterator of faecher.value) {
+    if (iterator.genehmigt == 'pending') {
+      console.log('Eines ist pending');
+      alleAccepted = false;
+      break;
+    }
+  }
+
+  if (alleAccepted == true) {
+    let today = new Date();
+
+    const obj = {
+      datum: today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
+      icon: 'CheckIcon',
+      iconbackground: 'bg-green-600',
+    };
+
+    await axios.post('http://localhost:2410/changeTimeLine', obj);
+  }
 }
 
 function closeModal() {

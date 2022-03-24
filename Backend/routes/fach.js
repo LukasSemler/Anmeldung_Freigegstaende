@@ -20,6 +20,7 @@ import {
   SchuelerInFreifachAbmelden,
   getFaecherSchueler,
   schuelerAbmelden,
+  changeTimeLine,
 } from '../controllers/Fach.js';
 
 router.get('/getAdminTimeLine', getAdminTimeLine);
@@ -45,4 +46,6 @@ router.delete('/delFach/:id', fachDel);
 router.get('/getFaecherSchueler/:id', getFaecherSchueler);
 
 router.delete('/schuelerAbmelden/:id', schuelerAbmelden);
+
+router.post('/changeTimeLine', changeTimeLine);
 export default router;

@@ -567,6 +567,28 @@ const schuelerAbmelden = (req, res) => {
   DatenbankTrennen();
 };
 
+const changeTimeLine = (req, res) => {
+  const daten = req.body;
+
+  console.log(daten.datum, daten.icon, daten.iconbackground);
+
+  try {
+    DatenbankVerbinden();
+
+    //Timeline aendern
+    aktiverClient.query(
+      'UPDATE admintimeline_tbl SET data = $1, icon = $2, iconbackground = $3 WHERE t_id = 3;',
+      [daten.datum, daten.icon, daten.iconbackground],
+    );
+
+    DatenbankTrennen();
+
+    res.status(200).send('Success');
+  } catch (error) {
+    res.status(500).send('Error');
+  }
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -586,4 +608,5 @@ export {
   SchuelerInFreifachAbmelden,
   getFaecherSchueler,
   schuelerAbmelden,
+  changeTimeLine,
 };

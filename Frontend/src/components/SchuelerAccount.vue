@@ -198,17 +198,17 @@
           </div>
         </div> -->
         <div class="flex flex-row">
-          <div class="flex flex-row justify-center flex-wrap ">
+          <div class="flex flex-row justify-center flex-wrap">
             <div
               v-for="fach of faecher"
               class="bg-white shadow-xl border overflow-hidden sm:rounded-lg mx-2 my-4 w-4/12"
             >
-              <div class="px-4 py-5 sm:px-6 flex justify-center">
+              <div class="flex-shrink-0">
                 <img
-                  class="h-48 w-96 object-scale-down"
-                  crossorigin="anonymous"
-                  async
+                  crossorigin="anynomous"
+                  class="h-48 w-full object-cover"
                   :src="fach.thumbnail"
+                  alt=""
                 />
               </div>
               <div class="px-4 py-5 sm:px-6">
