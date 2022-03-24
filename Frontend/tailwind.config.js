@@ -1,10 +1,5 @@
 module.exports = {
-  content: [
-    './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}',
-    './node_modules/tw-elements/dist/js/**/*.js',
-    './node_modules/flowbite/**/*.js',
-  ],
+  content: ['./src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -15,9 +10,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('tw-elements/dist/plugin'),
-    require('flowbite/plugin'),
-  ],
+  plugins: [require('@tailwindcss/forms')],
 };

@@ -54,3 +54,10 @@ function formateDate(date) {
   );
 }
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300&display=swap');
+body {
+  font-family: 'Titillium Web', sans-serif;
+}
+</style>

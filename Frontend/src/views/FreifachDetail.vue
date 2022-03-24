@@ -200,7 +200,7 @@
           <div class="my-16 flex justify-center" v-if="FristErlaubtInteraktion">
             <div class="w-1/2">
               <!--Wenn der Schueler schon im Freifach begetreten ist-->
-              <div v-if="SchuelerSchonBeigetreten">
+              <div v-if="SchuelerSchonBeigetreten" class="relative flex flex-col items-center group">
                 <button
                   data-tooltip-target="anmeldenErfolgTooltip"
                   data-tooltip-style="dark"
@@ -210,20 +210,22 @@
                 >
                   Vom Freifach abmelden
                 </button>
-                <div
-                  id="anmeldenErfolgTooltip"
-                  role="tooltip"
-                  class="flex absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700"
-                >
-                  <BadgeCheckIcon class="text-white w-4 h-4 mr-2" />
-                  Du kannst dich abmelden, solange die Frist noch nicht um ist!
-                  <div class="tooltip-arrow" data-popper-arrow></div>
+                <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
+                  <span
+                    class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-yellow-500 shadow-lg"
+                  >
+                    Du kannst dich abmelden, solange die Frist noch nicht um ist!
+                  </span>
+                  <div class="w-3 h-3 -mt-2 rotate-45 bg-yellow-500"></div>
                 </div>
               </div>
 
               <div v-else>
                 <!--Wenn Schüler erlaubt ist anzumelden-->
-                <div v-if="SchuelerBeitrittErlaubt">
+                <div
+                  v-if="SchuelerBeitrittErlaubt"
+                  class="relative flex flex-col items-center group"
+                >
                   <button
                     data-tooltip-target="anmeldenErfolgTooltip"
                     data-tooltip-style="dark"
@@ -233,19 +235,18 @@
                   >
                     Zum Freifach Anmelden
                   </button>
-                  <div
-                    id="anmeldenErfolgTooltip"
-                    role="tooltip"
-                    class="flex absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-green-600 rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700"
-                  >
-                    <BadgeCheckIcon class="text-white w-4 h-4 mr-2" />
-                    Du erfüllst alle Voraussetzungen!
-                    <div class="tooltip-arrow" data-popper-arrow></div>
+                  <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
+                    <span
+                      class="relative w-max z-10 p-2 leading-none text-black whitespace-no-wrap rounded bg-green-500 shadow-lg"
+                    >
+                      Du erfüllst alle Voraussetzungen, dich anzumelden!
+                    </span>
+                    <div class="w-3 h-3 -mt-2 rotate-45 bg-green-500"></div>
                   </div>
                 </div>
 
                 <!--Wenn Schüler erlaubt ist anzumelden-->
-                <div v-else>
+                <div v-else class="relative flex flex-col items-center group">
                   <button
                     data-tooltip-target="anmeldenFehlerTooltip"
                     data-tooltip-style="dark"
@@ -254,15 +255,13 @@
                   >
                     Zum Freifach Anmelden
                   </button>
-                  <div
-                    id="anmeldenFehlerTooltip"
-                    role="tooltip"
-                    class="flex absolute invisible z-10 py-2 px-3 text-sm font-medium text-white bg-htl_hellrot rounded-lg shadow-sm opacity-0 transition-opacity duration-300 tooltip dark:bg-gray-700"
-                  >
-                    <ShieldExclamationIcon class="text-white w-4 h-4 mr-2" />
-                    Du erfüllst leider noch nicht die Voraussetzungen, um an diesem Freifach
-                    teilzunehmen, oder bist bereits angemeldet
-                    <div class="tooltip-arrow" data-popper-arrow></div>
+                  <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
+                    <span
+                      class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-red-600 shadow-lg"
+                    >
+                      Du erfüllst leider nicht alle benötigten Voraussetzungen!
+                    </span>
+                    <div class="w-3 h-3 -mt-2 rotate-45 bg-red-600"></div>
                   </div>
                 </div>
               </div>
@@ -293,7 +292,6 @@
 </template>
 
 <script setup>
-import 'flowbite';
 import {
   MailIcon,
   BadgeCheckIcon,
@@ -312,7 +310,6 @@ import {
 } from '@headlessui/vue';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import SchuelerAccountVue from '../components/SchuelerAccount.vue';
 
 //Router für Weiterleitungen
 const router = useRouter();
