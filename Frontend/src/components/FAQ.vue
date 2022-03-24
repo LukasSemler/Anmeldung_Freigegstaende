@@ -1,23 +1,23 @@
 <template>
-  <div class="bg-white">
+  <div class="">
     <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
       <div class="lg:grid lg:grid-cols-3 lg:gap-8">
         <div>
           <h2 class="text-3xl font-extrabold text-gray-900">Häufig gestellte Fragen</h2>
           <p class="mt-4 text-lg text-gray-500">
-            Bitte informiere Dich zuerst hier, bevor du Deine Lehrer*in um Hilfe bittest. Kann
-            Deine Frage noch immer nicht beantwortet werden, informiere Dich am besten bei Deinem
+            Bitte informiere Dich zuerst hier, bevor du Deine Lehrer*in um Hilfe bittest. Kann Deine
+            Frage noch immer nicht beantwortet werden, informiere Dich am besten bei Deinem
             <span class="text-htl_rot">Klassenvorstand</span> oder beim
             <span class="text-htl_rot">Abteilungsvorstand.</span>
           </p>
         </div>
-        <div class="mt-12 lg:mt-0 lg:col-span-2">
+        <div class="mt-12 lg:mt-0 lg:col-span-2 ml-3">
           <dl class="space-y-12">
             <div v-for="faq in faqs" :key="faq.question">
-              <dt class="text-lg leading-6 font-medium text-gray-900">
+              <dt class="text-lg leading-6 font-bold text-gray-900">
                 {{ faq.question }}
               </dt>
-              <dd class="mt-2 text-base text-gray-500">
+              <dd class="mt-2 text-base text-gray-600 font-medium ">
                 {{ faq.answer }}
               </dd>
             </div>
@@ -31,44 +31,43 @@
 <script setup>
 const faqs = [
   {
-    question: 'How do you make holy water?',
+    question: 'Was geschieht, wenn es mehr anmeldungen auf das Freifach gibt, als Plätze?',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Wenn es mehr Anmeldungen als Plätze gibt, entscheidet der Lehrer oder die Lehrerin welche Schüler*innen teilnehmen dürfen und welche nicht. Dies wird häufig nach dem Notendurchschnitt entschieden. ',
   },
   {
-    question: 'How do you make holy water?',
-    answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+    question: 'Was ist, wenn ich draufkomme, dass mir das Freifach nicht gefällt?',
+    answer: 'Ein frühzeitiges beenden bzw. abmelden von dem Freifach ist leider nicht möglich.',
   },
   {
-    question: 'How do you make holy water?',
+    question: 'Wie ist, wenn ich eine fehle?',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Wenn du bei deinem angemeldetet Freifach fehlst, musst du ganz normal eine Entschuldigung bei deinem Klassenvorstand einreichen.',
   },
   {
-    question: 'How do you make holy water?',
+    question: 'Welche Technologien verwenden für bei den Freifächern?',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Für manche Freifächer werden bestimmte Technologien benötigt. Dies hängt aber immer davon ab, welches Freifach du besuchst. Prinzipell werden aber alle Technologien von der Schule bereitgestellt.',
   },
   {
-    question: 'How do you make holy water?',
+    question: 'Sind Freifächer kostenlos?',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Ja, Freifächer sind prinzipell kostenlos. Falls es aber doch vorkommt, dass Materialen benötigt werden, welche nicht in der Schule zu verfügen stehen und etwas kosten, wird dies vom Lehrer mitgeteilt.',
   },
   {
-    question: 'How do you make holy water?',
+    question: 'Bekomme ich eine Note im Zeugniss oder der Schulnachricht?',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Ja, du bekommst nicht nur ein "Teilgenommen", sondern eine Note, deswegen herrscht auch eine Anwesenheitspflicht.',
   },
   {
-    question: 'How do you make holy water?',
+    question: 'Darf ich auf meinem eigenen Notebook arbeiten? ',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Ja natürlich, ist sogar erwünscht :)',
   },
   {
-    question: 'How do you make holy water?',
+    question: 'Wieso gibt es bei manchen Freifächern eine limitierung der Teilnehmer?',
     answer:
-      'You boil the hell out of it. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.',
+      'Aufgrund der PCs welche uns in der Computerräumen zu verfügung stehen bzw. wegen der Anzahl von Lizenzen welche benötigt werden.',
   },
 ];
 </script>

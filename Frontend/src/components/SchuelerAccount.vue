@@ -198,10 +198,10 @@
           </div>
         </div> -->
         <div class="flex flex-row">
-          <div class="flex flex-row justify-center flex-wrap">
+          <div class="flex flex-row justify-center flex-wrap ">
             <div
               v-for="fach of faecher"
-              class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4 w-4/12"
+              class="bg-white shadow-xl border overflow-hidden sm:rounded-lg mx-2 my-4 w-4/12"
             >
               <div class="px-4 py-5 sm:px-6 flex justify-center">
                 <img
