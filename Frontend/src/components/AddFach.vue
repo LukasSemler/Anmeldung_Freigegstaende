@@ -87,7 +87,7 @@
                     </p>
                   </div>
                 </div>
-              </div> 
+              </div>
               <div class="mt-5 sm:mt-6">
                 <button
                   type="button"
@@ -461,7 +461,9 @@ import {
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-import Store from '../composables/Store.js';
+//Store einbinden
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
 
 //router erstellen
 const router = useRouter();
@@ -559,7 +561,8 @@ async function sendData() {
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
     linkThumbnail: `http://localhost:2410/images/${titel.value}.jpg`,
-    lehrer: Store.state.aktiverUser,
+    // lehrer: Store.state.aktiverUser,
+    lehrer: store.getAktivenUser,
   };
 
   console.log(fachObj.voraussetzungen);

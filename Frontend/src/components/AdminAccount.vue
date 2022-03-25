@@ -92,8 +92,14 @@
 import { XIcon, CheckIcon } from '@heroicons/vue/solid';
 import { useRouter } from 'vue-router';
 import { onMounted, reactive, ref } from 'vue';
-import Store from '../composables/Store.js';
+//Alter Store
+// import Store from '../composables/Store.js';
+
 import axios from 'axios';
+
+//Store einbinden
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
 
 const router = useRouter();
 
@@ -121,10 +127,22 @@ onMounted(async () => {
     else iterator.icon = CheckIcon;
   }
 
+  //! Alt
   //Fristen holen und zuweisen
-  if (Store.state.fristAnmelden && Store.state.fristEinreichen) {
-    fristEinreichen.value = Store.state.fristEinreichen;
-    fristAnmelden.value = Store.state.fristAnmelden;
+  // if (Store.state.fristAnmelden && Store.state.fristEinreichen) {
+  //   fristEinreichen.value = Store.state.fristEinreichen;
+  //   fristAnmelden.value = Store.state.fristAnmelden;
+
+  //   fristenGesetzt.value = true;
+  // }
+
+  //! Neu
+  const fristAnmelden = store.getFristAnmelden;
+  const fristEinreichen = store.getFristEinreichen;
+
+  if (fristAnmelden && fristEinreichen) {
+    fristEinreichen.value = fristEinreichen;
+    fristAnmelden.value = fristAnmelden;
 
     fristenGesetzt.value = true;
   }

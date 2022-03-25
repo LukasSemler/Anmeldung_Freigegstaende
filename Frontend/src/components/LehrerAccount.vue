@@ -325,11 +325,17 @@ import { ref, onMounted, reactive } from 'vue';
 
 //sonstige imports
 import axios from 'axios';
-import Store from '../composables/Store.js';
+// import Store from '../composables/Store.js';
 import moment from 'moment';
 
 //Router impotieren
 import { useRouter } from 'vue-router';
+
+//Store einbinden
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
+
+//Router erstellen
 const router = useRouter();
 
 let showAddFach = ref(false);
@@ -366,8 +372,11 @@ const props = defineProps({
 });
 
 function bearbeiten(fach) {
+  //Frist aus dem Store holen
+  const fristEinreichen = store.getFristEinreichen;
+
   //Daten holen
-  fristEinreichen.value = Store.state.fristEinreichen.original;
+  fristEinreichen.value = fristEinreichen.original;
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
@@ -394,8 +403,11 @@ function VoraussetzungenVonDbNutzbarMachen() {
 }
 
 function openModalError(fach) {
+  //Frist ist aus dem Store holen
+  const fristEinreichen = store.getFristEinreichen;
+
   //Daten holen
-  fristEinreichen.value = Store.state.fristEinreichen.original;
+  fristEinreichen.value = fristEinreichen.original;
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist

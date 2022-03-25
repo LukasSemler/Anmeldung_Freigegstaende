@@ -12,6 +12,8 @@
     "@heroicons/vue": "^1.0.6",
     "axios": "^0.26.0",
     "moment": "^2.29.1",
+    "pinia": "^2.0.12",
+    "pinia-plugin-persistedstate": "^1.5.1",
     "tw-elements": "^1.0.0-alpha11",
     "vue": "^3.2.25",
     "vue-moment": "^4.1.0",

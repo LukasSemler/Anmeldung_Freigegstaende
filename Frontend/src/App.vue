@@ -15,29 +15,53 @@ import { onMounted } from 'vue';
 import axios from 'axios';
 import FooterComp from './components/FooterComp.vue';
 
+//Store einbinden
+import { PiniaStore } from './Store/Store.js';
+const store = PiniaStore();
+
 onMounted(async () => {
   //Wenn User im Localstorage, dann laden
   if (localStorage.getItem('User')) {
     let user = JSON.parse(localStorage.getItem('User'));
 
+    //! Alt
     Store.actions.aktivenUserSetzen(user);
+
+    //? Neu
+    // store.setAktiverUser(user);
   }
 
   //Fristen holen und setzen
   const { data } = await axios.get('http://localhost:2410/getFristen');
 
+  //! Alt
+  // if (data.length !== 0) {
+  //   if (!Store.state.fristAnmelden && !Store.state.fristEinreichen) {
+  //     Store.state.fristEinreichen = {
+  //       formatiert: formateDate(data[0].frist_einreichen),
+  //       original: data[0].frist_einreichen,
+  //     };
+  //     Store.state.fristAnmelden = {
+  //       formatiert: formateDate(data[0].frist_anmelden),
+  //       original: data[0].frist_anmelden,
+  //     };
+  //   } else console.log('Fristen schon gesetzt');
+  // } else console.log('Keine Fristen gesetzt');
+
   if (data.length !== 0) {
-    if (!Store.state.fristAnmelden && !Store.state.fristEinreichen) {
-      Store.state.fristEinreichen = {
+
+    // if (!fristEinreichen && !fristAnmelden) {
+      //Fristen setzen
+      store.setFristEinreichen({
         formatiert: formateDate(data[0].frist_einreichen),
         original: data[0].frist_einreichen,
-      };
-      Store.state.fristAnmelden = {
+      });
+      store.setFristAnmelden({
         formatiert: formateDate(data[0].frist_anmelden),
         original: data[0].frist_anmelden,
-      };
-    } else console.log('Fristen schon gesetzt');
-  } else console.log('Keine Fristen gesetzt');
+      });
+    // }
+  }
 });
 
 function formateDate(date) {

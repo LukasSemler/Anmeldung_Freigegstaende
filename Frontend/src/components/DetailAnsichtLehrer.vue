@@ -89,7 +89,7 @@
                       <img
                         class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
                         async
-                        :src="Store.getters.getAktivenUser().icon"
+                        :src="store.getAktivenUser.icon"
                         referrerpolicy="no-referrer"
                       />
                     </div>
@@ -279,9 +279,13 @@ import {
 } from '@headlessui/vue';
 import { ExclamationIcon } from '@heroicons/vue/outline';
 import { onMounted, ref } from 'vue';
-import Store from '../composables/Store.js';
+// import Store from '../composables/Store.js';
 import axios from 'axios';
 import moment from 'moment';
+
+//Store einbinden
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
 
 let freifachRef = ref({});
 let schueler = ref([]);
@@ -294,13 +298,16 @@ let angenommen = ref([]);
 
 onMounted(async () => {
   try {
+    //Frist aus dem Store holen
+    let fristAnmelden = store.getFristEinreichen;
+
+    //Freifach aus dem LS holen
     const freifach = JSON.parse(localStorage.getItem('detailAnsichtLehrer'));
     freifachRef.value = freifach;
 
-    //TODO Datum checken
     let aktuellesDatum;
     //Daten holen
-    fristAnmelden.value = Store.state.fristAnmelden.original;
+    fristAnmelden.value = fristAnmelden.original;
     console.log(fristAnmelden.value);
     aktuellesDatum = new Date();
 

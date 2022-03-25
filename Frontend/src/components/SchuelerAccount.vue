@@ -139,64 +139,6 @@
   <div class="flex-row flex-wrap flex justify-center mt-8">
     <div v-if="faecher.length > 0" class="max-w-7xl mx-auto">
       <div>
-        <!-- <div
-          v-for="fach of faecher"
-          :key="fach.f_id"
-          class="flex flex-col rounded-lg shadow-lg overflow-hidden"
-        >
-          <div class="flex-shrink-0">
-            <img
-              crossorigin="anynomous"
-              class="h-48 w-full object-cover"
-              :src="fach.thumbnail"
-              alt=""
-            />
-          </div>
-          <div class="flex-1 bg-white p-6 flex flex-col justify-between">
-            <div class="flex-1">
-              <a class="block mt-2">
-                <p class="text-xl font-semibold text-gray-900">
-                  {{ fach.titel }}
-                </p>
-                <p class="mt-3 text-base text-gray-500 mb-2">
-                  {{ fach.beschreibung }}
-                </p>
-                <hr />
-                <p class="mt-3 text-base text-gray-500">
-                  Anzahl der Stunden: <span class="text-black">{{ fach.anzahl_stunden }}</span>
-                </p>
-                <p class="mt-3 text-base text-gray-500">
-                  Benötigte Schüler: <span class="text-black">{{ fach.min_schueler }}</span>
-                </p>
-                <p class="mt-3 text-base text-gray-500">
-                  Maximale Schüler: <span class="text-black">{{ fach.max_schueler }}</span>
-                </p>
-                <p class="mt-3 text-base text-gray-500">
-                  Jahrgänge:
-                  <span class="text-black" v-for="jahrgang of fach.voraussetzungen"
-                    >{{ jahrgang }},
-                  </span>
-                </p>
-              </a>
-            </div>
-          </div>
-          <div
-            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
-          >
-            <button
-              @click="detail(fach)"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 hover:text-black"
-            >
-              Detail
-            </button>
-            <button
-              @click="abmelden(fach)"
-              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-500 hover:text-black"
-            >
-              Abmelden
-            </button>
-          </div>
-        </div> -->
         <div class="flex flex-row">
           <div class="flex flex-row justify-center flex-wrap">
             <div
@@ -308,7 +250,7 @@
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import Store from '../composables/Store.js';
+// import Store from '../composables/Store.js';
 import moment from 'moment';
 import { CheckIcon } from '@heroicons/vue/solid';
 
@@ -320,6 +262,10 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import { ExclamationIcon } from '@heroicons/vue/outline';
+
+//Store einbinden
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
 
 const router = useRouter();
 
@@ -361,10 +307,12 @@ function detail(fach) {
 }
 
 async function abmelden(fach) {
+  const fristAnmelden = store.getFristEinreichen;
+
   let erg;
 
   //Daten holen
-  fristAnmelden.value = Store.state.fristAnmelden.original;
+  fristAnmelden.value = fristAnmelden;
   let aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist

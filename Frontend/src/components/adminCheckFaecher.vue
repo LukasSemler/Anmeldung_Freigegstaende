@@ -233,7 +233,7 @@
 import { ref, reactive, onMounted } from 'vue';
 import router from '../router';
 import axios from 'axios';
-import Store from '../composables/Store.js';
+// import Store from '../composables/Store.js';
 import moment from 'moment';
 
 import {
@@ -244,6 +244,10 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import { ExclamationIcon } from '@heroicons/vue/outline';
+
+//Store einbinden
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
 
 let faecher = ref([]);
 let fristEinreichen = ref(null);
@@ -259,14 +263,17 @@ const tabs = [
 ];
 
 onMounted(async () => {
+  //Frist aus dem Store holen
+  const frist = store.getFristEinreichen;
+
   //Daten holen
-  fristEinreichen.value = Store.state.fristEinreichen;
+  fristEinreichen.value = frist;
   aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
   erg.value = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
-  if (!erg.value) {
+  if (erg.value) {
     console.log('Sie können noch nicht checken');
     showModalWarning.value = true;
   }
@@ -288,7 +295,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 }
 
 async function annehmen(fach) {
-  if (erg.value) {
+  if (!erg.value) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: true,
@@ -303,7 +310,7 @@ async function annehmen(fach) {
 }
 
 async function ablehnen(fach) {
-  if (erg.value) {
+  if (!erg.value) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: false,
@@ -318,7 +325,7 @@ async function ablehnen(fach) {
 }
 
 function change(fach) {
-  if (erg.value) {
+  if (!erg.value) {
     console.log('Sie können checken');
     try {
       localStorage.clearItem('changeFach');

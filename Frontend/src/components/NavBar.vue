@@ -179,10 +179,13 @@ async function abmelden() {
   console.log('Abmelden');
 
   //Google Logout
+  //! Alt
   await Store.state.gAuth.signOut();
 
   //Aktiven User entfernen
+  //! Alt
   Store.actions.AktivenUserAbmelden();
+
   localStorage.removeItem('User');
 }
 
@@ -213,6 +216,7 @@ async function anmelden() {
   //Schauen ob es Login-Serverprobleme gab
   if (status == 200) {
     //User im Store setzen
+    //! Alt
     Store.actions.aktivenUserSetzen(User);
 
     //User im LS setzen
@@ -227,4 +231,3 @@ async function anmelden() {
   }
 }
 </script>
-
