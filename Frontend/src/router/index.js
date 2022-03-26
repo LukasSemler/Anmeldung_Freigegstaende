@@ -8,7 +8,9 @@ import adminCheckFaecherViewVue from '../views/adminCheckFaecherView.vue';
 import FreifachDetailVue from '../views/FreifachDetail.vue';
 import DetailAnsichtView from '../views/DetailAnsichtView.vue';
 import FAQView from '../views/FAQView.vue';
-import Store from '../composables/Store.js';
+import { PiniaStore } from '../Store/Store';
+
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,7 +25,8 @@ const router = createRouter({
       name: 'addFach',
       component: addFachView,
       beforeEnter: (to, from, next) => {
-        if (Store.getters.getLehrer()) {
+        const store = PiniaStore();
+        if (store.isLehrer) {
           next();
         } else {
           next('/');
@@ -40,7 +43,8 @@ const router = createRouter({
       name: 'account',
       component: AccountView,
       beforeEnter: (to, from, next) => {
-        if (Store.getters.getAktivenUser()) {
+        const store = PiniaStore();
+        if (store.getAktivenUser) {
           next();
         } else {
           next('/');
@@ -52,7 +56,8 @@ const router = createRouter({
       name: 'setFrist',
       component: setFristView,
       beforeEnter: (to, from, next) => {
-        if (Store.getters.getAdmin()) {
+        const store = PiniaStore();
+        if (store.isAdmin) {
           next();
         } else {
           next('/');
@@ -64,7 +69,8 @@ const router = createRouter({
       name: 'adminCheckFaecher',
       component: adminCheckFaecherViewVue,
       beforeEnter: (to, from, next) => {
-        if (Store.getters.getLehrer()) {
+        const store = PiniaStore();
+        if (store.isLehrer) {
           next();
         } else {
           next('/');
@@ -81,7 +87,8 @@ const router = createRouter({
       name: 'FreifachDetailLehrer',
       component: DetailAnsichtView,
       beforeEnter: (to, from, next) => {
-        if (Store.getters.getLehrer()) {
+        const store = PiniaStore();
+        if (store.isLehrer) {
           next();
         } else {
           next('/');

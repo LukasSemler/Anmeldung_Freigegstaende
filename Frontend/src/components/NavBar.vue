@@ -39,7 +39,7 @@
           >
             <!-- Schaue ob der User angemeldet ist oder nicht -->
             <!-- Profile dropdown -->
-            <Menu v-if="Store.getters.getAktivenUser()" as="div" class="ml-3 relative">
+            <Menu v-if="store.getAktivenUser" as="div" class="ml-3 relative">
               <div>
                 <MenuButton
                   class="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
@@ -47,7 +47,7 @@
                   <span class="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
                     <img
                       async
-                      :src="Store.getters.getAktivenUser().icon"
+                      :src="store.getAktivenUser.icon"
                       referrerpolicy="no-referrer"
                       alt="Icon"
                     />
@@ -95,7 +95,7 @@
             <button
               @click="anmelden"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white transform ease-in-out bg-htl_rot hover:bg-htl_hellrot ring-red-700 hover:scale-110 focus:ring-red-700"
-              v-if="Store.getters.getAktivenUser() == null"
+              v-if="store.getAktivenUser == null"
             >
               Anmelden
             </button>
@@ -166,7 +166,9 @@ import {
   MenuItems,
 } from '@headlessui/vue';
 import { MenuIcon, XIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/vue/outline';
-import Store from '../composables/Store.js';
+
+import { PiniaStore } from '../Store/Store.js';
+const store = PiniaStore();
 
 //Variablen
 const router = useRouter();
@@ -179,19 +181,20 @@ async function abmelden() {
   console.log('Abmelden');
 
   //Google Logout
-  //! Alt
-  await Store.state.gAuth.signOut();
+  await store.gAuth.signOut();
 
   //Aktiven User entfernen
-  //! Alt
-  Store.actions.AktivenUserAbmelden();
+  // store.aktivenUserAbmelden();
+  store.$reset();
+
+  store.$dispose();
 
   localStorage.removeItem('User');
 }
 
 async function anmelden() {
   //Google einloggen
-  const googleUser = await Store.state.gAuth.signIn();
+  const googleUser = await store.gAuth.signIn();
   const basicProfile = googleUser.getBasicProfile();
 
   const { sf: name, yv: email, zN: icon } = basicProfile;
@@ -215,9 +218,14 @@ async function anmelden() {
 
   //Schauen ob es Login-Serverprobleme gab
   if (status == 200) {
+    //Fehlermeldung entfernen
+    LoginFehlerAlertAnzeigen.value = false;
+    LoginFehlerAlertText.value = '';
+
     //User im Store setzen
-    //! Alt
-    Store.actions.aktivenUserSetzen(User);
+    store.setAktiverUser(User);
+
+    console.log(User);
 
     //User im LS setzen
     localStorage.setItem('User', JSON.stringify(User));

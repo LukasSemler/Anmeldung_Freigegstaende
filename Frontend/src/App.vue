@@ -1,7 +1,12 @@
 <template>
   <div>
+    <!--Navbar-->
     <NavBar></NavBar>
+
+    <!--MainView-->
     <RouterView />
+
+    <!--Footer-->
     <hr class="my-2 bg-gray-300" />
     <FooterComp></FooterComp>
   </div>
@@ -10,7 +15,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
-import Store from './composables/Store';
 import { onMounted } from 'vue';
 import axios from 'axios';
 import FooterComp from './components/FooterComp.vue';
@@ -24,42 +28,23 @@ onMounted(async () => {
   if (localStorage.getItem('User')) {
     let user = JSON.parse(localStorage.getItem('User'));
 
-    //! Alt
-    Store.actions.aktivenUserSetzen(user);
-
-    //? Neu
-    // store.setAktiverUser(user);
+    store.setAktiverUser(user);
   }
 
   //Fristen holen und setzen
   const { data } = await axios.get('http://localhost:2410/getFristen');
 
-  //! Alt
-  // if (data.length !== 0) {
-  //   if (!Store.state.fristAnmelden && !Store.state.fristEinreichen) {
-  //     Store.state.fristEinreichen = {
-  //       formatiert: formateDate(data[0].frist_einreichen),
-  //       original: data[0].frist_einreichen,
-  //     };
-  //     Store.state.fristAnmelden = {
-  //       formatiert: formateDate(data[0].frist_anmelden),
-  //       original: data[0].frist_anmelden,
-  //     };
-  //   } else console.log('Fristen schon gesetzt');
-  // } else console.log('Keine Fristen gesetzt');
-
   if (data.length !== 0) {
-
     // if (!fristEinreichen && !fristAnmelden) {
-      //Fristen setzen
-      store.setFristEinreichen({
-        formatiert: formateDate(data[0].frist_einreichen),
-        original: data[0].frist_einreichen,
-      });
-      store.setFristAnmelden({
-        formatiert: formateDate(data[0].frist_anmelden),
-        original: data[0].frist_anmelden,
-      });
+    // Fristen setzen
+    store.setFristEinreichen({
+      formatiert: formateDate(data[0].frist_einreichen),
+      original: data[0].frist_einreichen,
+    });
+    store.setFristAnmelden({
+      formatiert: formateDate(data[0].frist_anmelden),
+      original: data[0].frist_anmelden,
+    });
     // }
   }
 });

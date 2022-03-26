@@ -1,4 +1,5 @@
 import Store from './composables/Store';
+import { PiniaStore } from './Store/Store';
 
 import { reactive, readonly } from 'vue';
 let Vue3GoogleOauth;
@@ -6,6 +7,7 @@ Vue3GoogleOauth = reactive({
   isInit: false,
   isAuthorized: false,
 });
+
 const googleAuth = (function () {
   function installClient() {
     const apiUrl = 'https://apis.google.com/js/api.js';
@@ -133,7 +135,8 @@ export default {
 
     //Install Vue plugin
     googleAuth.load(config);
-    Store.state.gAuth = googleAuth;
+    const store = PiniaStore();
+    store.setgAuth(googleAuth);
     app.provide('Vue3GoogleOauth', readonly(Vue3GoogleOauth));
   },
 };

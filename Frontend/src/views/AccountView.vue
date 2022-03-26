@@ -1,19 +1,21 @@
 <template>
   <AdminAccount
-    :aktiverUser="Store.getters.getAktivenUser()"
-    v-if="Store.getters.getAktivenUser().isAdmin && Store.getters.getAktivenUser().isLehrer"
+    :aktiverUser="store.getAktivenUser"
+    v-if="store.getAktivenUser.isAdmin && store.getAktivenUser.isLehrer"
   ></AdminAccount>
   <LehrerAccount
-    :aktiverUser="Store.getters.getAktivenUser()"
-    v-else-if="Store.getters.getAktivenUser().isLehrer && !Store.getters.getAktivenUser().isAdmin"
+    :aktiverUser="store.getAktivenUser"
+    v-else-if="store.getAktivenUser.isLehrer && !store.getAktivenUser.isAdmin"
   ></LehrerAccount>
-  <SchuelerAccount :aktiverUser="Store.getters.getAktivenUser()" v-else></SchuelerAccount>
+  <SchuelerAccount :aktiverUser="store.getAktivenUser" v-else></SchuelerAccount>
 </template>
 
 <script setup>
-import Store from '../composables/Store.js';
-
 import AdminAccount from '../components/AdminAccount.vue';
 import LehrerAccount from '../components/LehrerAccount.vue';
 import SchuelerAccount from '../components/SchuelerAccount.vue';
+
+import { PiniaStore } from '../Store/Store.js';
+
+const store = PiniaStore();
 </script>
