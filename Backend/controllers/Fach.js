@@ -40,49 +40,60 @@ const fachErstellen = async (req, res) => {
   const daten = req.body;
   //Datenbank Verbindung herstellen
   DatenbankVerbinden();
+  try {
+    aktiverClient.query(
+      'INSERT INTO freifach_tbl (titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, voraussetzungen) VALUES ($1, $2, $3, $4, $5, $6, $7);',
+      [
+        daten.titel,
+        daten.beschreibung,
+        daten.linkThumbnail,
+        daten.selected,
+        daten.numberMin,
+        daten.numberMax,
+        daten.voraussetzungen,
+      ],
+      (errFreifachErstellen) => {
+        if (errFreifachErstellen) {
+          console.log('Error beim Erstellen des Freifachs');
+          console.log(errFreifachErstellen);
+          res.status(500).send('Fehler beim erstellen des Freifaches --> BETREUT');
+        }
+      },
+    );
 
-  aktiverClient.query(
-    'INSERT INTO freifach_tbl (titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, voraussetzungen) VALUES ($1, $2, $3, $4, $5, $6, $7);',
-    [
-      daten.titel,
-      daten.beschreibung,
-      daten.linkThumbnail,
-      daten.selected,
-      daten.numberMin,
-      daten.numberMax,
-      daten.voraussetzungen,
-    ],
-    (errFreifachErstellen) => {
-      if (errFreifachErstellen) {
-        res.status(210).send('Fehler beim erstellen des Freifaches --> BETREUT');
-      }
-    },
-  );
+    aktiverClient.query(
+      'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
+      [daten.lehrer.email, daten.titel],
+      (errFreifachBetreut) => {
+        if (errFreifachBetreut) {
+          res.status(510).send('Fehler beim erstellen des Freifaches --> BETREUT');
+        }
+      },
+    );
+    res.status(200).send('Freifach erfolgreich erstellt und Betreuer hinzugefügt!');
+  } catch (error) {
+    console.log('Error beim Erstellen des Freifachs');
+    console.log(error);
+  }
 
-  aktiverClient.query(
-    'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
-    [daten.lehrer.email, daten.titel],
-    (errFreifachBetreut) => {
-      if (errFreifachBetreut) {
-        res.status(210).send('Fehler beim erstellen des Freifaches --> BETREUT');
-      }
-    },
-  );
-
-  res.status(200).send('Freifach erfolgreich erstellt und Betreuer hinzugefügt!');
   DatenbankTrennen();
 };
 
 //Um ein Thumbnail im public/images Ordner zu speichern
 const fachThumbnail = (req, res) => {
   try {
-    const {titel, datentyp} = req.body;
+    const { titel, datentyp } = req.body;
     const uniqueImageName = path.join(dirname, `public/images/${titel}.${datentyp}`);
+    //schauen ob das Bild schon existiert, wenn ja löschen und neu erstellen
+    if (fs.existsSync(`${dirname}/public/images/${titel}.${datentyp}`)) {
+      fs.unlinkSync(`${dirname}/public/images/${titel}.${datentyp}`);
+    }
 
     fs.writeFileSync(`${uniqueImageName}`, req.files.image.data);
 
     res.status(200).send('Success');
-  } catch {
+  } catch (error) {
+    console.log(error);
     res.status(400).send('Something went wrong');
   }
 };
@@ -320,8 +331,6 @@ const lehrerSchülerAnmelden = async (req, res) => {
       },
     );
   }
-
-
 };
 
 const getFreifaecherAdmin = async (req, res) => {
@@ -371,18 +380,25 @@ const adminChangeFach = (req, res) => {
 
   DatenbankVerbinden();
 
-  aktiverClient.query(
-    'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6 WHERE f_id = $7',
-    [
-      body.titel,
-      body.beschreibung,
-      body.selected,
-      body.numberMax,
-      body.numberMin,
-      body.voraussetzungen,
-      id,
-    ],
-  );
+  try {
+    aktiverClient.query(
+      'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6, thumbnail = $7  WHERE f_id = $8',
+      [
+        body.titel,
+        body.beschreibung,
+        body.selected,
+        body.numberMax,
+        body.numberMin,
+        body.voraussetzungen,
+        body.linkThumbnail,
+        id,
+      ],
+    );
+    res.status(200).send('Success');
+  } catch (error) {
+    res.status(500).send('Fehler');
+  }
+  DatenbankTrennen();
 };
 
 const getSchuelerFaecher = async (req, res) => {
@@ -432,14 +448,50 @@ const accepDeclineStudent = (req, res) => {
   }
 };
 
-const fachDel = (req, res) => {
+const fachDel = async (req, res) => {
   const { id } = req.params;
   const { lehrerID } = req.query;
 
-  if (id) {
-    aktiverClient.query(`DELETE FROM freifach_tbl WHERE f_id = $1;`, [id]);
+  DatenbankVerbinden();
 
-    aktiverClient.query('DELETE FROM freifach_betreut WHERE l_fk = $1;', [lehrerID]);
+  try {
+    if (id) {
+      aktiverClient.query(`DELETE FROM freifach_tbl WHERE f_id = $1;`, [id]);
+
+      aktiverClient.query('DELETE FROM freifach_betreut WHERE l_fk = $1;', [lehrerID]);
+
+      const result = await aktiverClient.query(
+        'SELECT thumbnail from freifach_tbl where f_id = $1;',
+        [id],
+      );
+
+      let thumbnailLink = result.rows[0].thumbnail;
+
+      //change image path to /public/images/
+      thumbnailLink = thumbnailLink.replace('/images/', '/public/images/');
+
+      //remove everything before the /public
+      thumbnailLink = thumbnailLink.replace(/^.*\/public\//, '/public/');
+
+      thumbnailLink = path.join(dirname, thumbnailLink);
+
+      //Bild löschen
+      fs.unlink(thumbnailLink, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('File deleted!');
+        }
+      });
+
+      //Status 200 schicken
+      res.status(200).send('success');
+
+     
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('error');
   }
 };
 

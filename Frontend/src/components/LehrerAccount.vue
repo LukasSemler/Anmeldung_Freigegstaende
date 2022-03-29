@@ -372,18 +372,31 @@ const props = defineProps({
 });
 
 function bearbeiten(fach) {
+  //! Geht nicht weil Store nicht persistent ist
   //Frist aus dem Store holen
-  const fristEinreichen = store.getFristEinreichen;
+  //const fristEinreichen = store.getFristEinreichen;
 
   //Daten holen
-  fristEinreichen.value = fristEinreichen.original;
-  aktuellesDatum = new Date();
+  //fristEinreichen.value = fristEinreichen.original;
+  //aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-  const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
+  //const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
 
-  if (!erg) {
-    showModalWarning.value = true;
+  //if (!erg) {
+  //  showModalWarning.value = true;
+  //}
+
+  //Fach in den LocalStorage schreiben
+  try {
+    //Fach entfernen falls gesetzt
+    localStorage.removeItem('changeFach');
+    localStorage.setItem('changeFach', JSON.stringify(fach));
+    router.push('/addFach');
+  } catch (error) {
+    localStorage.setItem('changeFach', JSON.stringify(fach));
+    router.push('/addFach');
+    console.log(error);
   }
 }
 
@@ -427,6 +440,12 @@ async function fachDel() {
   const res = await axios.delete(
     `http://localhost:2410/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`,
   );
+
+  //Schauen ob das Löschen erfolgreich war
+  if (res.status == 200) {
+    //Modal ausblenden
+    showModalDel.value = false;
+  }
 }
 
 function detail(fach) {

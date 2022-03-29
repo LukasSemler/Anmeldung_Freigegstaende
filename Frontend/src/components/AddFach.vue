@@ -83,7 +83,7 @@
                   </DialogTitle>
                   <div class="mt-2">
                     <p class="text-sm text-gray-500">
-                      Das Freifach wurde erfolgreich beim Abteilungvorstand eingereicht
+                      {{ textModal }}
                     </p>
                   </div>
                 </div>
@@ -94,7 +94,7 @@
                   class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-htl_rot text-base font-medium text-white hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-htl_rot sm:text-sm"
                   @click="ZurHomeModalClick"
                 >
-                  Zurück zu Home
+                  Zurück zum Account
                 </button>
               </div>
             </div>
@@ -426,6 +426,13 @@
                 >
                   {{ nameButton }}
                 </button>
+                <button
+                  v-if="state == 'change'"
+                  @click="abbrechen"
+                  class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2"
+                >
+                  Abbrechen
+                </button>
               </div>
             </div>
           </div>
@@ -480,8 +487,9 @@ let voraussetzungen = ref([]);
 let showModal = ref(false);
 let state = ref('add');
 let id = ref(null);
+let textModal = ref('Das Freifach wurde erfolgreich beim Abteilungvorstand eingereicht');
 
-let datentyp = ref(null)
+let datentyp = ref(null);
 
 //Variablen:
 const stunden = [1, 2];
@@ -529,7 +537,7 @@ function onFileChanged(event) {
     let input = event.target;
     imageSchicken.value = event.target.files[0];
 
-    const name = imageSchicken.value.name
+    const name = imageSchicken.value.name;
 
     if (name.includes('.jpg')) {
       datentyp.value = 'jpg';
@@ -539,7 +547,6 @@ function onFileChanged(event) {
       datentyp.value = 'jpeg';
     } else {
     }
-
 
     // Ensure that you have a file before attempting to read it
     if (input.files && input.files[0]) {
@@ -562,8 +569,8 @@ async function sendImage() {
   let formData = new FormData();
   formData.append('image', imageSchicken.value);
   formData.append('titel', titel.value);
-  formData.append("datentyp", datentyp.value)
-
+  formData.append('datentyp', datentyp.value);
+  console.log(imageSchicken.value);
   axios.post('http://localhost:2410/fachThumbnail', formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -600,10 +607,25 @@ async function changeData() {
     numberMax: numberMax.value,
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
-    // linkThumbnail: `http://localhost:2410/images/${titel.value}.jpg`,
+    linkThumbnail: `http://localhost:2410/images/${titel.value}.${datentyp.value}`,
   };
 
+  //Bild zum Server schicken wenn es geändert wurde
+  if (imageSchicken.value != null) {
+    await sendImage();
+  }
+
   const res = await axios.patch(`http://localhost:2410/adminChangeFach/${fachObj.id}`, fachObj);
+
+  //schauen ob der status 200 ist
+  if (res.status == 200) {
+    //Success Modal anzeigen
+    showModal.value = true;
+    //text beim Modal changen
+    textModal.value = 'Das Freifach wurde erfolgreich geändert';
+  } else {
+    throw 'Fehler beim ändern des Freifaches, auf der Datenbankseite';
+  }
 }
 
 //Funktion wenn man auf Erstellen klickt, diese wählt ob gechanched oder neu erstellt wird
@@ -627,6 +649,14 @@ async function fachErstellen(e) {
     //Änderungs Freifach nach Änderung wieder aus LS löschen
     localStorage.removeItem('changeFach');
   }
+}
+
+//Funktion um den LS zu clearen und back to Account routen
+function abbrechen() {
+  //Änderungs Freifach nach Änderung wieder aus LS löschen
+  localStorage.removeItem('changeFach');
+  //Zurück zur Übersicht
+  router.push('/Account');
 }
 
 function ZurHomeModalClick() {

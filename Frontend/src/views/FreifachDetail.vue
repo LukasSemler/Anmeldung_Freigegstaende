@@ -200,7 +200,10 @@
           <div class="my-16 flex justify-center" v-if="FristErlaubtInteraktion">
             <div class="w-1/2">
               <!--Wenn der Schueler schon im Freifach begetreten ist-->
-              <div v-if="SchuelerSchonBeigetreten" class="relative flex flex-col items-center group">
+              <div
+                v-if="SchuelerSchonBeigetreten"
+                class="relative flex flex-col items-center group"
+              >
                 <button
                   data-tooltip-target="anmeldenErfolgTooltip"
                   data-tooltip-style="dark"

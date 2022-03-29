@@ -8,9 +8,8 @@ import adminCheckFaecherViewVue from '../views/adminCheckFaecherView.vue';
 import FreifachDetailVue from '../views/FreifachDetail.vue';
 import DetailAnsichtView from '../views/DetailAnsichtView.vue';
 import FAQView from '../views/FAQView.vue';
+import printAnmeldungeView from '../views/printAnmeldungView.vue';
 import { PiniaStore } from '../Store/Store';
-
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -99,6 +98,11 @@ const router = createRouter({
       path: '/FAQ',
       name: 'FAQ',
       component: FAQView,
+    },
+    {
+      path: '/printAnmeldung',
+      name: 'printAnmeldung',
+      component: printAnmeldungeView,
     },
     { path: '/:pathmatch(.*)*', name: 'not-found', component: Error404 },
   ],
