@@ -76,8 +76,8 @@ const fachErstellen = async (req, res) => {
 //Um ein Thumbnail im public/images Ordner zu speichern
 const fachThumbnail = (req, res) => {
   try {
-    const titel = req.body.titel;
-    const uniqueImageName = path.join(dirname, `public/images/${titel}.jpg`);
+    const {titel, datentyp} = req.body;
+    const uniqueImageName = path.join(dirname, `public/images/${titel}.${datentyp}`);
 
     fs.writeFileSync(`${uniqueImageName}`, req.files.image.data);
 
@@ -320,6 +320,8 @@ const lehrerSchülerAnmelden = async (req, res) => {
       },
     );
   }
+
+
 };
 
 const getFreifaecherAdmin = async (req, res) => {

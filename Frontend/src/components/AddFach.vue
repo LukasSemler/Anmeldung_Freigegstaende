@@ -481,6 +481,8 @@ let showModal = ref(false);
 let state = ref('add');
 let id = ref(null);
 
+let datentyp = ref(null)
+
 //Variablen:
 const stunden = [1, 2];
 let nameButton = ref('Erstellen');
@@ -526,6 +528,19 @@ function onFileChanged(event) {
     // Reference to the DOM input element
     let input = event.target;
     imageSchicken.value = event.target.files[0];
+
+    const name = imageSchicken.value.name
+
+    if (name.includes('.jpg')) {
+      datentyp.value = 'jpg';
+    } else if (name.includes('.png')) {
+      datentyp.value = 'png';
+    } else if (name.includes('.jpeg')) {
+      datentyp.value = 'jpeg';
+    } else {
+    }
+
+
     // Ensure that you have a file before attempting to read it
     if (input.files && input.files[0]) {
       // create a new FileReader to read this image and convert to base64 format
@@ -547,6 +562,7 @@ async function sendImage() {
   let formData = new FormData();
   formData.append('image', imageSchicken.value);
   formData.append('titel', titel.value);
+  formData.append("datentyp", datentyp.value)
 
   axios.post('http://localhost:2410/fachThumbnail', formData, {
     headers: {
@@ -564,7 +580,7 @@ async function sendData() {
     numberMax: numberMax.value,
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
-    linkThumbnail: `http://localhost:2410/images/${titel.value}.jpg`,
+    linkThumbnail: `http://localhost:2410/images/${titel.value}.${datentyp.value}`,
     // lehrer: Store.state.aktiverUser,
     lehrer: store.getAktivenUser,
   };

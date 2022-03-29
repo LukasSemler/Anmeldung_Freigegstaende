@@ -231,7 +231,7 @@ async function anmelden() {
     localStorage.setItem('User', JSON.stringify(User));
 
     //Weiterleitung zur Accountseite
-    router.push('/Account');
+    // router.push('/Account');
   } else {
     //Fehlermeldung setzen
     LoginFehlerAlertAnzeigen.value = true;
