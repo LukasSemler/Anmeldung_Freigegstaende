@@ -170,56 +170,8 @@
                       {{ fach.beschreibung }}
                     </dd>
                   </div>
-                  <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Anzahl der Schüler*innen</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      Minimale Anzahl Schüler: {{ fach.min_schueler }} | Maximale Anzahl Schüler:
-                      {{ fach.max_schueler }}
-                    </dd>
-                  </div>
-                  <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 h-32">
-                    <dt class="text-sm font-medium text-gray-500">Jahrgänge</dt>
-                    <div v-for="(voraussetzung, i) of fach.voraussetzungen" :key="i">
-                      <dd
-                        class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2"
-                        :class="[
-                          fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
-                          'flex items-center px-3 py-2 text-sm font-medium rounded-md',
-                        ]"
-                        :aria-current="fach ? 'page' : undefined"
-                      >
-                        <span class="truncate">
-                          {{ voraussetzung }}
-                        </span>
-                      </dd>
-                    </div>
-                  </div>
-                  <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">Benötigte Wochenstunden</dt>
-                    <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {{ fach.anzahl_stunden }} Stunden
-                    </dd>
-                  </div>
-                  <div class="bg-blue-400">
-                    <div class="ml-3 mt-6 flex items-center bg-lime-300">
-                      <div class="flex-shrink-0">
-                        <a>
-                          <span class="sr-only">{{ fach.vorname }} {{ fach.nachname }}</span>
-                          <img class="h-10 w-10 rounded-full" :src="fach.icon" alt="" />
-                        </a>
-                      </div>
-                      <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a class="hover:underline"> {{ fach.vorname }} {{ fach.nachname }} </a>
-                        </p>
-                        <div class="flex space-x-1 text-sm text-gray-500">
-                          <p>Email:</p>
-                          <span aria-hidden="true"> &middot; </span>
-                          <span> {{ fach.email }} </span>
-                        </div>
-                      </div>
-                    </div>
 
+                  <div class="bg-blue-400">
                     <div class="flex justify-center mt-3 mb-3">
                       <button
                         @click="detail(fach)"

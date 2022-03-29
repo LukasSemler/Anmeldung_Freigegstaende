@@ -2,7 +2,10 @@ import path from 'path';
 import fs from 'fs';
 import postgres from 'pg';
 
-//Postgres Pool erstellen
+//Variablen
+const dirname = path.resolve();
+
+//PostgreSQL-Variablen
 const { Pool } = postgres;
 let aktiverClient;
 
@@ -33,8 +36,6 @@ function DatenbankTrennen() {
   aktiverClient = null;
 }
 
-const dirname = path.resolve();
-
 const fachErstellen = async (req, res) => {
   const daten = req.body;
   //Datenbank Verbindung herstellen
@@ -51,31 +52,33 @@ const fachErstellen = async (req, res) => {
       daten.numberMax,
       daten.voraussetzungen,
     ],
-    (errFreifach) => {
-      if (!errFreifach) {
-        aktiverClient.query(
-          'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
-          [daten.lehrer.email, daten.titel],
-          (errFreifachBetreut) => {
-            if (!errFreifachBetreut) {
-              res.status(200).send('Freifach erfolgreich erstellt!');
-            } else {
-              res.status(210).send('Fehler beim erstellen des Freifaches --> BETREUT');
-            }
-          },
-        );
-      } else {
-        res.status(210).send('Fehler beim erstellen des Freifaches --> FREIFACH');
+    (errFreifachErstellen) => {
+      if (errFreifachErstellen) {
+        res.status(210).send('Fehler beim erstellen des Freifaches --> BETREUT');
       }
     },
   );
+
+  aktiverClient.query(
+    'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
+    [daten.lehrer.email, daten.titel],
+    (errFreifachBetreut) => {
+      if (errFreifachBetreut) {
+        res.status(210).send('Fehler beim erstellen des Freifaches --> BETREUT');
+      }
+    },
+  );
+
+  res.status(200).send('Freifach erfolgreich erstellt und Betreuer hinzugefügt!');
   DatenbankTrennen();
 };
 
+//Um ein Thumbnail im public/images Ordner zu speichern
 const fachThumbnail = (req, res) => {
   try {
     const titel = req.body.titel;
-    const uniqueImageName = path.join(dirname, `\\public\\images\\${titel}.jpg`);
+    const uniqueImageName = path.join(dirname, `public/images/${titel}.jpg`);
+
     fs.writeFileSync(`${uniqueImageName}`, req.files.image.data);
 
     res.status(200).send('Success');

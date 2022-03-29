@@ -231,7 +231,7 @@
               :key="fach.f_id"
               class="flex flex-col rounded-lg shadow-lg overflow-hidden"
             >
-              <div class="flex-shrink-0">
+              <div class="flex-shrink-0 cursor-pointer">
                 <img
                   crossorigin="anynomous"
                   class="h-48 w-full object-cover"
@@ -242,27 +242,13 @@
               <div class="flex-1 bg-white p-6 flex flex-col justify-between">
                 <div class="flex-1">
                   <a class="block mt-2">
-                    <p class="text-xl font-semibold text-gray-900">
+                    <p
+                      class="text-xl font-semibold text-gray-900 decoration-htl_hellrot hover:underline"
+                    >
                       {{ fach.titel }}
                     </p>
                     <p class="mt-3 text-base text-gray-500 mb-2">
                       {{ fach.beschreibung }}
-                    </p>
-                    <hr />
-                    <p class="mt-3 text-base text-gray-500">
-                      Anzahl der Stunden: <span class="text-black">{{ fach.anzahl_stunden }}</span>
-                    </p>
-                    <p class="mt-3 text-base text-gray-500">
-                      Benötigte Schüler: <span class="text-black">{{ fach.min_schueler }}</span>
-                    </p>
-                    <p class="mt-3 text-base text-gray-500">
-                      Maximale Schüler: <span class="text-black">{{ fach.max_schueler }}</span>
-                    </p>
-                    <p class="mt-3 text-base text-gray-500">
-                      Jahrgänge:
-                      <span class="text-black" v-for="jahrgang of fach.voraussetzungen"
-                        >{{ jahrgang }},
-                      </span>
                     </p>
                     <br />
                   </a>
@@ -304,8 +290,8 @@
       </svg>
     </div>
   </div>
-  <br>
-  <br>
+  <br />
+  <br />
 </template>
 
 <script setup>

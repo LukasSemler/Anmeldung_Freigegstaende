@@ -493,25 +493,29 @@ const tabs = [
 
 //Schaut ob das Freifach neu erstellt oder Verändert wird.
 onMounted(() => {
-  try {
-    let fach = JSON.parse(localStorage.getItem('changeFach'));
-    //Werte setzen
-    id.value = fach.f_id;
-    titel.value = fach.titel;
-    beschreibung.value = fach.beschreibung;
-    image.value = fach.thumbnail;
-    numberMin.value = fach.min_schueler;
-    numberMax.value = fach.max_schueler;
-    selected.value = fach.anzahl_stunden;
-    voraussetzungen.value = fach.voraussetzungen;
+  if (localStorage.getItem('changeFach')) {
+    try {
+      let fach = JSON.parse(localStorage.getItem('changeFach'));
+      //Werte setzen
+      id.value = fach.f_id;
+      titel.value = fach.titel;
+      beschreibung.value = fach.beschreibung;
+      image.value = fach.thumbnail;
+      numberMin.value = fach.min_schueler;
+      numberMax.value = fach.max_schueler;
+      selected.value = fach.anzahl_stunden;
+      voraussetzungen.value = fach.voraussetzungen;
 
-    nameButton.value = 'ändern';
-    Überschrift.value = 'Freifach ändern';
+      nameButton.value = 'ändern';
+      Überschrift.value = 'Freifach ändern';
 
-    state.value = 'change';
-    localStorage.clearItem('changeFach');
-  } catch (error) {
-    console.log(error);
+      state.value = 'change';
+    } catch {
+      console.log(
+        'Beim laden des vorhandenen Freifaches ist ein Fehler aufgetreten! (onMounted --> addFach.vue Component)',
+      );
+    }
+  } else {
     console.log('Fach neu erstellen');
   }
 });
@@ -565,9 +569,10 @@ async function sendData() {
     lehrer: store.getAktivenUser,
   };
 
-  console.log(fachObj.voraussetzungen);
-
-  axios.post('http://localhost:2410/fachErstellen', fachObj);
+  let { status } = axios.post('http://localhost:2410/fachErstellen', fachObj);
+  if (status == 210) {
+    throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
+  }
 }
 
 async function changeData() {
@@ -588,11 +593,17 @@ async function changeData() {
 //Funktion wenn man auf Erstellen klickt, diese wählt ob gechanched oder neu erstellt wird
 async function fachErstellen(e) {
   if (state.value == 'add') {
-    showModal.value = true;
-    //Daten schicken
-    sendImage();
-    sendData();
-    e.preventDefault();
+    try {
+      //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
+      sendImage();
+      //Freifachdaten dem Server für Eintrag schicken schicken
+      sendData();
+      e.preventDefault();
+
+      showModal.value = true;
+    } catch (error) {
+      console.log(error);
+    }
   } else {
     changeData();
     e.preventDefault();
@@ -607,7 +618,7 @@ function ZurHomeModalClick() {
   ClearAllInputs();
 
   //Zur Homeseite weiterleiten
-  router.push('/');
+  router.push('/account');
 }
 
 function ClearAllInputs() {
