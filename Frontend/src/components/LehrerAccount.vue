@@ -251,12 +251,29 @@
                 <p class="mt-3 text-base text-gray-500">
                   Maximale Schüler: <span class="text-black">{{ fach.max_schueler }}</span>
                 </p>
-                <p class="mt-3 text-base text-gray-500">
+                <!-- <p class="mt-3 text-base text-gray-500">
                   Jahrgänge:
                   <span class="text-black" v-for="jahrgang of fach.voraussetzungen"
                     >{{ jahrgang }},
                   </span>
-                </p>
+                </p> -->
+                <div class="sm:grid sm:grid-cols-3 sm:gap-4 mt-3">
+                  <p class="mt-3 text-base text-gray-500">Jahrgänge:</p>
+                  <div v-for="(voraussetzung, i) of fach.voraussetzungen" :key="i" class="mt-1">
+                    <p
+                      class="mt-1text-sm text-gray-900 sm:mt-0 sm:col-span-2"
+                      :class="[
+                        fach ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-50',
+                        'flex items-center px-3 py-2 text-sm font-medium rounded-md',
+                      ]"
+                      :aria-current="fach ? 'page' : undefined"
+                    >
+                      <span class="truncate">
+                        {{ voraussetzung }}
+                      </span>
+                    </p>
+                  </div>
+                </div>
                 <br />
                 <span
                   v-if="fach.genehmigt == 'false'"
