@@ -167,8 +167,9 @@ import {
 } from '@headlessui/vue';
 import { MenuIcon, XIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/vue/outline';
 
-import { PiniaStore } from '../Store/Store.js';
+import { PiniaStore, GoogleStore } from '../Store/Store.js';
 const store = PiniaStore();
+const googleStore = GoogleStore();
 
 //Variablen
 const router = useRouter();
@@ -181,20 +182,18 @@ async function abmelden() {
   console.log('Abmelden');
 
   //Google Logout
-  await store.gAuth.signOut();
+  await googleStore.gAuth.signOut();
 
   //Aktiven User entfernen
-  // store.aktivenUserAbmelden();
+  store.aktivenUserAbmelden();
   store.$reset();
 
   store.$dispose();
-
-  localStorage.removeItem('User');
 }
 
 async function anmelden() {
   //Google einloggen
-  const googleUser = await store.gAuth.signIn();
+  const googleUser = await googleStore.gAuth.signIn();
   const basicProfile = googleUser.getBasicProfile();
 
   const { sf: name, yv: email, zN: icon } = basicProfile;
@@ -227,11 +226,8 @@ async function anmelden() {
 
     console.log(User);
 
-    //User im LS setzen
-    localStorage.setItem('User', JSON.stringify(User));
-
     //Weiterleitung zur Accountseite
-    // router.push('/Account');
+    router.push('/Account');
   } else {
     //Fehlermeldung setzen
     LoginFehlerAlertAnzeigen.value = true;

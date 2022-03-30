@@ -1,10 +1,21 @@
 import { defineStore } from 'pinia';
 
+//Die Funktion läuft intern bei allen actions ab um den State im localstorage zu speichern
+function SaveState(abmelden) {
+  const store = PiniaStore();
+
+  //State speichern
+  if (store.aktiverUser != null) {
+    localStorage.setItem(store.$id, JSON.stringify(store.$state));
+  } else if (abmelden) {
+    localStorage.setItem(store.$id, JSON.stringify(store.$state));
+  }
+}
+
 export const PiniaStore = defineStore('AnmeldungFreifaecher', {
   //State
   state: () => ({
     aktiverUser: null,
-    gAuth: null,
 
     fristEinreichen: null,
     fristAnmelden: null,
@@ -62,21 +73,46 @@ export const PiniaStore = defineStore('AnmeldungFreifaecher', {
     //Actions fuer state setzen
     setFristAnmelden: function (frist) {
       this.fristAnmelden = frist;
+
+      //State speichern
+      SaveState();
     },
     setFristEinreichen: function (frist) {
       this.fristEinreichen = frist;
-    },
-    setgAuth: function (gAuth) {
-      this.gAuth = gAuth;
+
+      //State speichern
+      SaveState();
     },
     setAktiverUser: function (neuerUser) {
       console.log('Erstelle neuen User!');
       this.aktiverUser = neuerUser;
 
-      console.log(`Name: ${this.aktiverUser.vorname}`);
+      //State speichern
+      SaveState();
     },
     aktivenUserAbmelden: function () {
       this.aktiverUser = null;
+
+      //State speichern
+      SaveState(true);
+    },
+  },
+});
+
+//Store ist nur für Google zuständig
+export const GoogleStore = defineStore('GoogleLoginLogoutStore', {
+  state: () => ({
+    gAuth: null,
+  }),
+
+  getters: {},
+
+  actions: {
+    setgAuth: function (gAuth) {
+      this.gAuth = gAuth;
+
+      //State speichern
+      SaveState();
     },
   },
 });

@@ -24,11 +24,9 @@ import { PiniaStore } from './Store/Store.js';
 const store = PiniaStore();
 
 onMounted(async () => {
-  //Wenn User im Localstorage, dann laden
-  if (localStorage.getItem('User')) {
-    let user = JSON.parse(localStorage.getItem('User'));
-
-    store.setAktiverUser(user);
+  //Den Store beim Reload mit den gespeicherten Daten füllen
+  if (localStorage.getItem(store.$id)) {
+    store.$state = JSON.parse(localStorage.getItem(store.$id));
   }
 
   //Fristen holen und setzen
