@@ -433,6 +433,21 @@ function VoraussetzungenVonDbNutzbarMachen() {
 }
 
 function openModalError(fach) {
+  //! Geht nicht weil Store nicht persistent ist
+  //Frist aus dem Store holen
+  //const fristEinreichen = store.getFristEinreichen;
+
+  //Daten holen
+  //fristEinreichen.value = fristEinreichen.original;
+  //aktuellesDatum = new Date();
+
+  //Schauen ob das Datum vor oder nach der Frist ist
+  //const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
+
+  //if (!erg) {
+  //  showModalWarning.value = true;
+  //}
+
   //Frist ist aus dem Store holen
   const fristEinreichen = store.getFristEinreichen;
 

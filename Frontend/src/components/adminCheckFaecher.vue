@@ -284,10 +284,14 @@ onMounted(async () => {
   fristEinreichen.value = frist;
   aktuellesDatum = new Date();
 
+  console.log(fristEinreichen.value);
+  console.log(aktuellesDatum);
+
   //Schauen ob das Datum vor oder nach der Frist ist
   erg.value = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
-  if (erg.value) {
+  console.log("Ergebnis", erg.value);
+  if (erg.value == true) {
     console.log('Sie können noch nicht checken');
     showModalWarning.value = true;
   }
@@ -345,7 +349,10 @@ function change(fach) {
     console.log('Sie können checken');
     try {
       localStorage.clearItem('changeFach');
+      fach.admin = true;
+      localStorage.setItem('changeFach', JSON.stringify(fach));
     } catch {
+      fach.admin = true;
       localStorage.setItem('changeFach', JSON.stringify(fach));
       router.push('/addFach');
     }

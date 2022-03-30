@@ -420,7 +420,7 @@
               <!-- Platzhalter div -->
               <div class="sm:col-span-5"></div>
               <!-- Gewichtung -->
-              <div class="sm:col-span-1 mt-5">
+              <div v-if="admin" class="sm:col-span-1 mt-5">
                 <Listbox as="div" v-model="selectedGewichtung">
                   <ListboxLabel class="block text-sm font-medium text-gray-700">
                     Gewichtung
@@ -570,12 +570,16 @@ const tabs = [
   { name: 'Fach erstellen', link: '/addFach', current: true },
 ];
 
+let admin = ref(null);
 //Schaut ob das Freifach neu erstellt oder Verändert wird.
 onMounted(() => {
   if (localStorage.getItem('changeFach')) {
     console.log(imageSchicken.value);
     try {
       let fach = JSON.parse(localStorage.getItem('changeFach'));
+      if (fach.admin) {
+        admin.value = true;
+      }
       //Werte setzen
       id.value = fach.f_id;
       titel.value = fach.titel;
