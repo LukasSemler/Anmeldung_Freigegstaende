@@ -162,9 +162,23 @@
                 {{ fach.anzahl_stunden }} Stunden
               </dd>
             </div>
-            <div class="bg-blue-400">
-              <div class="ml-3 mt-6 flex items-center bg-lime-300">
-                <div class="flex-shrink-0">
+            <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <dt class="text-sm font-medium text-gray-500">Gewichtung:</dt>
+              <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
+                <span
+                  class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-red-600 shadow-lg"
+                >
+                  Du erfüllst leider nicht alle benötigten Voraussetzungen!
+                </span>
+                <div class="w-3 h-3 -mt-2 rotate-45 bg-red-600"></div>
+              </div>
+              <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                {{ fach.gewichtung }}
+              </dd>
+            </div>
+            <div class="bg-gray-50">
+              <div class="ml-3 mt-6 flex items-center">
+                <div class="flex-shrink-0 mt-2">
                   <a>
                     <span class="sr-only">{{ fach.vorname }} {{ fach.nachname }}</span>
                     <img class="h-10 w-10 rounded-full" :src="fach.icon" alt="" />
@@ -183,7 +197,7 @@
               </div>
               <div
                 v-if="fach.genehmigt == 'pending'"
-                class="bg-red-300 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
+                class="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
               >
                 <button
                   @click="annehmen(fach)"
@@ -280,6 +294,8 @@ onMounted(async () => {
 
   //Daten holen + Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
   getData();
+
+  console.log('Mounted');
 });
 
 //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
@@ -343,6 +359,8 @@ async function getData() {
   //Daten holen
   const { data } = await axios.get('http://localhost:2410/getFaecherAdmin');
   faecher.value = data;
+
+  console.log(faecher.value);
 
   //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
   VoraussetzungenVonDbNutzbarMachen();

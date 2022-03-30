@@ -417,7 +417,74 @@
                   </div>
                 </fieldset>
               </div>
+              <!-- Platzhalter div -->
+              <div class="sm:col-span-5"></div>
+              <!-- Gewichtung -->
+              <div class="sm:col-span-1 mt-5">
+                <Listbox as="div" v-model="selectedGewichtung">
+                  <ListboxLabel class="block text-sm font-medium text-gray-700">
+                    Gewichtung
+                  </ListboxLabel>
+                  <div class="mt-1 relative">
+                    <ListboxButton
+                      class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-htl_rot focus:border-htl_hellrot sm:text-sm"
+                    >
+                      <span class="block truncate">{{ selectedGewichtung }}</span>
+                      <span
+                        class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
+                      >
+                        <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+                      </span>
+                    </ListboxButton>
+
+                    <transition
+                      leave-active-class="transition ease-in duration-100"
+                      leave-from-class="opacity-100"
+                      leave-to-class="opacity-0"
+                    >
+                      <ListboxOptions
+                        class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
+                      >
+                        <ListboxOption
+                          as="template"
+                          v-for="(h, i) in gewichtung"
+                          :key="i"
+                          :value="h"
+                          v-slot="{ active, selectedGewichtung }"
+                        >
+                          <li
+                            :class="[
+                              active ? 'text-white bg-htl_rot' : 'text-gray-900',
+                              'cursor-default select-none relative py-2 pl-3 pr-9',
+                            ]"
+                          >
+                            <span
+                              :class="[
+                                selectedGewichtung ? 'font-semibold' : 'font-normal',
+                                'block truncate',
+                              ]"
+                            >
+                              {{ h }}
+                            </span>
+
+                            <span
+                              v-if="selectedGewichtung"
+                              :class="[
+                                active ? 'text-white' : 'text-htl_rot',
+                                'absolute inset-y-0 right-0 flex items-center pr-4',
+                              ]"
+                            >
+                              <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                            </span>
+                          </li>
+                        </ListboxOption>
+                      </ListboxOptions>
+                    </transition>
+                  </div>
+                </Listbox>
+              </div>
             </div>
+
             <div class="pt-5">
               <div class="flex justify-center">
                 <button
@@ -481,6 +548,7 @@ let beschreibung = ref('');
 let numberMin = ref(0);
 let numberMax = ref(0);
 let selected = ref(0);
+let selectedGewichtung = ref(1);
 let image = ref(null);
 let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
@@ -493,6 +561,7 @@ let datentyp = ref(null);
 
 //Variablen:
 const stunden = [1, 2];
+const gewichtung = [0, 1];
 let nameButton = ref('Erstellen');
 let Überschrift = ref('Neues Freifach erstellen');
 const klassen = ['1. Klasse', '2. Klasse', '3. Klasse', '4. Klasse', '5. Klasse'];
@@ -504,6 +573,7 @@ const tabs = [
 //Schaut ob das Freifach neu erstellt oder Verändert wird.
 onMounted(() => {
   if (localStorage.getItem('changeFach')) {
+    console.log(imageSchicken.value);
     try {
       let fach = JSON.parse(localStorage.getItem('changeFach'));
       //Werte setzen
@@ -515,6 +585,7 @@ onMounted(() => {
       numberMax.value = fach.max_schueler;
       selected.value = fach.anzahl_stunden;
       voraussetzungen.value = fach.voraussetzungen;
+      selectedGewichtung.value = fach.gewichtung;
 
       nameButton.value = 'ändern';
       Überschrift.value = 'Freifach ändern';
@@ -599,20 +670,33 @@ async function sendData() {
 }
 
 async function changeData() {
-  const fachObj = {
-    id: id.value,
-    titel: titel.value,
-    beschreibung: beschreibung.value,
-    numberMin: numberMin.value,
-    numberMax: numberMax.value,
-    selected: selected.value,
-    voraussetzungen: voraussetzungen.value,
-    linkThumbnail: `http://localhost:2410/images/${titel.value}.${datentyp.value}`,
-  };
+  let fachObj;
 
-  //Bild zum Server schicken wenn es geändert wurde
   if (imageSchicken.value != null) {
+    fachObj = {
+      id: id.value,
+      titel: titel.value,
+      beschreibung: beschreibung.value,
+      numberMin: numberMin.value,
+      numberMax: numberMax.value,
+      selected: selected.value,
+      voraussetzungen: voraussetzungen.value,
+      gewichtung: selectedGewichtung.value,
+      linkThumbnail: `http://localhost:2410/images/${titel.value}.${datentyp.value}`,
+    };
+    //Bild schicken
     await sendImage();
+  } else {
+    fachObj = {
+      id: id.value,
+      titel: titel.value,
+      beschreibung: beschreibung.value,
+      numberMin: numberMin.value,
+      numberMax: numberMax.value,
+      selected: selected.value,
+      voraussetzungen: voraussetzungen.value,
+      gewichtung: selectedGewichtung.value,
+    };
   }
 
   const res = await axios.patch(`http://localhost:2410/adminChangeFach/${fachObj.id}`, fachObj);

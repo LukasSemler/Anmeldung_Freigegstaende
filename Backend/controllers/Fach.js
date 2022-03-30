@@ -351,7 +351,8 @@ const getFreifaecherAdmin = async (req, res) => {
          nachname,
          email, 
          voraussetzungen, 
-         icon
+         icon, 
+         gewichtung
   from freifach_tbl
            JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
            JOIN lehrer_tbl lt on lt.l_id = fb.l_fk;`,
@@ -381,19 +382,36 @@ const adminChangeFach = (req, res) => {
   DatenbankVerbinden();
 
   try {
-    aktiverClient.query(
-      'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6, thumbnail = $7  WHERE f_id = $8',
-      [
-        body.titel,
-        body.beschreibung,
-        body.selected,
-        body.numberMax,
-        body.numberMin,
-        body.voraussetzungen,
-        body.linkThumbnail,
-        id,
-      ],
-    );
+    if (body.linkThumbnail) {
+      aktiverClient.query(
+        'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6, thumbnail = $7, gewichtung = $8  WHERE f_id = $9',
+        [
+          body.titel,
+          body.beschreibung,
+          body.selected,
+          body.numberMax,
+          body.numberMin,
+          body.voraussetzungen,
+          body.linkThumbnail,
+          body.gewichtung,
+          id,
+        ],
+      );
+    } else {
+      aktiverClient.query(
+        'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6, gewichtung = $7  WHERE f_id = $8',
+        [
+          body.titel,
+          body.beschreibung,
+          body.selected,
+          body.numberMax,
+          body.numberMin,
+          body.voraussetzungen,
+          body.gewichtung,
+          id,
+        ],
+      );
+    }
     res.status(200).send('Success');
   } catch (error) {
     res.status(500).send('Fehler');
@@ -486,8 +504,6 @@ const fachDel = async (req, res) => {
 
       //Status 200 schicken
       res.status(200).send('success');
-
-     
     }
   } catch (error) {
     console.log(error);
