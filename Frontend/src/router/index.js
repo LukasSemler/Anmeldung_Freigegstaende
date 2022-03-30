@@ -9,7 +9,9 @@ import FreifachDetailVue from '../views/FreifachDetail.vue';
 import DetailAnsichtView from '../views/DetailAnsichtView.vue';
 import FAQView from '../views/FAQView.vue';
 import printAnmeldungeView from '../views/printAnmeldungView.vue';
+import EasterEggView from '../views/EasterEggView.vue';
 import { PiniaStore } from '../Store/Store';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -103,6 +105,11 @@ const router = createRouter({
       path: '/printAnmeldung',
       name: 'printAnmeldung',
       component: printAnmeldungeView,
+    },
+    {
+      path: '/EasterEgg',
+      name: '/EasterEgg',
+      component: EasterEggView,
     },
     { path: '/:pathmatch(.*)*', name: 'not-found', component: Error404 },
   ],

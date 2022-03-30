@@ -15,13 +15,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import FooterComp from './components/FooterComp.vue';
 
 //Store einbinden
 import { PiniaStore } from './Store/Store.js';
 const store = PiniaStore();
+
 
 onMounted(async () => {
   //Den Store beim Reload mit den gespeicherten Daten füllen
