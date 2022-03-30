@@ -114,7 +114,7 @@
             crossorigin="anynomous"
             class="h-60 w-full object-cover"
             :src="fach.thumbnail"
-            alt=""
+            :alt="Math.random() * 100"
           />
         </div>
         <div class="px-4 py-5 sm:px-6">
@@ -281,7 +281,7 @@ onMounted(async () => {
   const frist = store.getFristEinreichen;
 
   //Daten holen
-  fristEinreichen.value = frist;
+  fristEinreichen.value = frist.original;
   aktuellesDatum = new Date();
 
   console.log(fristEinreichen.value);
@@ -290,8 +290,8 @@ onMounted(async () => {
   //Schauen ob das Datum vor oder nach der Frist ist
   erg.value = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
-  console.log("Ergebnis", erg.value);
-  if (erg.value == true) {
+  console.log('Ergebnis', erg.value);
+  if (!erg.value) {
     console.log('Sie können noch nicht checken');
     showModalWarning.value = true;
   }
@@ -315,7 +315,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 }
 
 async function annehmen(fach) {
-  if (!erg.value) {
+  if (erg.value) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: true,
@@ -330,7 +330,7 @@ async function annehmen(fach) {
 }
 
 async function ablehnen(fach) {
-  if (!erg.value) {
+  if (erg.value) {
     try {
       const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
         genehmigt: false,
@@ -345,7 +345,7 @@ async function ablehnen(fach) {
 }
 
 function change(fach) {
-  if (!erg.value) {
+  if (erg.value) {
     console.log('Sie können checken');
     try {
       localStorage.clearItem('changeFach');
