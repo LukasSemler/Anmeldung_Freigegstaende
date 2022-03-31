@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 import NavBar from './components/NavBar.vue';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';

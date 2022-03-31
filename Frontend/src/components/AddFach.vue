@@ -574,7 +574,6 @@ let admin = ref(null);
 //Schaut ob das Freifach neu erstellt oder Verändert wird.
 onMounted(() => {
   if (localStorage.getItem('changeFach')) {
-    console.log(imageSchicken.value);
     try {
       let fach = JSON.parse(localStorage.getItem('changeFach'));
       if (fach.admin) {
