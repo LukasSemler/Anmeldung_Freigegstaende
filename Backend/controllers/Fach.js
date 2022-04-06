@@ -669,7 +669,7 @@ const getFaecherFromStudent = async (req, res) => {
 
   try {
     const result = await aktiverClient.query(
-      'SELECT titel, vorname, nachname from freifach_tbl JOIN freifach_bucht fb on freifach_tbl.f_id = fb.f_fk JOIN schueler_tbl st on st.s_id = fb.s_fk WHERE s_id = $1;',
+      "SELECT titel, vorname, nachname, status from freifach_tbl JOIN freifach_bucht fb on freifach_tbl.f_id = fb.f_fk JOIN schueler_tbl st on st.s_id = fb.s_fk WHERE s_id = $1 and status = 'true';",
       [id],
     );
 
