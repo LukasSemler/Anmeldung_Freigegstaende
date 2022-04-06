@@ -662,6 +662,25 @@ const changeTimeLine = (req, res) => {
   }
 };
 
+const getFaecherFromStudent = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  DatenbankVerbinden();
+
+  try {
+    const result = await aktiverClient.query(
+      'SELECT titel, vorname, nachname from freifach_tbl JOIN freifach_bucht fb on freifach_tbl.f_id = fb.f_fk JOIN schueler_tbl st on st.s_id = fb.s_fk WHERE s_id = $1;',
+      [id],
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    res.status(500).send('Error');
+  }
+
+  DatenbankTrennen();
+};
+
 export {
   fachErstellen,
   fachThumbnail,
@@ -682,4 +701,5 @@ export {
   getFaecherSchueler,
   schuelerAbmelden,
   changeTimeLine,
+  getFaecherFromStudent,
 };

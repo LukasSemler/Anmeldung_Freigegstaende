@@ -21,6 +21,7 @@ import {
   getFaecherSchueler,
   schuelerAbmelden,
   changeTimeLine,
+  getFaecherFromStudent,
 } from '../controllers/Fach.js';
 
 router.get('/getAdminTimeLine', getAdminTimeLine);
@@ -48,4 +49,6 @@ router.get('/getFaecherSchueler/:id', getFaecherSchueler);
 router.delete('/schuelerAbmelden/:id', schuelerAbmelden);
 
 router.post('/changeTimeLine', changeTimeLine);
+
+router.get('/getFaecherFromStudent/:id', getFaecherFromStudent);
 export default router;

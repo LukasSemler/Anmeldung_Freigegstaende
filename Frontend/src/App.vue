@@ -1,14 +1,14 @@
 <template>
   <div>
     <!--Navbar-->
-    <NavBar></NavBar>
+    <NavBar id="nav"></NavBar>
 
     <!--MainView-->
     <RouterView />
 
     <!--Footer-->
     <hr class="my-2 bg-gray-300" />
-    <FooterComp></FooterComp>
+    <FooterComp id="footer"></FooterComp>
   </div>
 </template>
 
@@ -22,7 +22,6 @@ import FooterComp from './components/FooterComp.vue';
 //Store einbinden
 import { PiniaStore } from './Store/Store.js';
 const store = PiniaStore();
-
 
 onMounted(async () => {
   //Den Store beim Reload mit den gespeicherten Daten füllen
@@ -67,5 +66,12 @@ function formateDate(date) {
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@200;300&display=swap');
 body {
   font-family: 'Titillium Web', sans-serif;
+}
+
+@media print {
+  #nav,
+  #footer {
+    display: none !important;
+  }
 }
 </style>
