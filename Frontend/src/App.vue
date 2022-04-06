@@ -7,7 +7,7 @@
     <RouterView />
 
     <!--Footer-->
-    <hr class="my-2 bg-gray-300" />
+    <hr id="footer" class="my-2 bg-gray-300" />
     <FooterComp id="footer"></FooterComp>
   </div>
 </template>
