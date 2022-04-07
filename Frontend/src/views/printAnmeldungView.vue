@@ -7,8 +7,10 @@
     />
   </div>
   <h1 id="noPrint" class="text-center text-3xl font-black mt-6">
-    Formular fuer die Anmeldung zu den Freifächer
+    Formular für die Anmeldung zu den Freifächer
   </h1>
+ <p class="mx-6 mt-4" id="noPrint">Anbei dürfen wir Ihnen einige Informationen zu den Freifächern und unverbindlichen Übungen der IT-Abteilung übermitteln.
+Freifächer und unverbindliche Übungen finden zusätzlich zum Pflichtunterricht statt. Mit der Anmeldung ist die Teilnahme für ein Schuljahr verpflichtend.</p>
 
   <div id="Print">
     <h1 class="text-center text-3xl font-black mt-6">Anmeldung zu den Freifächer</h1>
@@ -48,7 +50,7 @@
     <button
       @click="print"
       type="button"
-      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
+      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-htl_rot hover:bg-htl_hellrot"
     >
       Print
     </button>
