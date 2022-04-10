@@ -1,6 +1,10 @@
 import path from 'path';
 import fs from 'fs';
 import postgres from 'pg';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const WebUntis = require('webuntis');
+const nodeWebuntis = require('node-webuntis');
 
 //Variablen
 const dirname = path.resolve();
@@ -193,13 +197,56 @@ const getFreifaecher = async (req, res) => {
 
 const lehrerSchülerAnmelden = async (req, res) => {
   //Wichtige Variablen
-  let schonMalVerbundenGewesen = false;
   const GoogleUser = req.body;
 
-  //Schauen ob der User, der sich einloggen will, ein HTLWienwest-Mitglied ist
+  console.log(GoogleUser);
+
+  //Checken ob User, ein HTLWienwest-Mitglied ist
   if (!GoogleUser.email.includes('@htlwienwest.at')) {
     res.status(210).send('Du bist leider kein Mitglied der HTL WienWest!');
     return;
+  }
+
+  //Schülerklasse herausfinden
+  const SchuelerKlasseHerausfinden = async () => {
+    try {
+      //AdminAccount
+      const untis = new WebUntis(
+        'htlwienwest',
+        'proj_AFG_itp2021',
+        'Benni2410$',
+        'melpomene.webuntis.com',
+      );
+      let untisRes = await untis.login();
+      let klassenArray = await untis.getClasses();
+
+      //Schüleraccount
+      let { klasseId } = await nodeWebuntis.getSession(
+        'htlwienwest',
+        GoogleUser.email.split('@')[0],
+        GoogleUser.webUntisPW,
+      );
+
+      //Klasse suchen
+      let SchuelerKlasse = klassenArray.find(({ id }) => klasseId == id).name;
+
+      return SchuelerKlasse;
+    } catch (error) {
+      console.log(`Fehler --> ${error}`);
+      return '';
+    }
+  };
+
+  //Klasse vom Schüler bekommen, wenn Schüler
+  if (!GoogleUser.isLehrer) {
+    GoogleUser.klasse = await SchuelerKlasseHerausfinden();
+
+    console.log('Klasse: ' + GoogleUser.klasse);
+
+    if (GoogleUser.klasse == '') {
+      res.status(210).send('Webuntis-Passwort war leider falsch!');
+      return;
+    }
   }
 
   //Schauen ob User schon mal verbunden war
@@ -301,6 +348,7 @@ const lehrerSchülerAnmelden = async (req, res) => {
                     },
                   );
                 } else {
+                  console.log(errorEintrag);
                   //Server-Result setzen
                   res.status(210).send('Fehler beim Eintragen des Schülers');
                 }

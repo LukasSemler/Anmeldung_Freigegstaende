@@ -91,11 +91,31 @@
               </transition>
             </Menu>
 
-            <!-- Button zum anmelden anzeigen -->
+            <!--Webuntis-Passwort -->
+            <div class="flex flex-wrap flex-row" v-if="WebuntisPasswordFieldShow">
+              <div class="mr-5">
+                <input
+                  class="shadow appearance-none border border-htl_rot rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="password"
+                  type="password"
+                  placeholder="Webuntis-Passwort"
+                  v-model="WebuntisPasswordFieldInput"
+                />
+              </div>
+              <br />
+              <button
+                @click="anmeldenMitUntisdaten"
+                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white transform ease-in-out bg-htl_rot hover:bg-htl_hellrot ring-red-700 hover:scale-110 focus:ring-red-700"
+              >
+                Weiter
+              </button>
+            </div>
+
+            <!-- Button zum anmeldenGoogle anzeigen -->
             <button
-              @click="anmelden"
+              @click="anmeldenGoogle"
               class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white transform ease-in-out bg-htl_rot hover:bg-htl_hellrot ring-red-700 hover:scale-110 focus:ring-red-700"
-              v-if="store.getAktivenUser == null"
+              v-if="store.getAktivenUser == null && !WebuntisPasswordFieldShow"
             >
               Anmelden
             </button>
@@ -151,9 +171,10 @@
 
 <script setup>
 //Imports
-import { ref, inject } from 'vue';
+import { ref, inject, reactive } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
+import { PiniaStore, GoogleStore } from '../Store/Store.js';
 
 //Import Tailwind
 import {
@@ -167,15 +188,17 @@ import {
 } from '@headlessui/vue';
 import { MenuIcon, XIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/vue/outline';
 
-import { PiniaStore, GoogleStore } from '../Store/Store.js';
 const store = PiniaStore();
 const googleStore = GoogleStore();
 
 //Variablen
 const router = useRouter();
 const Vue3GoogleOauth = inject('Vue3GoogleOauth');
+const WebuntisPasswordFieldShow = ref(false);
+const WebuntisPasswordFieldInput = ref('');
 const LoginFehlerAlertAnzeigen = ref(false);
 const LoginFehlerAlertText = ref('');
+const googleUser = reactive({});
 
 //Funktionen
 async function abmelden() {
@@ -191,28 +214,40 @@ async function abmelden() {
   store.$dispose();
 }
 
-async function anmelden() {
+async function anmeldenGoogle() {
   //Google einloggen
-  const googleUser = await googleStore.gAuth.signIn();
-  const basicProfile = googleUser.getBasicProfile();
+  const googleUserSigned = await googleStore.gAuth.signIn();
+  const basicProfile = googleUserSigned.getBasicProfile();
 
   const { sf: name, yv: email, zN: icon } = basicProfile;
 
   //Google-Uservariablen bekommen
   const checkIfTeacher = (emailString) => (/\d/.test(emailString) ? false : true);
-  //TODO MAN MUSS NOCH MITTELS GOOGLE-GROUP NOCH DIE KLASSE HERAUSBEKOMMEN
-  const GoogleUser = {
+  googleUser.value = {
     name,
     email,
     icon,
     isLehrer: checkIfTeacher(email),
-    klasse: '4BHITM',
+    klasse: 'server!',
   };
+
+  //Weiterleiten, wenn Lehrer, Schüler müssen dann Webuntis-Passwort eingeben
+  if (!googleUser.value.isLehrer) {
+    //Webuntis Password-field einblenden
+    WebuntisPasswordFieldShow.value = true;
+  } else {
+    anmeldenMitUntisdaten();
+  }
+}
+
+async function anmeldenMitUntisdaten() {
+  //Das WebuntisPasswort mit ins Userpaket packen
+  googleUser.value.webUntisPW = WebuntisPasswordFieldInput.value;
 
   //User registrieren in DB, falls er noch nicht ist
   let { status, data: User } = await await axios.post(
     'http://localhost:2410/lehrerSchuelerAnmelden',
-    GoogleUser,
+    googleUser.value,
   );
 
   //Schauen ob es Login-Serverprobleme gab
@@ -221,17 +256,28 @@ async function anmelden() {
     LoginFehlerAlertAnzeigen.value = false;
     LoginFehlerAlertText.value = '';
 
+    //UntisInputs leeren
+    WebuntisPasswordFieldInput.value = '';
+    WebuntisPasswordFieldShow.value = false;
+
     //User im Store setzen
     store.setAktiverUser(User);
 
     console.log(User);
 
     //Weiterleitung zur Accountseite
-    router.push('/Account');
+    // router.push('/Account');
   } else {
     //Fehlermeldung setzen
     LoginFehlerAlertAnzeigen.value = true;
     LoginFehlerAlertText.value = User;
+
+    //UntisInputs leeren
+    WebuntisPasswordFieldInput.value = '';
+    WebuntisPasswordFieldShow.value = false;
+
+    //Von Google abmelden wenn Fehler beim Anmelden aufgetreten sind
+    abmelden();
   }
 }
 </script>
