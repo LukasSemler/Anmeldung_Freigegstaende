@@ -502,12 +502,19 @@ const accepDeclineStudent = (req, res) => {
   if (!id || !status) rest.status(404).send('User not found');
   try {
     DatenbankVerbinden();
-    aktiverClient.query(`UPDATE freifach_bucht SET status = $1 WHERE s_fk = $2 and f_fk = $3;`, [
-      status,
-      id,
-      fachID,
-    ]);
-    res.status(200).send('success');
+
+    //Schüler annehmen oder wenn nicht direkt entfernen
+    if (status === 'true') {
+      aktiverClient.query(`UPDATE freifach_bucht SET status = $1 WHERE s_fk = $2 and f_fk = $3;`, [
+        status,
+        id,
+        fachID,
+      ]);
+      res.status(200).send('success');
+    } else {
+      aktiverClient.query(`DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2`, [fachID, id]);
+      res.status(200).send('success');
+    }
   } catch (error) {
     console.log(error);
     res.status(500).send('error');

@@ -2,6 +2,10 @@
   <HomeHeader></HomeHeader>
   <br />
   <!-- Countdown mit Endzeitpunkt anmelden anzeigen -->
+  <!-- <div v-if="Store.state.fristAnmelden">
+    <CountDown :endzeitpunkt="Store.state.fristAnmelden.formatiert"></CountDown>
+  </div> -->
+
   <div v-if="Store.state.fristAnmelden">
     <CountDown :endzeitpunkt="Store.state.fristAnmelden.formatiert"></CountDown>
   </div>

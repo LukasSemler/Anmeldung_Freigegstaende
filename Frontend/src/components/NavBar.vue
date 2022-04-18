@@ -219,7 +219,9 @@ async function anmeldenGoogle() {
   const googleUserSigned = await googleStore.gAuth.signIn();
   const basicProfile = googleUserSigned.getBasicProfile();
 
-  const { sf: name, yv: email, zN: icon } = basicProfile;
+  //! Alt ??
+  //const { sf: name, yv: email, zN: icon } = basicProfile;
+  const { sf: name, Gv: email, MN: icon } = basicProfile;
 
   //Google-Uservariablen bekommen
   const checkIfTeacher = (emailString) => (/\d/.test(emailString) ? false : true);

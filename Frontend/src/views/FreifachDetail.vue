@@ -197,92 +197,145 @@
           </div>
 
           <!--Schüler-Interaktions-Buttons-->
-          <div class="my-16 flex justify-center" v-if="FristErlaubtInteraktion">
-            <div class="w-1/2">
-              <!--Wenn der Schueler schon im Freifach begetreten ist-->
-              <div
-                v-if="SchuelerSchonBeigetreten"
-                class="relative flex flex-col items-center group"
-              >
-                <button
-                  data-tooltip-target="anmeldenErfolgTooltip"
-                  data-tooltip-style="dark"
-                  data-tooltip-placement="top"
-                  @click="FreifachAbmelden"
-                  class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 hover:ring-green-500 focus:ring-green-500"
-                >
-                  Vom Freifach abmelden
-                </button>
-                <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
-                  <span
-                    class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-yellow-500 shadow-lg"
-                  >
-                    Du kannst dich abmelden, solange die Frist noch nicht um ist!
-                  </span>
-                  <div class="w-3 h-3 -mt-2 rotate-45 bg-yellow-500"></div>
-                </div>
-              </div>
-
-              <div v-else>
-                <!--Wenn Schüler erlaubt ist anzumelden-->
+          <div v-if="!isLehrer">
+            <div class="my-16 flex justify-center" v-if="FristErlaubtInteraktion">
+              <div class="w-1/2">
+                <!--Wenn der Schueler schon im Freifach begetreten ist-->
                 <div
-                  v-if="SchuelerBeitrittErlaubt"
+                  v-if="SchuelerSchonBeigetreten"
                   class="relative flex flex-col items-center group"
                 >
                   <button
                     data-tooltip-target="anmeldenErfolgTooltip"
                     data-tooltip-style="dark"
                     data-tooltip-placement="top"
-                    @click="FreifachAnmelden"
-                    class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 hover:ring-green-500 focus:ring-green-500"
+                    @click="FreifachAbmelden"
+                    class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 hover:ring-green-500 focus:ring-green-500"
                   >
-                    Zum Freifach Anmelden
+                    Vom Freifach abmelden
                   </button>
                   <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
                     <span
-                      class="relative w-max z-10 p-2 leading-none text-black whitespace-no-wrap rounded bg-green-500 shadow-lg"
+                      class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-yellow-500 shadow-lg"
                     >
-                      Du erfüllst alle Voraussetzungen, dich anzumelden!
+                      Du kannst dich abmelden, solange die Frist noch nicht um ist!
                     </span>
-                    <div class="w-3 h-3 -mt-2 rotate-45 bg-green-500"></div>
+                    <div class="w-3 h-3 -mt-2 rotate-45 bg-yellow-500"></div>
                   </div>
                 </div>
 
-                <!--Wenn Schüler erlaubt ist anzumelden-->
-                <div v-else class="relative flex flex-col items-center group">
-                  <button
-                    data-tooltip-target="anmeldenFehlerTooltip"
-                    data-tooltip-style="dark"
-                    data-tooltip-placement="top"
-                    class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400"
+                <div v-else>
+                  <!--Wenn Schüler erlaubt ist anzumelden-->
+                  <div
+                    v-if="SchuelerBeitrittErlaubt"
+                    class="relative flex flex-col items-center group"
                   >
-                    Zum Freifach Anmelden
-                  </button>
-                  <div class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex">
-                    <span
-                      class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-red-600 shadow-lg"
+                    <button
+                      data-tooltip-target="anmeldenErfolgTooltip"
+                      data-tooltip-style="dark"
+                      data-tooltip-placement="top"
+                      @click="FreifachAnmelden"
+                      class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 hover:ring-green-500 focus:ring-green-500"
                     >
-                      Du erfüllst leider nicht alle benötigten Voraussetzungen!
-                    </span>
-                    <div class="w-3 h-3 -mt-2 rotate-45 bg-red-600"></div>
+                      Zum Freifach Anmelden
+                    </button>
+                    <div
+                      class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex"
+                    >
+                      <span
+                        class="relative w-max z-10 p-2 leading-none text-black whitespace-no-wrap rounded bg-green-500 shadow-lg"
+                      >
+                        Du erfüllst alle Voraussetzungen, dich anzumelden!
+                      </span>
+                      <div class="w-3 h-3 -mt-2 rotate-45 bg-green-500"></div>
+                    </div>
+                  </div>
+
+                  <!--Wenn Schüler erlaubt ist anzumelden-->
+                  <div v-else class="relative flex flex-col items-center group">
+                    <button
+                      data-tooltip-target="anmeldenFehlerTooltip"
+                      data-tooltip-style="dark"
+                      data-tooltip-placement="top"
+                      class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-400"
+                    >
+                      Zum Freifach Anmelden
+                    </button>
+                    <div
+                      class="absolute bottom-5 flex-col items-center hidden mb-6 group-hover:flex"
+                    >
+                      <span
+                        class="relative w-max z-10 p-2 leading-none text-white whitespace-no-wrap rounded bg-red-600 shadow-lg"
+                      >
+                        Du erfüllst leider nicht alle benötigten Voraussetzungen!
+                      </span>
+                      <div class="w-3 h-3 -mt-2 rotate-45 bg-red-600"></div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--Wenn die Anmeldefrist schon abgelaufen ist-->
-          <div class="my-16 flex justify-center" v-else>
-            <div class="w-1/2">
-              <!--Wenn der Schueler schon im Freifach begetreten ist-->
-              <div>
-                <button
-                  disabled
-                  @click="FreifachAbmelden"
-                  class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-zinc-500"
-                >
-                  Leider ist die Anmeldefrist schon abgelaufen
-                </button>
+            <!--Wenn die Anmeldefrist schon abgelaufen ist-->
+            <div class="my-16 flex justify-center" v-else>
+              <div class="w-1/2">
+                <!--Wenn der Schueler schon im Freifach begetreten ist-->
+                <div>
+                  <button
+                    disabled
+                    @click="FreifachAbmelden"
+                    class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-zinc-500"
+                  >
+                    Leider ist die Anmeldefrist schon abgelaufen
+                  </button>
+                </div>
               </div>
+            </div>
+          </div>
+          <div v-else class="flex justify-center">
+            <div class="w-1/2 flex flex-wrap flex-row justify-start">
+              <ul v-for="schueler of schueler" :key="schueler.s_id">
+                <div class="flex items-center px-4 py-4 sm:px-6 bg-red-300">
+                  <div class="min-w-0 flex-1 flex items-center">
+                    <div class="flex-shrink-0">
+                      <img
+                        class="h-12 w-12 rounded-full"
+                        :src="schueler.icon"
+                        alt=""
+                        async
+                        referrerpolicy="no-referrer"
+                      />
+                    </div>
+                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                      <div>
+                        <p class="text-sm font-medium text-htl_rot truncate">
+                          {{ schueler.vorname }} {{ schueler.nachname }}
+                        </p>
+                        <p class="mt-2 flex items-center text-sm text-gray-500">
+                          Klasse:
+                          {{ schueler.klasse }}
+                        </p>
+                      </div>
+                      <div class="block">
+                        <div v-if="schueler.status == 'pending'" class="ml-5">
+                          <button
+                            @click="annehmen(schueler)"
+                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                          >
+                            Annehmen
+                          </button>
+                          <button
+                            @click="ablehnen(schueler)"
+                            class="mx-2 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                          >
+                            Ablehnen
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div></div>
+                </div>
+              </ul>
             </div>
           </div>
 
@@ -303,7 +356,6 @@ import {
   XIcon,
 } from '@heroicons/vue/solid';
 import axios from 'axios';
-import Store from '../composables/Store';
 import {
   Dialog,
   DialogOverlay,
@@ -313,6 +365,9 @@ import {
 } from '@headlessui/vue';
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { PiniaStore } from '../Store/Store.js';
+
+const Store = PiniaStore();
 
 //Router für Weiterleitungen
 const router = useRouter();
@@ -333,7 +388,24 @@ let FristErlaubtInteraktion = ref(true);
 let showModal = ref(false);
 let SchuelerBeitrittErfolg = ref(false);
 
+//Variablen für die adminansicht
+let schueler = ref([]);
+let isLehrer = ref(false);
+
 onMounted(async () => {
+  console.log(Store.getAktivenUser);
+
+  //Schauen ob der User ein Lehrer ist
+  try {
+    if (Store.getAktivenUser.isLehrer) {
+      isLehrer.value = true;
+    } else {
+      isLehrer.value = false;
+    }
+  } catch {
+    console.log('Kein Lehrer');
+  }
+
   //Freifach wird aus dem LS geladen
   let ausgaehltesFreifach = JSON.parse(localStorage.getItem('AuswahlFreifach'));
   Object.assign(FreifachDatenObjekt, ausgaehltesFreifach);
@@ -352,50 +424,57 @@ onMounted(async () => {
 
   //Schauen ob Schüler zum Freifach beitreten kann
   FreifachCheck();
+
+  //Alle Schüler die begetreten oder angefragt haben bekommen
+  SchuelerVomFreifach();
 });
 
 //Überprüft ob der Schüler zum Freifach beitreten kann
 async function FreifachCheck() {
-  //Bekommt Aktuelle Klasse
-  const klasse = Store.getters.getAktivenUser().klasse[0];
-  const s_id = Store.getters.getAktivenUser().s_id;
+  try {
+    //Bekommt Aktuelle Klasse
+    const klasse = Store.getAktivenUser.klasse[0];
+    const s_id = Store.getAktivenUser.s_id;
 
-  //Schaut ob Schülerklasse mit einer Voraussetzungsklasse übereinspricht
-  FreifachDatenObjekt.voraussetzungen.forEach((voraussetzung) => {
-    if (voraussetzung.includes(klasse)) {
-      SchuelerBeitrittErlaubt.value = true;
-    }
-  });
-
-  //Schaut ob der Schüler schon im Freifach ist
-  const { data, status } = await axios.get(
-    `http://localhost:2410/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`,
-  );
-  if (status == 200) {
-    data.forEach((el) => {
-      if (el.s_id == s_id) {
-        SchuelerSchonBeigetreten.value = true;
+    //Schaut ob Schülerklasse mit einer Voraussetzungsklasse übereinspricht
+    FreifachDatenObjekt.voraussetzungen.forEach((voraussetzung) => {
+      if (voraussetzung.includes(klasse)) {
+        SchuelerBeitrittErlaubt.value = true;
       }
     });
-  }
 
-  //Schaut ob Fristen überhaupt noch Interaktionen erlauben
-  const { data: Fristdata } = await axios.get('http://localhost:2410/getFristen');
+    //Schaut ob der Schüler schon im Freifach ist
+    const { data, status } = await axios.get(
+      `http://localhost:2410/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`,
+    );
+    if (status == 200) {
+      data.forEach((el) => {
+        if (el.s_id == s_id) {
+          SchuelerSchonBeigetreten.value = true;
+        }
+      });
+    }
 
-  //Schauen ob Anmeldefrist eh noch nicht überschritten wurde
-  if (new Date(Fristdata[0].frist_anmelden) > new Date(Date.now())) {
-    console.log('Ändern ist erlaubt');
-    FristErlaubtInteraktion.value = true;
-  } else {
-    console.log('Ändern ist nicht erlaubt!');
-    FristErlaubtInteraktion.value = false;
+    //Schaut ob Fristen überhaupt noch Interaktionen erlauben
+    const { data: Fristdata } = await axios.get('http://localhost:2410/getFristen');
+
+    //Schauen ob Anmeldefrist eh noch nicht überschritten wurde
+    if (new Date(Fristdata[0].frist_anmelden) > new Date(Date.now())) {
+      console.log('Ändern ist erlaubt');
+      FristErlaubtInteraktion.value = true;
+    } else {
+      console.log('Ändern ist nicht erlaubt!');
+      FristErlaubtInteraktion.value = false;
+    }
+  } catch {
+    console.log('Offenbar nicht angemeldet! --> function FreifachDetail()');
   }
 }
 
 //Schüler kann sich hier zum Freifach anmelden
 async function FreifachAnmelden() {
   const { status } = await axios.post('http://localhost:2410/SchuelerInFreifachAnmelden', {
-    s_id: Store.getters.getAktivenUser().s_id,
+    s_id: Store.getAktivenUser.s_id,
     f_id: FreifachDatenObjekt.f_id,
   });
 
@@ -410,7 +489,7 @@ async function FreifachAnmelden() {
 
 async function FreifachAbmelden() {
   const { status } = await axios.post('http://localhost:2410/SchuelerInFreifachAbmelden', {
-    s_id: Store.getters.getAktivenUser().s_id,
+    s_id: Store.getAktivenUser.s_id,
     f_id: FreifachDatenObjekt.f_id,
   });
 
@@ -428,5 +507,37 @@ function EmailAnLehrerClicked() {
   window.open(
     `mailto:${FreifachLehrerDaten.value.email}?subject=Freifach ${FreifachDatenObjekt.titel} Frage`,
   );
+}
+
+//--ADMINATEILUNG--
+async function SchuelerVomFreifach() {
+  const { data: SchuelerListeBeigDaten } = await axios.get(
+    `http://localhost:2410/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`,
+  );
+  schueler.value = SchuelerListeBeigDaten;
+}
+
+async function annehmen(s) {
+  const res = await axios.patch(`http://localhost:2410/accepDeclineStudent/${s.s_id}`, {
+    status: 'true',
+    fachID: FreifachDatenObjekt.f_id,
+  });
+
+  //Neu die Schueler Laden
+  if (res.status == 200) {
+    SchuelerVomFreifach();
+  }
+}
+
+async function ablehnen(s) {
+  const res = await axios.patch(`http://localhost:2410/accepDeclineStudent/${s.s_id}`, {
+    status: 'false',
+    fachID: FreifachDatenObjekt.f_id,
+  });
+
+  //Neu die Schueler Laden
+  if (res.status == 200) {
+    SchuelerVomFreifach();
+  }
 }
 </script>
