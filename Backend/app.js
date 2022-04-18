@@ -9,7 +9,7 @@ import cors from 'cors';
 import { config } from 'dotenv';
 config();
 
-import customerRoutes from './routes/fach.js';
+import customerRoutes from './routes/Router.js';
 
 const PORT = process.env.PORT || 5000;
 

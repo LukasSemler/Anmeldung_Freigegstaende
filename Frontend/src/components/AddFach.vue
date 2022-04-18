@@ -702,7 +702,7 @@ async function changeData() {
     };
   }
 
-  const res = await axios.patch(`http://localhost:2410/adminChangeFach/${fachObj.id}`, fachObj);
+  const res = await axios.patch(`http://localhost:2410/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist
   if (res.status == 200) {
