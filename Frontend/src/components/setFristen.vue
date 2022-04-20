@@ -216,6 +216,7 @@ const tabs = [
 
 const router = useRouter();
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let fristEinreichen = ref(null);
 let fristAnmelden = ref(null);
 let showModal = ref(false);
@@ -225,7 +226,7 @@ let fristEinreichenFormated = ref(null);
 let fristAnmeldenFormated = ref(null);
 
 onMounted(async () => {
-  const { data } = await axios.get('http://localhost:2410/getFristen');
+  const { data } = await axios.get(`${serverAdress}/getFristen`);
   console.log(data);
   if (data.length > 0) {
     console.log('if');
@@ -273,7 +274,7 @@ async function setFristen() {
       },
     ];
 
-    const res = await axios.post('http://localhost:2410/setFristenChangeTimeLine', obj);
+    const res = await axios.post(`${serverAdress}/setFristenChangeTimeLine`, obj);
 
     if (res.status === 200) {
       showModal.value = true;

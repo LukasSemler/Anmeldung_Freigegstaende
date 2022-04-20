@@ -287,6 +287,7 @@ import moment from 'moment';
 import { PiniaStore } from '../Store/Store.js';
 const store = PiniaStore();
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let freifachRef = ref({});
 let schueler = ref([]);
 let showModalWarning = ref(false);
@@ -334,7 +335,7 @@ async function annehmen(s) {
   if (!erg.value) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.patch(`http://localhost:2410/accepDeclineStudent/${s.s_id}`, {
+    const res = await axios.patch(`${serverAdress}/accepDeclineStudent/${s.s_id}`, {
       status: 'true',
       fachID: freifachRef.value.f_id,
     });
@@ -352,7 +353,7 @@ async function ablehnen(s) {
   if (!erg.value) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.patch(`http://localhost:2410/accepDeclineStudent/${s.s_id}`, {
+    const res = await axios.patch(`${serverAdress}/accepDeclineStudent/${s.s_id}`, {
       status: 'false',
       fachID: freifachRef.value.f_id,
     });
@@ -365,7 +366,7 @@ async function ablehnen(s) {
 
 async function getData() {
   const { data } = await axios.get(
-    `http://localhost:2410/getSchuelerFaecher?id=${freifachRef.value.f_id}`,
+    `${serverAdress}/getSchuelerFaecher?id=${freifachRef.value.f_id}`,
   );
 
   return data;

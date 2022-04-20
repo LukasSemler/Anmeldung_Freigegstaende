@@ -293,6 +293,7 @@ const store = PiniaStore();
 const googleStore = GoogleStore();
 
 //Variablen
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 const router = useRouter();
 const Vue3GoogleOauth = inject('Vue3GoogleOauth');
 const WebuntisPasswordFieldShow = ref(false);
@@ -348,8 +349,8 @@ async function anmeldenMitUntisdaten() {
   googleUser.value.webUntisPW = WebuntisPasswordFieldInput.value;
 
   //User registrieren in DB, falls er noch nicht ist
-  let { status, data: User } = await await axios.post(
-    'http://localhost:2410/lehrerSchuelerAnmelden',
+  let { status, data: User } = await axios.post(
+    `${serverAdress}/lehrerSchuelerAnmelden`,
     googleUser.value,
   );
 

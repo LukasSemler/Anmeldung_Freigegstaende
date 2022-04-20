@@ -64,6 +64,7 @@ import axios from 'axios';
 import { PiniaStore } from '../Store/Store.js';
 const store = PiniaStore();
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let user = ref({ vorname: 'Loading', nachname: 'Loading', klasse: 'Loading' });
 let daten = ref([]);
 let aktuellesDatum = new Date();
@@ -81,7 +82,7 @@ onMounted(async () => {
     console.log(error);
   }
   const { data } = await axios.get(
-    `http://localhost:2410/getFaecherFromStudent/${store.aktiverUser.s_id}`,
+    `${serverAdress}/getFaecherFromStudent/${store.aktiverUser.s_id}`,
   );
   daten.value = data;
   console.log(daten.value);

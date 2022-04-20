@@ -426,6 +426,7 @@ const store = PiniaStore();
 //Router erstellen
 const router = useRouter();
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let showAddFach = ref(false);
 let faecher = ref([]);
 let showModalWarning = ref(false);
@@ -443,7 +444,7 @@ const tabs = [
 onMounted(async () => {
   // Freifaecher vom Server holen
   const { data } = await axios.get(
-    `http://localhost:2410/getFreifaecher?email=${props.aktiverUser.email}`,
+    `${serverAdress}/getFreifaecher?email=${props.aktiverUser.email}`,
   );
 
   console.log(data);
@@ -532,7 +533,7 @@ function openModalError(fach) {
 async function fachDel() {
   const fachZuDel = fachZuLöschen.value;
   const res = await axios.delete(
-    `http://localhost:2410/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`,
+    `${serverAdress}/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`,
   );
 
   //Schauen ob das Löschen erfolgreich war

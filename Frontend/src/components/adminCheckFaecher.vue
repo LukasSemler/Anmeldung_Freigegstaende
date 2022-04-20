@@ -263,6 +263,7 @@ import { ExclamationIcon } from '@heroicons/vue/outline';
 import { PiniaStore } from '../Store/Store.js';
 const store = PiniaStore();
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let faecher = ref([]);
 let fristEinreichen = ref(null);
 let showModalWarning = ref(false);
@@ -317,7 +318,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 async function annehmen(fach) {
   if (erg.value) {
     try {
-      const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
+      const res = await axios.patch(`${serverAdress}/acceptFach/${fach.f_id}`, {
         genehmigt: true,
       });
 
@@ -332,7 +333,7 @@ async function annehmen(fach) {
 async function ablehnen(fach) {
   if (erg.value) {
     try {
-      const res = await axios.patch(`http://localhost:2410/acceptFach/${fach.f_id}`, {
+      const res = await axios.patch(`${serverAdress}/acceptFach/${fach.f_id}`, {
         genehmigt: false,
       });
 
@@ -364,7 +365,7 @@ function change(fach) {
 
 async function getData() {
   //Daten holen
-  const { data } = await axios.get('http://localhost:2410/getFaecherAdmin');
+  const { data } = await axios.get(`${serverAdress}/getFaecherAdmin`);
   faecher.value = data;
 
   console.log(faecher.value);
@@ -390,7 +391,7 @@ async function getData() {
       iconbackground: 'bg-green-600',
     };
 
-    await axios.post('http://localhost:2410/changeTimeLine', obj);
+    await axios.post(`${serverAdress}/changeTimeLine`, obj);
   }
 }
 

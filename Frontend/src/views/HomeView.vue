@@ -328,6 +328,7 @@ import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let Freifaecherliste = ref([]);
 let AktivFilter = ref([]);
 const open = ref(false);
@@ -396,7 +397,7 @@ onMounted(async () => {
   }
 
   //Bekommen und anzeigen aller Freifächer
-  const { data, status } = await axios.get('http://localhost:2410/getFreifaecher');
+  const { data, status } = await axios.get(`${serverAdress}/getFreifaecher`);
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');

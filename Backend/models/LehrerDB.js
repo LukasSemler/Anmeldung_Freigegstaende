@@ -43,7 +43,7 @@ const accepDeclineStudentDB = async (status, id, fachID) => {
     console.log(error.message);
     return false;
   } finally {
-    client.release();
+    // client.release();
   }
 };
 

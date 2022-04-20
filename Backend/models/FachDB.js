@@ -47,7 +47,7 @@ const fachErstellenDB = async (
 
     return false;
   } finally {
-    // client.release();
+    client.release();
   }
 };
 

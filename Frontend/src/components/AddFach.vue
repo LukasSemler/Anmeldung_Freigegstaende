@@ -543,6 +543,7 @@ const store = PiniaStore();
 const router = useRouter();
 
 //Variablen
+const serverAdress = import.meta.env.<PROD/DEV>.VITE_SERVER_ADRESS;
 let titel = ref('');
 let beschreibung = ref('');
 let numberMin = ref(0);
@@ -645,7 +646,7 @@ async function sendImage() {
   formData.append('titel', titel.value);
   formData.append('datentyp', datentyp.value);
   console.log(imageSchicken.value);
-  axios.post('http://localhost:2410/fachThumbnail', formData, {
+  axios.post(`${serverAdress}/fachThumbnail`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -661,12 +662,12 @@ async function sendData() {
     numberMax: numberMax.value,
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
-    linkThumbnail: `http://localhost:2410/images/${titel.value}.${datentyp.value}`,
+    linkThumbnail: `${serverAdress}/images/${titel.value}.${datentyp.value}`,
     // lehrer: Store.state.aktiverUser,
     lehrer: store.getAktivenUser,
   };
 
-  let { status } = axios.post('http://localhost:2410/fachErstellen', fachObj);
+  let { status } = axios.post(`${serverAdress}/fachErstellen`, fachObj);
   if (status == 210) {
     throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
   }
@@ -685,7 +686,7 @@ async function changeData() {
       selected: selected.value,
       voraussetzungen: voraussetzungen.value,
       gewichtung: selectedGewichtung.value,
-      linkThumbnail: `http://localhost:2410/images/${titel.value}.${datentyp.value}`,
+      linkThumbnail: `${serverAdress}/images/${titel.value}.${datentyp.value}`,
     };
     //Bild schicken
     await sendImage();
@@ -702,7 +703,7 @@ async function changeData() {
     };
   }
 
-  const res = await axios.patch(`http://localhost:2410/changeFach/${fachObj.id}`, fachObj);
+  const res = await axios.patch(`${serverAdress}/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist
   if (res.status == 200) {

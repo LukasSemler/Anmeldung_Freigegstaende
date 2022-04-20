@@ -99,10 +99,12 @@ import axios from 'axios';
 
 //Store einbinden
 import { PiniaStore } from '../Store/Store.js';
+
 const store = PiniaStore();
 
 const router = useRouter();
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let timeline = ref(null);
 let fristEinreichen = ref(null);
 let fristAnmelden = ref(null);
@@ -118,7 +120,7 @@ const tabs = [
 //Mounted
 onMounted(async () => {
   //Werte der TimeLine holen und setzen
-  const { data } = await axios.get('http://localhost:2410/getAdminTimeLine');
+  const { data } = await axios.get(`${serverAdress}/getAdminTimeLine`);
   timeline.value = data;
 
   //Icons der TimeLine setzen

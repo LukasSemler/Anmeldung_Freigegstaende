@@ -216,6 +216,7 @@ import moment from 'moment';
 
 import { PiniaStore } from '../Store/Store.js';
 
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let faecher = ref([]);
 let fristAnmelden = ref(null);
 let showModalWarning = ref(false);
@@ -228,7 +229,7 @@ const props = defineProps({ aktiverUser: {} });
 const store = PiniaStore();
 
 const { data } = await axios.get(
-  `http://localhost:2410/getFaecherSchueler/${props.aktiverUser.s_id}`,
+  `${serverAdress}/getFaecherSchueler/${props.aktiverUser.s_id}`,
 );
 faecher.value = data;
 
@@ -269,7 +270,7 @@ async function abmelden(fach) {
   if (erg) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.delete(`http://localhost:2410/schuelerAbmelden/${fach.f_id}`);
+    const res = await axios.delete(`${serverAdress}/schuelerAbmelden/${fach.f_id}`);
     if (res.status != 200) {
       //TODO Fehler Zeigen
     }
