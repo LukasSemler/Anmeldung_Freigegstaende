@@ -394,8 +394,6 @@ let schueler = ref([]);
 let isLehrer = ref(false);
 
 onMounted(async () => {
-  console.log(Store.getAktivenUser);
-
   //Schauen ob der User ein Lehrer ist
   try {
     if (Store.getAktivenUser.isLehrer) {
@@ -418,12 +416,12 @@ onMounted(async () => {
 
   if (status == 200) {
     //Lehrerdaten setzen
-    FreifachLehrerDaten.value = Lehrerdata;
+    FreifachLehrerDaten.value = Lehrerdata[0];
   } else {
     alert('Beim bekommen des Lehrers über ein Freifach ist ein Fehler aufgetreten');
   }
 
-  //Schauen ob Schüler zum Freifach beitreten kann
+//Schauen ob Schüler zum Freifach beitreten kann
   FreifachCheck();
 
   //Alle Schüler die begetreten oder angefragt haben bekommen

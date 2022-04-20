@@ -543,7 +543,7 @@ const store = PiniaStore();
 const router = useRouter();
 
 //Variablen
-const serverAdress = import.meta.env.<PROD/DEV>.VITE_SERVER_ADRESS;
+const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let titel = ref('');
 let beschreibung = ref('');
 let numberMin = ref(0);

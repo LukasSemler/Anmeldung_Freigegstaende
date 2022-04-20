@@ -6,7 +6,7 @@
       <div class="flex-shrink-0 flex justify-center">
         <a href="/" class="inline-flex">
           <span class="sr-only">Workflow</span>
-          <img class="h-12 w-auto" src="../assets/Logo HTL Wien West.png" alt="" />
+          <img class="h-12 w-auto" src="/HTLWienWestLogo.png" alt="HTL-Logo" />
         </a>
       </div>
       <div class="py-16">

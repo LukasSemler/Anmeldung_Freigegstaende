@@ -23,13 +23,13 @@
               <img
                 @click="router.push('/')"
                 class="block lg:hidden h-8 w-auto"
-                src="../assets/Logo HTL Wien West.png"
+                src="/HTLWienWestLogo.png"
                 alt="HTL Logo"
               />
               <img
                 @click="router.push('/')"
                 class="hidden lg:block h-8 w-auto"
-                src="../assets/Logo HTL Wien West.png"
+                src="/HTLWienWestLogo.png"
                 alt="HTL Logo"
               />
             </div>

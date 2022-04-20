@@ -1,3 +1,4 @@
+import path from 'path';
 import { fileURLToPath, URL } from 'url';
 
 import { defineConfig } from 'vite';
@@ -11,5 +12,8 @@ export default defineConfig({
   },
   alias: {
     '@': fileURLToPath(new URL('./src', import.meta.url)),
+  },
+  build: {
+    outDir: path.resolve(__dirname, '../Backend/public'),
   },
 });

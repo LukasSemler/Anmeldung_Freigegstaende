@@ -25,10 +25,6 @@
                   <h3>{{ person.name }}</h3>
                   <p class="text-htl_rot">{{ person.role }}</p>
                 </div>
-                  <!-- <div class="text-lg">
-                    <p class="text-gray-500">{{ person.bio }}</p>
-                  </div> -->
-
                 <ul role="list" class="flex space-x-5">
                   <li>
                     <a :href="person.instagramUrl"
