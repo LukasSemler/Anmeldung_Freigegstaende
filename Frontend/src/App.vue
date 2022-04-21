@@ -30,7 +30,7 @@ onMounted(async () => {
   }
 
   //Fristen holen und setzen
-  const { data } = await axios.get('http://localhost:2410/getFristen');
+  const { data } = await axios.get(`/getFristen`);
 
   if (data.length !== 0) {
     // if (!fristEinreichen && !fristAnmelden) {

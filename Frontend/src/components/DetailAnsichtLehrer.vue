@@ -335,7 +335,7 @@ async function annehmen(s) {
   if (!erg.value) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.patch(`${serverAdress}/accepDeclineStudent/${s.s_id}`, {
+    const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
       status: 'true',
       fachID: freifachRef.value.f_id,
     });
@@ -353,7 +353,7 @@ async function ablehnen(s) {
   if (!erg.value) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.patch(`${serverAdress}/accepDeclineStudent/${s.s_id}`, {
+    const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
       status: 'false',
       fachID: freifachRef.value.f_id,
     });
@@ -366,7 +366,7 @@ async function ablehnen(s) {
 
 async function getData() {
   const { data } = await axios.get(
-    `${serverAdress}/getSchuelerFaecher?id=${freifachRef.value.f_id}`,
+    `/getSchuelerFaecher?id=${freifachRef.value.f_id}`,
   );
 
   return data;

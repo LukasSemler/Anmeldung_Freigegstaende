@@ -411,7 +411,7 @@ onMounted(async () => {
 
   //Leitender Lehrer bekommen
   let { data: Lehrerdata, status } = await axios.get(
-    `${serverAdress}/getFreifaecherLehrer?freifachname=${ausgaehltesFreifach.titel}`,
+    `/getFreifaecherLehrer?freifachname=${ausgaehltesFreifach.titel}`,
   );
 
   if (status == 200) {
@@ -421,7 +421,7 @@ onMounted(async () => {
     alert('Beim bekommen des Lehrers über ein Freifach ist ein Fehler aufgetreten');
   }
 
-//Schauen ob Schüler zum Freifach beitreten kann
+  //Schauen ob Schüler zum Freifach beitreten kann
   FreifachCheck();
 
   //Alle Schüler die begetreten oder angefragt haben bekommen
@@ -443,9 +443,7 @@ async function FreifachCheck() {
     });
 
     //Schaut ob der Schüler schon im Freifach ist
-    const { data, status } = await axios.get(
-      `${serverAdress}/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`,
-    );
+    const { data, status } = await axios.get(`/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`);
     if (status == 200) {
       data.forEach((el) => {
         if (el.s_id == s_id) {
@@ -455,7 +453,7 @@ async function FreifachCheck() {
     }
 
     //Schaut ob Fristen überhaupt noch Interaktionen erlauben
-    const { data: Fristdata } = await axios.get(`${serverAdress}/getFristen`);
+    const { data: Fristdata } = await axios.get(`/getFristen`);
 
     //Schauen ob Anmeldefrist eh noch nicht überschritten wurde
     if (new Date(Fristdata[0].frist_anmelden) > new Date(Date.now())) {
@@ -472,7 +470,7 @@ async function FreifachCheck() {
 
 //Schüler kann sich hier zum Freifach anmelden
 async function FreifachAnmelden() {
-  const { status } = await axios.post(`${serverAdress}/SchuelerInFreifachAnmelden`, {
+  const { status } = await axios.post(`/SchuelerInFreifachAnmelden`, {
     s_id: Store.getAktivenUser.s_id,
     f_id: FreifachDatenObjekt.f_id,
   });
@@ -487,7 +485,7 @@ async function FreifachAnmelden() {
 }
 
 async function FreifachAbmelden() {
-  const { status } = await axios.post(`${serverAdress}/SchuelerInFreifachAbmelden`, {
+  const { status } = await axios.post(`/SchuelerInFreifachAbmelden`, {
     s_id: Store.getAktivenUser.s_id,
     f_id: FreifachDatenObjekt.f_id,
   });
@@ -511,13 +509,13 @@ function EmailAnLehrerClicked() {
 //--ADMINATEILUNG--
 async function SchuelerVomFreifach() {
   const { data: SchuelerListeBeigDaten } = await axios.get(
-    `${serverAdress}/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`,
+    `/getSchuelerFaecher?id=${FreifachDatenObjekt.f_id}`,
   );
   schueler.value = SchuelerListeBeigDaten;
 }
 
 async function annehmen(s) {
-  const res = await axios.patch(`${serverAdress}/accepDeclineStudent/${s.s_id}`, {
+  const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
     status: 'true',
     fachID: FreifachDatenObjekt.f_id,
   });
@@ -529,7 +527,7 @@ async function annehmen(s) {
 }
 
 async function ablehnen(s) {
-  const res = await axios.patch(`${serverAdress}/accepDeclineStudent/${s.s_id}`, {
+  const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
     status: 'false',
     fachID: FreifachDatenObjekt.f_id,
   });

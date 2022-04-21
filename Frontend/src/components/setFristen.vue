@@ -80,7 +80,8 @@
                 </DialogTitle>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
-                    Die Fristen zum Einreichen von den Freifächer und für die Anmeldung wurden gesetzt
+                    Die Fristen zum Einreichen von den Freifächer und für die Anmeldung wurden
+                    gesetzt
                   </p>
                 </div>
               </div>
@@ -226,7 +227,7 @@ let fristEinreichenFormated = ref(null);
 let fristAnmeldenFormated = ref(null);
 
 onMounted(async () => {
-  const { data } = await axios.get(`${serverAdress}/getFristen`);
+  const { data } = await axios.get(`/getFristen`);
   console.log(data);
   if (data.length > 0) {
     console.log('if');
@@ -274,7 +275,7 @@ async function setFristen() {
       },
     ];
 
-    const res = await axios.post(`${serverAdress}/setFristenChangeTimeLine`, obj);
+    const res = await axios.post(`/setFristenChangeTimeLine`, obj);
 
     if (res.status === 200) {
       showModal.value = true;

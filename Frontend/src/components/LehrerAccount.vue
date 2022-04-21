@@ -443,9 +443,7 @@ const tabs = [
 
 onMounted(async () => {
   // Freifaecher vom Server holen
-  const { data } = await axios.get(
-    `${serverAdress}/getFreifaecher?email=${props.aktiverUser.email}`,
-  );
+  const { data } = await axios.get(`/getFreifaecher?email=${props.aktiverUser.email}`);
 
   console.log(data);
 
@@ -526,15 +524,12 @@ function openModalError(fach) {
       showModalDel.value = true;
       fachZuLöschen.value = fach;
     }
-  }
-  else showModalWarningGenehmigt.value = true;
+  } else showModalWarningGenehmigt.value = true;
 }
 
 async function fachDel() {
   const fachZuDel = fachZuLöschen.value;
-  const res = await axios.delete(
-    `${serverAdress}/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`,
-  );
+  const res = await axios.delete(`/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`);
 
   //Schauen ob das Löschen erfolgreich war
   if (res.status == 200) {

@@ -389,6 +389,8 @@ function FilterChanged() {
 
 //Mounted
 onMounted(async () => {
+  //TODO KOMMT BALD WEG
+
   try {
     localStorage.removeItem('AuswahlFreifach');
     localStorage.removeItem('detailAnsichtLehrer');
@@ -397,7 +399,7 @@ onMounted(async () => {
   }
 
   //Bekommen und anzeigen aller Freifächer
-  const { data, status } = await axios.get(`${serverAdress}/getFreifaecher`);
+  const { data, status } = await axios.get(`/getFreifaecher`);
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');

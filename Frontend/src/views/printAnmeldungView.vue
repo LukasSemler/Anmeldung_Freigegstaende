@@ -100,9 +100,7 @@ onMounted(async () => {
   } catch (error) {
     console.log(error);
   }
-  const { data } = await axios.get(
-    `${serverAdress}/getFaecherFromStudent/${store.aktiverUser.s_id}`,
-  );
+  const { data } = await axios.get(`/getFaecherFromStudent/${store.aktiverUser.s_id}`);
   daten.value = data;
 });
 

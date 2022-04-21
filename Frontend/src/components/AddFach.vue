@@ -646,7 +646,7 @@ async function sendImage() {
   formData.append('titel', titel.value);
   formData.append('datentyp', datentyp.value);
   console.log(imageSchicken.value);
-  axios.post(`${serverAdress}/fachThumbnail`, formData, {
+  axios.post(`/fachThumbnail`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -662,12 +662,12 @@ async function sendData() {
     numberMax: numberMax.value,
     selected: selected.value,
     voraussetzungen: voraussetzungen.value,
-    linkThumbnail: `${serverAdress}/images/${titel.value}.${datentyp.value}`,
+    linkThumbnail: `/images/${titel.value}.${datentyp.value}`,
     // lehrer: Store.state.aktiverUser,
     lehrer: store.getAktivenUser,
   };
 
-  let { status } = axios.post(`${serverAdress}/fachErstellen`, fachObj);
+  let { status } = axios.post(`/fachErstellen`, fachObj);
   if (status == 210) {
     throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
   }
@@ -686,7 +686,7 @@ async function changeData() {
       selected: selected.value,
       voraussetzungen: voraussetzungen.value,
       gewichtung: selectedGewichtung.value,
-      linkThumbnail: `${serverAdress}/images/${titel.value}.${datentyp.value}`,
+      linkThumbnail: `/images/${titel.value}.${datentyp.value}`,
     };
     //Bild schicken
     await sendImage();
@@ -703,7 +703,7 @@ async function changeData() {
     };
   }
 
-  const res = await axios.patch(`${serverAdress}/changeFach/${fachObj.id}`, fachObj);
+  const res = await axios.patch(`/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist
   if (res.status == 200) {
