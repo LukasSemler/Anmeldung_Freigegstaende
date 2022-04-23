@@ -3,12 +3,12 @@
     <HomeHeader></HomeHeader>
     <br />
     <!-- Countdown mit Endzeitpunkt anmelden anzeigen -->
-    <!-- <div v-if="Store.state.fristAnmelden">
-    <CountDown :endzeitpunkt="Store.state.fristAnmelden.formatiert"></CountDown>
-  </div> -->
+    <!-- <div v-if="Store.fristAnmelden">
+      <CountDown :endzeitpunkt="Store.fristAnmelden.formatiert"></CountDown>
+    </div> -->
 
-    <div v-if="Store.state.fristAnmelden">
-      <CountDown :endzeitpunkt="Store.state.fristAnmelden.formatiert"></CountDown>
+    <div v-if="Store.fristAnmelden">
+      <CountDown :endzeitpunkt="Store.fristAnmelden.formatiert"></CountDown>
     </div>
 
     <div v-if="Freifaecherliste.length > 0">
@@ -323,16 +323,17 @@ import { ChevronDownIcon } from '@heroicons/vue/solid';
 import CountDown from '../components/CountDown.vue';
 import HomeHeader from '../components/HomeHeader.vue';
 import FooterComp from '../components/FooterComp.vue';
-import Store from '../composables/Store.js';
 import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { PiniaStore } from '../Store/Store.js';
 
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let Freifaecherliste = ref([]);
 let AktivFilter = ref([]);
 const open = ref(false);
 const router = useRouter();
+const Store = PiniaStore();
 
 //Sortieren
 const sortOptions = [
@@ -399,7 +400,7 @@ onMounted(async () => {
   }
 
   //Bekommen und anzeigen aller Freifächer
-  const { data, status } = await axios.get(`/getFreifaecher`);
+  const { data, status } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getFreifaecher`);
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');

@@ -92,8 +92,6 @@
 import { XIcon, CheckIcon } from '@heroicons/vue/solid';
 import { useRouter } from 'vue-router';
 import { onMounted, reactive, ref } from 'vue';
-//Alter Store
-// import Store from '../composables/Store.js';
 
 import axios from 'axios';
 
@@ -120,7 +118,7 @@ const tabs = [
 //Mounted
 onMounted(async () => {
   //Werte der TimeLine holen und setzen
-  const { data } = await axios.get(`/getAdminTimeLine`);
+  const { data } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getAdminTimeLine`);
   timeline.value = data;
 
   //Icons der TimeLine setzen

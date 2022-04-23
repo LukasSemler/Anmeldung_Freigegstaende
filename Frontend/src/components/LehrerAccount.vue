@@ -413,7 +413,6 @@ import { ref, onMounted, reactive } from 'vue';
 
 //sonstige imports
 import axios from 'axios';
-// import Store from '../composables/Store.js';
 import moment from 'moment';
 
 //Router impotieren
@@ -443,7 +442,7 @@ const tabs = [
 
 onMounted(async () => {
   // Freifaecher vom Server holen
-  const { data } = await axios.get(`/getFreifaecher?email=${props.aktiverUser.email}`);
+  const { data } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getFreifaecher?email=${props.aktiverUser.email}`);
 
   console.log(data);
 
@@ -529,7 +528,7 @@ function openModalError(fach) {
 
 async function fachDel() {
   const fachZuDel = fachZuLöschen.value;
-  const res = await axios.delete(`/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`);
+  const res = await axios.delete(`${import.meta.env.VITE_SERVER_ADRESS}/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`);
 
   //Schauen ob das Löschen erfolgreich war
   if (res.status == 200) {

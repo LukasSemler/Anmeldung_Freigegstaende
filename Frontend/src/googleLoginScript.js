@@ -1,4 +1,3 @@
-import Store from './composables/Store';
 import { GoogleStore } from './Store/Store';
 
 import { reactive, readonly } from 'vue';

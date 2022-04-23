@@ -1,21 +1,9 @@
 <template>
   <div class="shadow">
     <!--Navbar-->
-    <Disclosure as="nav" class="bg-white" v-slot="{ open }">
+    <Disclosure as="nav" class="bg-white">
       <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div class="relative flex items-center justify-between h-16">
-          <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <!-- Möglicherweise nicht notwendig -->
-
-            <!-- Mobile menu button-->
-            <DisclosureButton
-              class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-            >
-              <span class="sr-only">Open main menu</span>
-              <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
-              <XIcon v-else class="block h-6 w-6" aria-hidden="true" />
-            </DisclosureButton>
-          </div>
           <div
             class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start cursor-pointer"
           >
@@ -349,7 +337,10 @@ async function anmeldenMitUntisdaten() {
   googleUser.value.webUntisPW = WebuntisPasswordFieldInput.value;
 
   //User registrieren in DB, falls er noch nicht ist
-  let { status, data: User } = await axios.post(`/lehrerSchuelerAnmelden`, googleUser.value);
+  let { status, data: User } = await axios.post(
+    `${import.meta.env.VITE_SERVER_ADRESS}/lehrerSchuelerAnmelden`,
+    googleUser.value,
+  );
 
   //Schauen ob es Login-Serverprobleme gab
   if (status == 200) {

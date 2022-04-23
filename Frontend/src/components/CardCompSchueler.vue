@@ -229,7 +229,7 @@ const props = defineProps({ aktiverUser: {} });
 const store = PiniaStore();
 
 const { data } = await axios.get(
-  `/getFaecherSchueler/${props.aktiverUser.s_id}`,
+  `${import.meta.env.VITE_SERVER_ADRESS}/getFaecherSchueler/${props.aktiverUser.s_id}`,
 );
 faecher.value = data;
 
@@ -270,7 +270,7 @@ async function abmelden(fach) {
   if (erg) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.delete(`/schuelerAbmelden/${fach.f_id}`);
+    const res = await axios.delete(`${import.meta.env.VITE_SERVER_ADRESS}/schuelerAbmelden/${fach.f_id}`);
     if (res.status != 200) {
       //TODO Fehler Zeigen
     }
