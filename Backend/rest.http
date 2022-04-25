@@ -1,5 +1,0 @@
-####GET####
-GET http://localhost:2410/getFreifaecher
-
-#####
-GET http://localhost:2410/getFreifaecherLehrer?freifachname=JavaScript
