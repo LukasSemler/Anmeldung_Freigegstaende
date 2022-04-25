@@ -9,7 +9,7 @@ export const NotFoundHandler = (req, res, next) => {
 
 export const HttpsRedirectHandler = (req, res, next) => {
   if (req.headers['x-forwarded-proto'] === 'http') {
-    res.redirect(`https://${req.headers.host}${req.url}`);
+    next();
   } else {
     console.log('Redirect');
     if (req.headers.host.split(':')[0] == 'localhost') {
