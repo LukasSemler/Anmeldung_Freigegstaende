@@ -8,14 +8,16 @@ export const NotFoundHandler = (req, res, next) => {
 };
 
 export const HttpsRedirectHandler = (req, res, next) => {
-  if (req.headers['x-forwarded-proto'] === 'http') {
-    next();
-  } else {
-    console.log('Redirect');
-    if (req.headers.host.split(':')[0] == 'localhost') {
-      next();
-    } else {
-      res.redirect(`http://${req.headers.host}${req.url}`);
-    }
-  }
+  //TODO MUSS MAN NOCH UMBAUEN
+  // if (req.secure) {
+  //   console.log('HTTPS');
+  //   next();
+  // } else {
+  //   if (req.headers.host.split(':')[0] == 'localhost') {
+  //     next();
+  //   } else {
+  //     console.log('HTTP');
+  //     res.redirect(`https://${req.headers.host}${req.url}`);
+  //   }
+  // }
 };

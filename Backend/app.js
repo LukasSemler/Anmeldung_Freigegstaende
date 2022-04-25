@@ -21,12 +21,12 @@ app.use(fileUpload());
 
 const dirname = path.resolve();
 
-//Middwar-Route
-app.use(HttpsRedirectHandler); //Wenn der User versucht auf dei Heroku-HTTP-URL zuzugreifen, wird er auf die HTTPS-URL umgeleitet
-
 app.use(express.static(path.join(dirname, 'public')));
 app.use(express.json()); // body parser
 app.use(express.urlencoded({ extended: false }));
+
+//Middwar-Route
+app.use(HttpsRedirectHandler); //Wenn der User versucht auf dei Heroku-HTTP-URL zuzugreifen, wird er auf die HTTPS-URL umgeleitet
 
 //Normale Server-Routen
 app.use('/', customerRoutes);
