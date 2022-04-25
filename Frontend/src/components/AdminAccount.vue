@@ -118,7 +118,7 @@ const tabs = [
 //Mounted
 onMounted(async () => {
   //Werte der TimeLine holen und setzen
-  const { data } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getAdminTimeLine`);
+  const { data } = await axios.get(`/getAdminTimeLine`);
   timeline.value = data;
 
   //Icons der TimeLine setzen

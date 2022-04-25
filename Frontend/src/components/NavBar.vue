@@ -337,10 +337,7 @@ async function anmeldenMitUntisdaten() {
   googleUser.value.webUntisPW = WebuntisPasswordFieldInput.value;
 
   //User registrieren in DB, falls er noch nicht ist
-  let { status, data: User } = await axios.post(
-    `${import.meta.env.VITE_SERVER_ADRESS}/lehrerSchuelerAnmelden`,
-    googleUser.value,
-  );
+  let { status, data: User } = await axios.post(`/lehrerSchuelerAnmelden`, googleUser.value);
 
   //Schauen ob es Login-Serverprobleme gab
   if (status == 200) {
@@ -358,7 +355,7 @@ async function anmeldenMitUntisdaten() {
     console.log(User);
 
     //Weiterleitung zur Accountseite
-    // router.push('/Account');
+    router.push('/Account');
   } else {
     //Fehlermeldung setzen
     LoginFehlerAlertAnzeigen.value = true;

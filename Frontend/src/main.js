@@ -5,6 +5,7 @@ import Countdown from 'vue3-flip-countdown';
 import { createPinia } from 'pinia';
 import router from './router';
 import gAuthPlguin from './googleLoginScript';
+import axios from 'axios';
 
 const app = createApp(App);
 
@@ -17,6 +18,11 @@ app.use(pinia);
 
 //CountdownComponente
 app.use(Countdown);
+
+//Axios base-url setzen
+if (location.origin === 'http://localhost:8080') {
+  axios.defaults.baseURL = 'http://localhost:2410';
+}
 
 //Google umgebautes (NPM-Package)
 app.use(gAuthPlguin, {

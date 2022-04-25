@@ -400,7 +400,7 @@ onMounted(async () => {
   }
 
   //Bekommen und anzeigen aller Freifächer
-  const { data, status } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getFreifaecher`);
+  const { data, status } = await axios.get(`/getFreifaecher`);
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');

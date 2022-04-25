@@ -227,7 +227,7 @@ let fristEinreichenFormated = ref(null);
 let fristAnmeldenFormated = ref(null);
 
 onMounted(async () => {
-  const { data } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getFristen`);
+  const { data } = await axios.get(`/getFristen`);
   console.log(data);
   if (data.length > 0) {
     console.log('if');
@@ -275,7 +275,7 @@ async function setFristen() {
       },
     ];
 
-    const res = await axios.post(`${import.meta.env.VITE_SERVER_ADRESS}/setFristenChangeTimeLine`, obj);
+    const res = await axios.post(`/setFristenChangeTimeLine`, obj);
 
     if (res.status === 200) {
       showModal.value = true;

@@ -646,7 +646,7 @@ async function sendImage() {
   formData.append('titel', titel.value);
   formData.append('datentyp', datentyp.value);
   console.log(imageSchicken.value);
-  axios.post(`${import.meta.env.VITE_SERVER_ADRESS}/fachThumbnail`, formData, {
+  axios.post(`/fachThumbnail`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -667,7 +667,7 @@ async function sendData() {
     lehrer: store.getAktivenUser,
   };
 
-  let { status } = axios.post(`${import.meta.env.VITE_SERVER_ADRESS}/fachErstellen`, fachObj);
+  let { status } = axios.post(`/fachErstellen`, fachObj);
   if (status == 210) {
     throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
   }
@@ -703,7 +703,7 @@ async function changeData() {
     };
   }
 
-  const res = await axios.patch(`${import.meta.env.VITE_SERVER_ADRESS}/changeFach/${fachObj.id}`, fachObj);
+  const res = await axios.patch(`/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist
   if (res.status == 200) {

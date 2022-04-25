@@ -317,7 +317,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 async function annehmen(fach) {
   if (erg.value) {
     try {
-      const res = await axios.patch(`${import.meta.env.VITE_SERVER_ADRESS}/acceptFach/${fach.f_id}`, {
+      const res = await axios.patch(`/acceptFach/${fach.f_id}`, {
         genehmigt: true,
       });
 
@@ -332,7 +332,7 @@ async function annehmen(fach) {
 async function ablehnen(fach) {
   if (erg.value) {
     try {
-      const res = await axios.patch(`${import.meta.env.VITE_SERVER_ADRESS}/acceptFach/${fach.f_id}`, {
+      const res = await axios.patch(`/acceptFach/${fach.f_id}`, {
         genehmigt: false,
       });
 
@@ -364,7 +364,7 @@ function change(fach) {
 
 async function getData() {
   //Daten holen
-  const { data } = await axios.get(`${import.meta.env.VITE_SERVER_ADRESS}/getFaecherAdmin`);
+  const { data } = await axios.get(`/getFaecherAdmin`);
   faecher.value = data;
 
   console.log(faecher.value);
@@ -390,7 +390,7 @@ async function getData() {
       iconbackground: 'bg-green-600',
     };
 
-    await axios.post(`${import.meta.env.VITE_SERVER_ADRESS}/changeTimeLine`, obj);
+    await axios.post(`/changeTimeLine`, obj);
   }
 }
 
