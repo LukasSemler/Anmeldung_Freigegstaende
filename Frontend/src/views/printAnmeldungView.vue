@@ -1,4 +1,105 @@
 <template>
+  <TransitionRoot as="template" :show="showModalWarning">
+    <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModalWarning = false">
+      <div
+        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+      >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+        </TransitionChild>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+          >&#8203;</span
+        >
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          enter-to="opacity-100 translate-y-0 sm:scale-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100 translate-y-0 sm:scale-100"
+          leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        >
+          <div
+            class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
+          >
+            <div>
+              <div
+                class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100"
+              >
+                <ExclamationIcon class="h-6 w-6 text-orange-600" aria-hidden="true" />
+              </div>
+              <div class="mt-3 text-center sm:mt-5">
+                <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                  Warning
+                </DialogTitle>
+                <div class="mt-2">
+                  <p class="text-sm text-gray-500">
+                    Da die Frist zum Anmelden von den Freifächern noch nicht abgelaufen ist, kannst
+                    du noch keine Anmeldung drucken. Warte bis die Frist abgelaufen ist, um zu
+                    drucken.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="mt-5 sm:mt-6">
+              <button
+                type="button"
+                class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-orange-600 text-base font-medium text-white hover:bg-orange-500 focus:outline-none sm:text-sm"
+                @click="showModalWarning = false"
+              >
+                Akzeptieren
+              </button>
+            </div>
+          </div>
+        </TransitionChild>
+      </div>
+    </Dialog>
+  </TransitionRoot>
+  <div>
+    <div class="sm:hidden">
+      <label for="tabs" class="sr-only">Select a tab</label>
+      <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+      <select
+        id="tabs"
+        name="tabs"
+        class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-htl_rot focus:border-htl_rot sm:text-sm rounded-md"
+      >
+        <option v-for="tab in tabs" :key="tab.name" :selected="tab.current">
+          {{ tab.name }}
+        </option>
+      </select>
+    </div>
+    <div class="hidden sm:block">
+      <div class="border-b border-gray-200">
+        <nav class="-mb-px flex space-x-8 ml-2" aria-label="Tabs">
+          <a
+            v-for="tab in tabs"
+            :key="tab.name"
+            @click="router.push(tab.link)"
+            :class="[
+              tab.current
+                ? 'border-htl_rot text-htl_rot'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+              'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+            ]"
+            :aria-current="tab.current ? 'page' : undefined"
+          >
+            {{ tab.name }}
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
   <div>
     <div class="h-24" id="Print">
       <img
@@ -10,11 +111,14 @@
     <h1 id="noPrint" class="text-center text-3xl font-black mt-6">
       Formular für die Anmeldung zu den Freifächer
     </h1>
-    <p class="mx-6 mt-4" id="noPrint">
-      Anbei dürfen wir Ihnen einige Informationen zu den Freifächern und unverbindlichen Übungen der
-      IT-Abteilung übermitteln. Freifächer und unverbindliche Übungen finden zusätzlich zum
-      Pflichtunterricht statt. Mit der Anmeldung ist die Teilnahme für ein Schuljahr verpflichtend.
-    </p>
+    <div class="flex justify-center">
+      <p class="ml-12 mr-12 mt-4 text-center w-1/2" id="noPrint">
+        Anbei dürfen wir Ihnen einige Informationen zu den Freifächern und unverbindlichen Übungen
+        der IT-Abteilung übermitteln. Freifächer und unverbindliche Übungen finden zusätzlich zum
+        Pflichtunterricht statt. Mit der Anmeldung ist die Teilnahme für ein Schuljahr
+        verpflichtend.
+      </p>
+    </div>
 
     <div id="Print">
       <h1 class="text-center text-3xl font-black mt-6">Anmeldung zu den Freifächer</h1>
@@ -78,11 +182,32 @@
 </template>
 
 <script setup>
+import {
+  Dialog,
+  DialogOverlay,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from '@headlessui/vue';
+import { ExclamationIcon } from '@heroicons/vue/outline';
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+import moment from 'moment';
 
 import { PiniaStore } from '../Store/Store.js';
 const store = PiniaStore();
+
+const router = useRouter();
+
+const showModalWarning = ref(false);
+
+//Tabs für das Menü anzeigen
+const tabs = [
+  { name: 'Mein Account', link: '/Account', current: false },
+  { name: 'Anmeldung Drucken', link: '/printAnmeldung', current: true },
+];
 
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let user = ref({ vorname: 'Loading', nachname: 'Loading', klasse: 'Loading' });
@@ -105,7 +230,24 @@ onMounted(async () => {
 });
 
 function print() {
-  window.print();
+  //Frist aus dem Store holen
+  const frist = store.getFristEinreichen;
+
+  //Daten holen
+  let fristEinreichen = frist.original;
+  let aktuellesDatum = new Date();
+
+  console.log(fristEinreichen);
+  console.log(aktuellesDatum);
+
+  //Schauen ob das Datum vor oder nach der Frist ist
+  let erg = moment(fristEinreichen.value).isBefore(aktuellesDatum);
+
+  console.log('Ergebnis', erg);
+  if (!erg) {
+    console.log('Sie koennen nicht drucken');
+    showModalWarning.value = true;
+  } else window.print();
 }
 </script>
 
