@@ -13,27 +13,30 @@ const fachErstellenDB = async (
   voraussetzungen,
   lehrer,
 ) => {
-  let querys = [];
   try {
     //Tranaktion
     await client.query('BEGIN');
-    //Ersten Befehl pushen
-    querys.push(
-      client.query(
-        'INSERT INTO freifach_tbl (titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, voraussetzungen) VALUES ($1, $2, $3, $4, $5, $6, $7);',
-      ),
+
+    //ID vom Lehrer bekommen
+    const lehrerID = await client.query('SELECT l_id FROM lehrer_tbl WHERE email = $1;', [
+      lehrer.email,
+    ]);
+
+    //Freifach erstellen
+    await client.query(
+      'INSERT INTO freifach_tbl (titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, voraussetzungen) VALUES ($1, $2, $3, $4, $5, $6, $7);',
       [titel, beschreibung, linkThumbnail, selected, numberMin, numberMax, voraussetzungen],
     );
-    //Zweiten Befehl pushen
-    querys.push(
-      client.query(
-        'INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ((SELECT l_id from lehrer_tbl WHERE email = $1), (SELECT f_id from freifach_tbl WHERE titel = $2));',
-      ),
-      [lehrer.email, titel],
-    );
 
-    //Befehle ausführen
-    await Promis.all(querys);
+    //ID vom Fach bekommen
+    const fachID = await client.query('SELECT f_id FROM freifach_tbl WHERE titel = $1;', [titel]);
+
+    console.log('LehrerID: ' + lehrerID.rows[0].l_id);
+    console.log('FachID: ' + fachID.rows[0].f_id);
+
+    //Freifach zu Lehrer hinzufügen
+    await client.query('INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ($1, $2);',
+      [lehrerID.rows[0].l_id, fachID.rows[0].f_id]);
 
     //Transaktion abschließen
     await client.query('COMMIT');
