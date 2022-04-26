@@ -1,5 +1,5 @@
 // Pool impotieren
-import { pool } from '../DB/index.js';
+import { pool, query } from '../DB/index.js';
 
 const client = await pool.connect();
 
@@ -49,7 +49,7 @@ const setFristenChangeTimeLineDB = async (changeTimeLine, setFristen) => {
 const getAdminTimeLineDB = async () => {
   try {
     //Rows bekommen
-    const { rows } = await client.query('SELECT * FROM admintimeline_tbl ORDER BY t_id ASC; ');
+    const { rows } = await query('SELECT * FROM admintimeline_tbl ORDER BY t_id ASC; ');
 
     return rows;
   } catch (error) {
@@ -64,7 +64,7 @@ const getAdminTimeLineDB = async () => {
 const getFristenDB = async () => {
   try {
     // Rows bekommen
-    const { rows } = await client.query('SELECT * FROM fristen; ');
+    const { rows } = await query('SELECT * FROM fristen; ');
 
     return rows;
   } catch (error) {
@@ -78,7 +78,7 @@ const getFristenDB = async () => {
 
 const getFaecherFromStudentDB = async (id) => {
   try {
-    const { rows } = await client.query(
+    const { rows } = await query(
       "SELECT titel, vorname, nachname, status from freifach_tbl JOIN freifach_bucht fb on freifach_tbl.f_id = fb.f_fk JOIN schueler_tbl st on st.s_id = fb.s_fk WHERE s_id = $1 and status = 'true';",
       [id],
     );

@@ -1,11 +1,11 @@
 //Pool impotieren
-import { pool } from '../DB/index.js';
+import { pool, query } from '../DB/index.js';
 
 const client = await pool.connect();
 
 const getFaecherAdminDB = async () => {
   try {
-    const { rows } = await client.query(`SELECT f_id,
+    const { rows } = await query(`SELECT f_id,
          titel,
          beschreibung,
          thumbnail,
@@ -35,7 +35,7 @@ const getFaecherAdminDB = async () => {
 
 const acceptFachDB = async (id, state) => {
   try {
-    client.query('UPDATE freifach_tbl SET genehmigt = $1 WHERE f_id = $2; ', [state, id]);
+    query('UPDATE freifach_tbl SET genehmigt = $1 WHERE f_id = $2; ', [state, id]);
 
     return true
   } catch (error) {

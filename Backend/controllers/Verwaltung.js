@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { createRequire } from 'module';
-import { pool } from '../DB/index.js';
+import { pool, query } from '../DB/index.js';
 
 import {
   setFristenChangeTimeLineDB,

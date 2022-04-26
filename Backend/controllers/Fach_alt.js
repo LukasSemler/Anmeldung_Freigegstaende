@@ -42,6 +42,8 @@ function DatenbankTrennen() {
 
 const fachErstellen = async (req, res) => {
   const daten = req.body;
+
+
   //Datenbank Verbindung herstellen
   DatenbankVerbinden();
   try {

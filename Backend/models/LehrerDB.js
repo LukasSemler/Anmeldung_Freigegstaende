@@ -1,12 +1,12 @@
 /* eslint-disable import/extensions */
 // Pool impotieren
-import { pool } from '../DB/index.js';
+import { pool, query } from '../DB/index.js';
 
 const client = await pool.connect();
 
 const getFreifaecherLehrerDB = async (freifachname) => {
   try {
-    const { rows } = await client.query(
+    const { rows } = await query(
       `SELECT lt.vorname, lt.nachname, lt.email, lt.icon
     FROM freifach_tbl
     INNER JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
@@ -29,13 +29,13 @@ const accepDeclineStudentDB = async (status, id, fachID) => {
   try {
     //Schüler annehmen oder wenn nicht direkt entfernen
     if (status === 'true') {
-      client.query(`UPDATE freifach_bucht SET status = $1 WHERE s_fk = $2 and f_fk = $3;`, [
+      query(`UPDATE freifach_bucht SET status = $1 WHERE s_fk = $2 and f_fk = $3;`, [
         status,
         id,
         fachID,
       ]);
     } else {
-      client.query(`DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2`, [fachID, id]);
+      query(`DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2`, [fachID, id]);
     }
 
     return true;
@@ -49,7 +49,7 @@ const accepDeclineStudentDB = async (status, id, fachID) => {
 
 const getSchuelerFaecherDB = async (id) => {
   try {
-    const { rows } = await client.query(
+    const { rows } = await query(
       `SELECT s_id,
        vorname,
        nachname,
@@ -73,7 +73,7 @@ WHERE f_id = $1`,
     console.log(error.message);
     return false;
   } finally {
-    // client.release();
+
   }
 };
 

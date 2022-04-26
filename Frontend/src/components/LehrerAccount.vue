@@ -525,13 +525,13 @@ function openModalError(fach) {
 
 async function fachDel() {
   const fachZuDel = fachZuLöschen.value;
-  const res = await axios.delete(`/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.s_id}`);
+  const res = await axios.delete(`/delFach/${fachZuDel.f_id}?lehrerID=${props.aktiverUser.email}`);
 
-  //Schauen ob das Löschen erfolgreich war
-  if (res.status == 200) {
-    //Modal ausblenden
-    showModalDel.value = false;
+  if (res.status != 200) {
+    console.log(res);
   }
+
+  showModalDel.value = false;
 }
 
 function detail(fach) {

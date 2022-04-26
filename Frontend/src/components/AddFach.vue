@@ -646,7 +646,7 @@ async function sendImage() {
   formData.append('titel', titel.value);
   formData.append('datentyp', datentyp.value);
   console.log(imageSchicken.value);
-  axios.post(`/fachThumbnail`, formData, {
+  axios.post(`http://localhost:2410/fachThumbnail`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -667,7 +667,7 @@ async function sendData() {
     lehrer: store.getAktivenUser,
   };
 
-  let { status } = axios.post(`/fachErstellen`, fachObj);
+  let { status } = axios.post('http://localhost:2410/fachErstellen', fachObj);
   if (status == 210) {
     throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
   }
@@ -703,7 +703,7 @@ async function changeData() {
     };
   }
 
-  const res = await axios.patch(`/changeFach/${fachObj.id}`, fachObj);
+  const res = await axios.patch(`http://localhost:2410/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist
   if (res.status == 200) {
@@ -719,11 +719,11 @@ async function changeData() {
 //Funktion wenn man auf Erstellen klickt, diese wählt ob gechanched oder neu erstellt wird
 async function fachErstellen(e) {
   //Frist aus dem Store holen
-  let fristEinreichen = store.getFristEinreichen.original;
-  let aktuellesDatum = new Date();
+  // let fristEinreichen = store.getFristEinreichen.original;
+  // let aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-  let erg = moment(fristEinreichen).isBefore(aktuellesDatum);
+  // let erg = moment(fristEinreichen).isBefore(aktuellesDatum);
 
   //Facherstellen-Operation starten wenn Frist es erlaubt
   if (state.value == 'add') {
@@ -760,7 +760,7 @@ function ZurHomeModalClick() {
   ClearAllInputs();
 
   //Zur Homeseite weiterleiten
-  // router.push('/account');
+  router.push('/account');
 }
 
 function ClearAllInputs() {

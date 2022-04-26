@@ -1,5 +1,5 @@
 //Pool impotieren
-import { query, pool } from '../DB/index.js';
+import { query} from '../DB/index.js';
 
 //! Schüler in Freifach anmelden
 const SchuelerInFreifachAnmeldenDB = async (s_id, f_id) => {

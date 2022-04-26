@@ -1,7 +1,7 @@
 // Pool impotieren
-import { pool } from '../DB/index.js';
+import { pool, query } from '../DB/index.js';
 
-const client = await pool.connect();
+// const client = await pool.connect();
 
 const fachErstellenDB = async (
   titel,
@@ -13,6 +13,9 @@ const fachErstellenDB = async (
   voraussetzungen,
   lehrer,
 ) => {
+  //Client erstellen
+  const client = await pool.connect();
+
   try {
     //Tranaktion
     await client.query('BEGIN');
@@ -35,8 +38,10 @@ const fachErstellenDB = async (
     console.log('FachID: ' + fachID.rows[0].f_id);
 
     //Freifach zu Lehrer hinzufügen
-    await client.query('INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ($1, $2);',
-      [lehrerID.rows[0].l_id, fachID.rows[0].f_id]);
+    await client.query('INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ($1, $2);', [
+      lehrerID.rows[0].l_id,
+      fachID.rows[0].f_id,
+    ]);
 
     //Transaktion abschließen
     await client.query('COMMIT');
@@ -54,19 +59,24 @@ const fachErstellenDB = async (
   }
 };
 
-const fachLöschenDB = async (fachID, lehrerID) => {
+const fachLöschenDB = async (fachID, lehrerEmail) => {
+  //Client erstellen
+  const client = await pool.connect();
   try {
-    let querys = [];
-
     //Transaktion beginnnen
-    await client.query('BEGINN');
+    await client.query('BEGIN');
 
-    //Querys Pushen
-    querys.push(client.query(`DELETE FROM freifach_tbl WHERE f_id = $1;`, [fachID]));
-    querys.push(aktiverClient.query('DELETE FROM freifach_betreut WHERE l_fk = $1;', [lehrerID]));
+    const lehrerID = await client.query('SELECT l_id FROM lehrer_tbl WHERE email = $1;', [
+      lehrerEmail,
+    ]);
 
-    //Promises erledigen
-    await Promise.all(querys);
+    console.log(lehrerID.rows[0].l_id);
+
+    await client.query(`DELETE FROM freifach_tbl WHERE f_id = $1;`, [fachID]);
+    await client.query('DELETE FROM freifach_betreut WHERE l_fk = $1 and f_fk = $2;', [
+      lehrerID.rows[0].l_id,
+      fachID,
+    ]);
 
     //Transaktion abschließen
     await client.query('COMMIT');
@@ -74,7 +84,7 @@ const fachLöschenDB = async (fachID, lehrerID) => {
     return true;
   } catch (error) {
     //Tranaktion abbrechen
-    await client.query('FALLBACK');
+    await client.query('ROLLBACK');
 
     //Fehler ausgeben
     console.log(error.message);
@@ -82,7 +92,7 @@ const fachLöschenDB = async (fachID, lehrerID) => {
     return false;
   } finally {
     //Client releasen
-    // client.release();
+    client.release();
   }
 };
 
@@ -90,7 +100,7 @@ const getFreifaecherDB = async (email) => {
   if (email) {
     //? Wenn eine Email vorhanden ist
     try {
-      const result = await client.query(
+      const result = await query(
         `SELECT f_id,
            titel,
            beschreibung,
@@ -121,7 +131,7 @@ const getFreifaecherDB = async (email) => {
   } else {
     //? Wenn keine Email vorhanden ist
     try {
-      const result = await client.query(
+      const result = await query(
         'SELECT f_id, titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, genehmigt, voraussetzungen FROM freifach_tbl',
       );
 
@@ -139,7 +149,7 @@ const getFreifaecherDB = async (email) => {
 const changeFachDB = async (id, body) => {
   try {
     if (body.linkThumbnail) {
-      client.query(
+      await query(
         'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6, thumbnail = $7, gewichtung = $8  WHERE f_id = $9',
         [
           body.titel,
@@ -154,7 +164,7 @@ const changeFachDB = async (id, body) => {
         ],
       );
     } else {
-      client.query(
+      await query(
         'UPDATE freifach_tbl SET titel = $1, beschreibung = $2, anzahl_stunden = $3, max_schueler = $4, min_schueler = $5, voraussetzungen = $6, gewichtung = $7  WHERE f_id = $8',
         [
           body.titel,
@@ -180,7 +190,7 @@ const changeFachDB = async (id, body) => {
 };
 
 const fachThumbnailEntfernen = async (fachID) => {
-  return await client.query('SELECT thumbnail from freifach_tbl where f_id = $1;', [fachID]);
+  return await query('SELECT thumbnail from freifach_tbl where f_id = $1;', [fachID]);
 };
 
 export { fachErstellenDB, fachLöschenDB, fachThumbnailEntfernen, getFreifaecherDB, changeFachDB };
