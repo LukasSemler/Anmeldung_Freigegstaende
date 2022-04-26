@@ -298,8 +298,6 @@ onMounted(async () => {
 
   //Daten holen + Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
   getData();
-
-  console.log('Mounted');
 });
 
 //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen

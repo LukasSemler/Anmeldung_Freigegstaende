@@ -192,7 +192,9 @@
           </div>
         </div>
       </div>
-      <div class="text-center text-2xl font-bold my-6" v-else>Du hast dich für kein Freifach angemeldet !</div>
+      <div class="text-center text-2xl font-bold my-6" v-else>
+        Du hast dich für kein Freifach angemeldet !
+      </div>
     </div>
   </div>
 </template>
@@ -254,16 +256,12 @@ function detail(fach) {
 }
 
 async function abmelden(fach) {
-  const fristAnmelden = store.getFristEinreichen;
-
-  let erg;
-
-  //Daten holen
-  fristAnmelden.value = fristAnmelden;
+  //Frist aus dem Store holen
+  fristAnmelden.value = store.getFristAnmelden.original;
   let aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-  erg = moment(fristAnmelden.value).isBefore(aktuellesDatum);
+  let erg = moment(fristAnmelden.value).isBefore(aktuellesDatum);
 
   if (erg) {
     showModalWarning.value = true;

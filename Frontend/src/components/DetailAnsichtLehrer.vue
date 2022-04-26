@@ -290,7 +290,7 @@ const store = PiniaStore();
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let freifachRef = ref({});
 let schueler = ref([]);
-let showModalWarning = ref(true);
+let showModalWarning = ref(false);
 let fristAnmelden = ref(null);
 let erg = ref(null);
 
@@ -299,25 +299,18 @@ let angenommen = ref([]);
 
 onMounted(async () => {
   try {
-    //Frist aus dem Store holen
-    let fristAnmelden = store.getFristEinreichen;
-
     //Freifach aus dem LS holen
     const freifach = JSON.parse(localStorage.getItem('detailAnsichtLehrer'));
     freifachRef.value = freifach;
 
-    let aktuellesDatum;
-    //Daten holen
-    fristAnmelden.value = fristAnmelden.original;
-    console.log(fristAnmelden.value);
-    aktuellesDatum = new Date();
+    //Frist aus dem Store holen
+    fristAnmelden.value = store.getFristAnmelden.original;
+    let aktuellesDatum = new Date();
 
     //Schauen ob das Datum vor oder nach der Frist ist
     erg.value = moment(fristAnmelden.value).isBefore(aktuellesDatum);
 
-    console.log(erg.value);
-
-    if (!erg.value) {
+    if (erg.value) {
       console.log('Sie können noch nicht checken');
       showModalWarning.value = true;
     }
@@ -334,7 +327,7 @@ onMounted(async () => {
 });
 
 async function annehmen(s) {
-  if (erg.value) {
+  if (!erg.value) {
     showModalWarning.value = true;
   } else {
     const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
@@ -352,7 +345,7 @@ async function annehmen(s) {
 }
 
 async function ablehnen(s) {
-  if (erg.value) {
+  if (!erg.value) {
     showModalWarning.value = true;
   } else {
     const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {

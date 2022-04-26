@@ -4,21 +4,10 @@ export const ErrorHandler = (err, req, res, next) => {
 };
 
 export const NotFoundHandler = (req, res, next) => {
-  res.status(404).send("Sorry, but server hasn't found this route");
+  res.redirect('/');
 };
 
 export const HttpsRedirectHandler = (req, res, next) => {
   next();
   //TODO MUSS MAN NOCH UMBAUEN
-  // if (req.secure) {
-  //   console.log('HTTPS');
-  //   next();
-  // } else {
-  //   if (req.headers.host.split(':')[0] == 'localhost') {
-  //     next();
-  //   } else {
-  //     console.log('HTTP');
-  //     res.redirect(`https://${req.headers.host}${req.url}`);
-  //   }
-  // }
 };

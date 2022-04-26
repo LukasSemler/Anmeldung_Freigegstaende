@@ -462,17 +462,14 @@ const props = defineProps({
 
 function bearbeiten(fach) {
   //Frist aus dem Store holen
-  const fristEinreichen = store.getFristEinreichen;
-
-  //Daten holen
-  fristEinreichen.value = fristEinreichen.original;
-  aktuellesDatum = new Date();
+  fristEinreichen.value = store.getFristEinreichen.original;
+  let aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-  const erg = moment(aktuellesDatum).isBefore(fristEinreichen.value);
+  let erg = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
   if (fach.genehmigt != 'true') {
-    if (!erg) {
+    if (erg) {
       showModalWarning.value = true;
     } else {
       //Fach in den LocalStorage schreiben
