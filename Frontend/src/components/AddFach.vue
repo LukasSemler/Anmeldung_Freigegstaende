@@ -726,7 +726,7 @@ async function fachErstellen(e) {
   let erg = moment(fristEinreichen).isBefore(aktuellesDatum);
 
   //Facherstellen-Operation starten wenn Frist es erlaubt
-  if (state.value == 'add' && erg) {
+  if (state.value == 'add') {
     try {
       //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
       sendImage();
@@ -760,7 +760,7 @@ function ZurHomeModalClick() {
   ClearAllInputs();
 
   //Zur Homeseite weiterleiten
-  router.push('/account');
+  // router.push('/account');
 }
 
 function ClearAllInputs() {
