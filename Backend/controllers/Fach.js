@@ -7,6 +7,11 @@ import {
   changeFachDB,
 } from '../models/FachDB.js';
 
+import fs from 'fs';
+import path from 'path';
+  
+const dirname = path.resolve();
+
 //! Fach erstellen
 const fachErstellen = async (req, res) => {
   const body = req.body;
