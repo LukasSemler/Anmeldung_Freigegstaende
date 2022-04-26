@@ -435,13 +435,5 @@ function detail(freifachItem) {
 
   //Weiterleitung auf Detailseite
   router.push('/freifachDetail');
-
-  //TODO check Lehrer
-  // const person = Store.getAktivenUser();
-  // if (person.isLehrer) {
-  //   router.push('/freifachDetailLehrer');
-  // } else {
-  //   router.push('/freifachDetail');
-  // }
 }
 </script>

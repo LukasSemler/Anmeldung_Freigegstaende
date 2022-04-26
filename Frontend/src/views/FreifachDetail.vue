@@ -358,53 +358,7 @@
               </div>
             </div>
           </div>
-          <div v-else class="flex justify-center">
-            <div class="w-1/2 flex flex-wrap flex-row justify-start">
-              <ul v-for="schueler of schueler" :key="schueler.s_id">
-                <div class="flex items-center px-4 py-4 sm:px-6 bg-red-300">
-                  <div class="min-w-0 flex-1 flex items-center">
-                    <div class="flex-shrink-0">
-                      <img
-                        class="h-12 w-12 rounded-full"
-                        :src="schueler.icon"
-                        alt=""
-                        async
-                        referrerpolicy="no-referrer"
-                      />
-                    </div>
-                    <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                      <div>
-                        <p class="text-sm font-medium text-htl_rot truncate">
-                          {{ schueler.vorname }} {{ schueler.nachname }}
-                        </p>
-                        <p class="mt-2 flex items-center text-sm text-gray-500">
-                          Klasse:
-                          {{ schueler.klasse }}
-                        </p>
-                      </div>
-                      <div class="block">
-                        <div v-if="schueler.status == 'pending'" class="ml-5">
-                          <button
-                            @click="annehmen(schueler)"
-                            class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                          >
-                            Annehmen
-                          </button>
-                          <button
-                            @click="ablehnen(schueler)"
-                            class="mx-2 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                          >
-                            Ablehnen
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div></div>
-                </div>
-              </ul>
-            </div>
-          </div>
+          
 
           <br />
           <br />
@@ -477,6 +431,7 @@ onMounted(async () => {
   //Freifach wird aus dem LS geladen
   let ausgaehltesFreifach = JSON.parse(localStorage.getItem('AuswahlFreifach'));
   Object.assign(FreifachDatenObjekt, ausgaehltesFreifach);
+
 
   //Leitender Lehrer bekommen
   let { data: Lehrerdata, status } = await axios.get(

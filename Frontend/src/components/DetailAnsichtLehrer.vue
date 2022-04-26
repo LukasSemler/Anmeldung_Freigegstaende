@@ -314,6 +314,7 @@ onMounted(async () => {
       console.log('Sie können noch nicht checken');
       showModalWarning.value = true;
     }
+
   } catch (err) {
     console.log(err);
     // console.error('Es wurde kein Freifach gefunden');

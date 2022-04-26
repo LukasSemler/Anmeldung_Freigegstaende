@@ -718,7 +718,15 @@ async function changeData() {
 
 //Funktion wenn man auf Erstellen klickt, diese wählt ob gechanched oder neu erstellt wird
 async function fachErstellen(e) {
-  if (state.value == 'add') {
+  //Frist aus dem Store holen
+  let fristEinreichen = store.getFristEinreichen.original;
+  let aktuellesDatum = new Date();
+
+  //Schauen ob das Datum vor oder nach der Frist ist
+  let erg = moment(fristEinreichen).isBefore(aktuellesDatum);
+
+  //Facherstellen-Operation starten wenn Frist es erlaubt
+  if (state.value == 'add' && erg) {
     try {
       //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
       sendImage();
