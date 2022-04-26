@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import express from 'express';
+import asyncHandler from 'express-async-handler'
 
 import // fachErstellen,
 // fachThumbnail,
@@ -75,72 +76,42 @@ import {
 const router = express.Router();
 
 //* Routen für Fach:
-router.post('/fachErstellen', fachErstellen);
-router.post('/fachThumbnail', fachThumbnailSpeichern);
-router.delete('/delFach/:id', fachDel);
-router.get('/getFreifaecher', getFreifaecher);
-router.patch('/changeFach/:id', changeFach);
+router.post('/fachErstellen', asyncHandler(fachErstellen));
+router.post('/fachThumbnail', asyncHandler(fachThumbnailSpeichern));
+router.delete('/delFach/:id', asyncHandler(fachDel));
+router.get('/getFreifaecher', asyncHandler(getFreifaecher));
+router.patch('/changeFach/:id', asyncHandler(changeFach));
 
 // ! _______________________________________________________________________________________________
 
 //* Routen für Schüler:
-router.post('/SchuelerInFreifachAnmelden', SchuelerInFreifachAnmelden);
-router.post('/SchuelerInFreifachAbmelden', SchuelerVonFreifachAbmelden);
-router.get('/getFaecherSchueler/:id', getFaecherSchueler);
-router.delete('/schuelerAbmelden/:id', schuelerAbmelden);
+router.post('/SchuelerInFreifachAnmelden', asyncHandler(SchuelerInFreifachAnmelden));
+router.post('/SchuelerInFreifachAbmelden', asyncHandler(SchuelerVonFreifachAbmelden));
+router.get('/getFaecherSchueler/:id', asyncHandler(getFaecherSchueler));
+router.delete('/schuelerAbmelden/:id', asyncHandler(schuelerAbmelden));
 
 // ! _______________________________________________________________________________________________
 
 // *Routen für Lehrer
-router.get('/getFreifaecherLehrer', getFreifaecherLehrer);
-router.patch('/accepDeclineStudent/:id', accepDeclineStudent);
-router.get('/getSchuelerFaecher', getSchuelerFaecher);
+router.get('/getFreifaecherLehrer', asyncHandler(getFreifaecherLehrer));
+router.patch('/accepDeclineStudent/:id', asyncHandler(accepDeclineStudent));
+router.get('/getSchuelerFaecher', asyncHandler(getSchuelerFaecher));
 
 // ! _______________________________________________________________________________________________
 
 //* Routen für Admin
-router.get('/getFaecherAdmin', getFaecherAdmin);
-router.patch('/acceptFach/:id', acceptFach);
+router.get('/getFaecherAdmin', asyncHandler(getFaecherAdmin));
+router.patch('/acceptFach/:id', asyncHandler(acceptFach));
 
 // ! _______________________________________________________________________________________________
 
 //* Routen für Verwaltung
-router.post('/setFristenChangeTimeLine', setFristenChangeTimeLine);
-router.get('/getAdminTimeLine', getAdminTimeLine);
-router.get('/getFristen', getFristen);
-router.post('/lehrerSchuelerAnmelden', lehrerSchülerAnmelden);
-router.get('/getFaecherFromStudent/:id', getFaecherFromStudent);
+router.post('/setFristenChangeTimeLine', asyncHandler(setFristenChangeTimeLine));
+router.get('/getAdminTimeLine', asyncHandler(getAdminTimeLine));
+router.get('/getFristen', asyncHandler(getFristen));
+router.post('/lehrerSchuelerAnmelden', asyncHandler(lehrerSchülerAnmelden));
+router.get('/getFaecherFromStudent/:id', asyncHandler(getFaecherFromStudent));
 
 // ! _______________________________________________________________________________________________
 
-//* Alte Routen
-// router.get('/getAdminTimeLine', getAdminTimeLine);
-// router.get('/getFristen', getFristen);
-// router.get('/getFreifaecher', getFreifaecher);
-// ? Wird nicht verwendet
-// router.get('/getFreifaecherLehrer', getFreifaecherLehrer);
-
-// router.get('/getFaecherAdmin', getFreifaecherAdmin);
-// router.get('/getSchuelerFaecher', getSchuelerFaecher);
-
-// router.post('/fachErstellen', fachErstellen);
-// router.post('/fachThumbnail', fachThumbnail);
-// router.post('/setFristenChangeTimeLine', setFristenChangeTimeLine);
-// router.post('/lehrerSchuelerAnmelden', lehrerSchülerAnmelden);
-// router.post('/SchuelerInFreifachAnmelden', SchuelerInFreifachAnmelden);
-// router.post('/SchuelerInFreifachAbmelden', SchuelerInFreifachAbmelden);
-
-// router.patch('/acceptFach/:id', acceptFach);
-// router.patch('/adminChangeFach/:id', adminChangeFach);
-// router.patch('/accepDeclineStudent/:id', accepDeclineStudent);
-
-// router.delete('/delFach/:id', fachDel);
-
-// router.get('/getFaecherSchueler/:id', getFaecherSchueler);
-
-// router.delete('/schuelerAbmelden/:id', schuelerAbmelden);
-
-// router.post('/changeTimeLine', changeTimeLine);
-
-// router.get('/getFaecherFromStudent/:id', getFaecherFromStudent);
 export default router;

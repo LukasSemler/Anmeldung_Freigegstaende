@@ -8,6 +8,7 @@ export const NotFoundHandler = (req, res, next) => {
 };
 
 export const HttpsRedirectHandler = (req, res, next) => {
+  next();
   //TODO MUSS MAN NOCH UMBAUEN
   // if (req.secure) {
   //   console.log('HTTPS');

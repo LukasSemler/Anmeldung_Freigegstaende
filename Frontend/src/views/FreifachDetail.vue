@@ -115,11 +115,7 @@
                 <div
                   class="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1"
                 >
-                  <div class="sm:hidden 2xl:block mt-6 min-w-0 flex-1">
-                    <h1 class="text-2xl font-bold text-gray-900 truncate">
-                      {{ FreifachDatenObjekt.titel }}
-                    </h1>
-                  </div>
+              
                   <div
                     class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
                   >
@@ -135,15 +131,20 @@
                 </div>
               </div>
               <br />
-              <div class="bg-lime-200 hidden sm:block 2xl:hidden mt-6 min-w-0 flex-1">
-                <h1 class="text-2xl font-bold text-gray-900 truncate">ajdlkajsdlkasjdlka</h1>
-              </div>
+              <!-- <div class="hidden sm:block 2xl:hidden mt-6 min-w-0 flex-1">
+                <h1 class="text-2xl font-bold text-gray-900 truncate">
+                  {{ FreifachDatenObjekt.titel }}
+                </h1>
+              </div> -->
             </div>
           </div>
           <br />
           <!-- Freiach Beschreibung -->
           <div class="mt-8 flex justify-center">
             <div class="w-1/2">
+              <h1 class="text-2xl font-bold text-gray-900 truncate my-">
+                {{ FreifachDatenObjekt.titel }}
+              </h1>
               <div class="mt-5 border-t border-gray-200">
                 <dl class="sm:divide-y sm:divide-gray-200">
                   <div class="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -411,7 +412,7 @@ onMounted(async () => {
 
   //Leitender Lehrer bekommen
   let { data: Lehrerdata, status } = await axios.get(
-    ` /getFreifaecherLehrer?freifachname=${ausgaehltesFreifach.titel}`,
+    `/getFreifaecherLehrer?freifachname=${ausgaehltesFreifach.titel}`,
   );
 
   if (status == 200) {

@@ -192,7 +192,7 @@
           </div>
         </div>
       </div>
-      <div class="text-center text-2xl font-bold my-6" v-else>Du hast Dich nicht angemeldet</div>
+      <div class="text-center text-2xl font-bold my-6" v-else>Du hast dich für kein Freifach angemeldet !</div>
     </div>
   </div>
 </template>

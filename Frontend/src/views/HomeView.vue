@@ -227,47 +227,49 @@
       </div>
 
       <!--Anzeigecontainer für alle Freifächer-->
-      <div class="flex-row flex-wrap flex justify-center mt-8">
-        <div class="flex flex-wrap justify-center">
-          <div class="relative max-w-7xl mx-auto">
-            <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-              <div
-                v-for="fach of FreifaecherGefiltert"
-                :key="fach.f_id"
-                class="flex flex-col rounded-lg shadow-lg overflow-hidden"
-              >
-                <div class="flex-shrink-0 cursor-pointer">
-                  <img
-                    crossorigin="anynomous"
-                    class="h-48 w-full object-cover"
-                    :src="fach.thumbnail"
-                    alt=""
-                  />
-                </div>
-                <div class="flex-1 bg-white p-6 flex flex-col justify-between">
-                  <div class="flex-1">
-                    <a class="block mt-2">
-                      <p
-                        class="text-xl font-semibold text-gray-900 decoration-htl_hellrot hover:underline"
-                      >
-                        {{ fach.titel }}
-                      </p>
-                      <p class="mt-3 text-base text-gray-500 mb-2">
-                        {{ fach.beschreibung }}
-                      </p>
-                      <br />
-                    </a>
-                  </div>
-                </div>
-                <div class="bg-white px-4 py-5 flex justify-center">
-                  <button
-                    @click="detail(fach)"
-                    class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+      <div class="flex-row flex-wrap flex justify-center gap-10 mt-2 mx-1">
+        <div
+          v-for="fach of FreifaecherGefiltert"
+          :key="fach.f_id"
+          class="rounded-lg shadow-lg overflow-hidden basis-96 bg-white"
+        >
+          <div>
+            <!--Thumbnail-->
+            <div class="flex-shrink-0 cursor-pointer">
+              <img
+                crossorigin="anynomous"
+                class="h-48 w-full object-cover"
+                :src="fach.thumbnail"
+                alt=""
+              />
+            </div>
+            <!--Text-->
+            <div class="flex-1 p-6 flex flex-col justify-between">
+              <div class="flex-1">
+                <a class="block mt-2">
+                  <p
+                    class="text-xl font-semibold text-gray-900 decoration-htl_hellrot hover:underline"
                   >
-                    Detailansicht
-                  </button>
-                </div>
+                    {{ fach.titel }}
+                  </p>
+                  <p
+                    class="mt-3 text-base text-gray-500 mb-2"
+                    style="height: 100px; max-height: 100px"
+                  >
+                    {{ fach.beschreibung }}
+                  </p>
+                  <br />
+                </a>
               </div>
+            </div>
+            <!--Datail-Button-->
+            <div class="px-4 py-5">
+              <button
+                @click="detail(fach)"
+                class="w-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+              >
+                Detailansicht
+              </button>
             </div>
           </div>
         </div>
@@ -433,5 +435,13 @@ function detail(freifachItem) {
 
   //Weiterleitung auf Detailseite
   router.push('/freifachDetail');
+
+  //TODO check Lehrer
+  // const person = Store.getAktivenUser();
+  // if (person.isLehrer) {
+  //   router.push('/freifachDetailLehrer');
+  // } else {
+  //   router.push('/freifachDetail');
+  // }
 }
 </script>

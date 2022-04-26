@@ -214,54 +214,55 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-center shadow overflow-hidden sm:rounded-md">
-      <ul role="list" class="divide-y divide-gray-200">
-        <li v-for="schueler of schueler" :key="schueler.s_id">
-          <a v-if="schueler.status == 'pending'" class="block hover:bg-gray-50">
-            <div class="flex items-center px-4 py-4 sm:px-6">
-              <div class="min-w-0 flex-1 flex items-center">
-                <div class="flex-shrink-0">
-                  <img
-                    class="h-12 w-12 rounded-full"
-                    :src="schueler.icon"
-                    alt=""
-                    async
-                    referrerpolicy="no-referrer"
-                  />
-                </div>
-                <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                  <div>
-                    <p class="text-sm font-medium text-htl_rot truncate">
-                      {{ schueler.vorname }} {{ schueler.nachname }}
-                    </p>
-                    <p class="mt-2 flex items-center text-sm text-gray-500">
-                      Klasse:
-                      {{ schueler.klasse }}
-                    </p>
-                  </div>
-                  <div class="hidden md:block">
-                    <div v-if="schueler.status == 'pending'" class="ml-5">
-                      <button
-                        @click="annehmen(schueler)"
-                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-green-500 hover:bg-green-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                      >
-                        Annehmen
-                      </button>
-                      <button
-                        @click="ablehnen(schueler)"
-                        class="mx-2 inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-500 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-                      >
-                        Ablehnen
-                      </button>
-                    </div>
-                  </div>
-                </div>
+
+    <div class="mx-12">
+      <!-- <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 bg-orange-500"> KANNST DU LÖSCHEN ;) -->
+      <ul role="list" class="w-full flex flex-row flex-wrap justify-center gap-12">
+        <li
+          v-for="schueler in onlyPending"
+          :key="schueler.s_id"
+          class="col-span-1 bg-white rounded-lg shadow-xl divide-y divide-gray-200"
+        >
+          <div class="w-full flex items-center justify-between p-6 space-x-6">
+            <div class="flex-1 truncate">
+              <div class="flex items-center space-x-3">
+                <h3 class="text-gray-900 text-sm font-medium truncate">
+                  {{ schueler.vorname }} {{ schueler.nachname }}
+                </h3>
+                <span
+                  class="flex-shrink-0 inline-block px-2 py-0.5 text-xs font-medium text-gray-500 rounded-full"
+                  >{{ schueler.email }}</span
+                >
               </div>
-              <div>
-                <!-- <ChevronRightIcon class="h-5 w-5 text-gray-400" aria-hidden="true" /> -->
+              <p class="mt-1 text-gray-500 text-sm truncate">Klasse: {{ schueler.klasse }}</p>
+            </div>
+            <img
+              class="w-10 h-10 bg-gray-300 rounded-full flex-shrink-0"
+              :src="schueler.icon"
+              async
+              referrerpolicy="no-referrer"
+            />
+          </div>
+          <div>
+            <div class="-mt-px flex divide-x divide-gray-200">
+              <div class="w-0 flex-1 flex">
+                <a
+                  @click="annehmen(schueler)"
+                  class="cursor-pointer relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent rounded-bl-lg text-white bg-green-500 hover:bg-green-300 hover:text-black"
+                >
+                  <span class="ml-3">Annehmen</span>
+                </a>
+              </div>
+              <div class="-ml-px w-0 flex-1 flex">
+                <a
+                  @click="ablehnen(schueler)"
+                  class="cursor-pointer relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm font-medium border border-transparent rounded-br-lg text-white bg-red-600 hover:bg-red-500 hover:text-black"
+                >
+                  <span class="ml-3">Ablehnen</span>
+                </a>
               </div>
             </div>
-          </a>
+          </div>
         </li>
       </ul>
     </div>
@@ -278,7 +279,7 @@ import {
   TransitionRoot,
 } from '@headlessui/vue';
 import { ExclamationIcon } from '@heroicons/vue/outline';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -289,7 +290,7 @@ const store = PiniaStore();
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let freifachRef = ref({});
 let schueler = ref([]);
-let showModalWarning = ref(false);
+let showModalWarning = ref(true);
 let fristAnmelden = ref(null);
 let erg = ref(null);
 
@@ -314,6 +315,8 @@ onMounted(async () => {
     //Schauen ob das Datum vor oder nach der Frist ist
     erg.value = moment(fristAnmelden.value).isBefore(aktuellesDatum);
 
+    console.log(erg.value);
+
     if (!erg.value) {
       console.log('Sie können noch nicht checken');
       showModalWarning.value = true;
@@ -331,7 +334,7 @@ onMounted(async () => {
 });
 
 async function annehmen(s) {
-  if (!erg.value) {
+  if (erg.value) {
     showModalWarning.value = true;
   } else {
     const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
@@ -349,7 +352,7 @@ async function annehmen(s) {
 }
 
 async function ablehnen(s) {
-  if (!erg.value) {
+  if (erg.value) {
     showModalWarning.value = true;
   } else {
     const res = await axios.patch(`/accepDeclineStudent/${s.s_id}`, {
@@ -368,4 +371,8 @@ async function getData() {
 
   return data;
 }
+
+const onlyPending = computed(() => {
+  return schueler.value.filter((elem) => elem.status == 'pending');
+});
 </script>
