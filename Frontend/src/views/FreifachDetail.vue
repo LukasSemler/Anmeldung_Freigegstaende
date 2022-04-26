@@ -87,6 +87,73 @@
       </Dialog>
     </TransitionRoot>
 
+    <TransitionRoot as="template" :show="showModalDel">
+      <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModalDel = false">
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+          >
+            <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </TransitionChild>
+
+          <!-- This element is to trick the browser into centering the modal contents. -->
+          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+            >&#8203;</span
+          >
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <div
+              class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+            >
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+                >
+                  <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                    Freifach löschen
+                  </DialogTitle>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                      Du kannst nicht mehr als 2 Freifaecher buchen! Wenn du dieses Fach besuchen
+                      willst, musst du dich von einem anderen Fach abmelden
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  class="mt-3 w-full inline-flex justify-center rounded-md border border-htl_rot shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm"
+                  @click="showModalDel = false"
+                  ref="cancelButtonRef"
+                >
+                  Akzeptieren
+                </button>
+              </div>
+            </div>
+          </TransitionChild>
+        </div>
+      </Dialog>
+    </TransitionRoot>
+
     <!--Freifach-Detail-->
     <div class="h-full flex">
       <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
@@ -115,7 +182,6 @@
                 <div
                   class="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1"
                 >
-              
                   <div
                     class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4"
                   >
@@ -356,6 +422,7 @@ import {
   CheckIcon,
   XIcon,
 } from '@heroicons/vue/solid';
+import { ExclamationIcon } from '@heroicons/vue/outline';
 import axios from 'axios';
 import {
   Dialog,
@@ -389,6 +456,7 @@ let FristErlaubtInteraktion = ref(true);
 //ModalVariablen für Feedback An/Abmelden Modal
 let showModal = ref(false);
 let SchuelerBeitrittErfolg = ref(false);
+let showModalDel = ref(false);
 
 //Variablen für die adminansicht
 let schueler = ref([]);
@@ -477,12 +545,13 @@ async function FreifachAnmelden() {
   });
 
   if (status == 200) {
+    showModal.value = true;
     SchuelerBeitrittErfolg.value = true;
+  } else if (status == 210) {
+    showModalDel.value = true;
   } else {
     SchuelerBeitrittErfolg.value = false;
   }
-  //Feedback-Modal anzeigen
-  showModal.value = true;
 }
 
 async function FreifachAbmelden() {

@@ -1,15 +1,29 @@
 //Pool impotieren
-import { pool } from '../DB/index.js';
-
-const client = await pool.connect();
+import { query, pool } from '../DB/index.js';
 
 //! Schüler in Freifach anmelden
 const SchuelerInFreifachAnmeldenDB = async (s_id, f_id) => {
   try {
-    client.query('INSERT INTO freifach_bucht (f_fk, s_fk) VALUES ($1, $2)', [f_id, s_id]);
+    //Schauen ob schüler schon in freifach ist
+    const { rows } = await query(
+      'SELECT SUM(ft.gewichtung) AS "AnzahlGewichtung" FROM freifach_bucht INNER JOIN freifach_tbl ft on ft.f_id = freifach_bucht.f_fk WHERE s_fk = $1;',
+      [s_id],
+    );
 
-    return true;
+    console.log(Number(rows[0].AnzahlGewichtung));
+
+    if (Number(rows[0].AnzahlGewichtung) < 2 || rows[0] === null) {
+      const erg = await query('INSERT INTO freifach_bucht (f_fk, s_fk) VALUES ($1, $2)', [
+        f_id,
+        s_id,
+      ]);
+
+      return true;
+    } else {
+      return 'toMuch';
+    }
   } catch (error) {
+    console.log(error.message);
     return false;
   } finally {
     // client.release();
@@ -19,7 +33,7 @@ const SchuelerInFreifachAnmeldenDB = async (s_id, f_id) => {
 //! Schüler von Freifach abmelden
 const SchueleVonFreifachAbmeldenDB = async (s_id, f_id) => {
   try {
-    client.query('DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2;', [f_id, s_id]);
+    query('DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2;', [f_id, s_id]);
 
     return true;
   } catch (error) {
@@ -34,7 +48,7 @@ const SchueleVonFreifachAbmeldenDB = async (s_id, f_id) => {
 //! Fächer vom Schüler bekommen
 const getFaecherSchuelerDB = async (s_id) => {
   try {
-    const result = await client.query(
+    const result = await query(
       `SELECT f_id,
        titel,
        beschreibung,
@@ -65,7 +79,7 @@ WHERE s_fk = $1 `,
 
 const schuelerAbmeldenDB = async (s_id) => {
   try {
-    client.query('DELETE FROM freifach_bucht WHERE f_fk = $1;', [s_id]);
+    query('DELETE FROM freifach_bucht WHERE f_fk = $1;', [s_id]);
 
     return true;
   } catch (error) {
