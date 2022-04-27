@@ -256,7 +256,7 @@
                     class="mt-3 text-base text-gray-500 mb-2"
                     style="height: 100px; max-height: 100px"
                   >
-                    {{ fach.beschreibung.substring(0, 10) + '...' }}
+                    {{ fach.beschreibung.slice(0, 250) + '...' }}
                   </p>
                   <br />
                 </a>
