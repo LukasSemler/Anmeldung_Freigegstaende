@@ -256,7 +256,7 @@
                     class="mt-3 text-base text-gray-500 mb-2"
                     style="height: 100px; max-height: 100px"
                   >
-                    {{ fach.beschreibung }}
+                    {{ fach.beschreibung.substring(0, 10) + '...' }}
                   </p>
                   <br />
                 </a>
@@ -408,10 +408,10 @@ onMounted(async () => {
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');
-    Freifaecherliste.value.forEach((fach) => {
-      if (fach.beschreibung.length > 500)
-        fach.beschreibung = fach.beschreibung.substring(0, 500) + '...';
-    });
+    // Freifaecherliste.value.forEach((fach) => {
+    //   if (fach.beschreibung.length > 10)
+    //     fach.beschreibung = fach.beschreibung.substring(0, 10) + '...';
+    // });
 
     //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
     VoraussetzungenVonDbNutzbarMachen();
