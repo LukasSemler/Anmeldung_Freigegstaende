@@ -373,9 +373,11 @@ const filters = [
 
 const FreifaecherGefiltert = computed(() => {
   if (AktivFilter.value.length > 0) {
-    return Freifaecherliste.value.filter(({ anzahl_stunden }) =>
+    const gefiltert = Freifaecherliste.value.filter(({ anzahl_stunden }) =>
       AktivFilter.value.includes(anzahl_stunden),
     );
+
+    return gefiltert;
   } else {
     return Freifaecherliste.value;
   }
@@ -406,6 +408,10 @@ onMounted(async () => {
   if (status == 200) {
     //Zeigt nur Freifächer an die angenommen wurden
     Freifaecherliste.value = data.filter(({ genehmigt }) => genehmigt === 'true');
+    Freifaecherliste.value.forEach((fach) => {
+      if (fach.beschreibung.length > 500)
+        fach.beschreibung = fach.beschreibung.substring(0, 500) + '...';
+    });
 
     //Macht aus eigenartigen String ein Array mit den Klassen als Voraussetzungen
     VoraussetzungenVonDbNutzbarMachen();
