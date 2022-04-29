@@ -80,25 +80,6 @@
             </Menu>
 
             <!--Webuntis-Passwort -->
-            <div class="flex flex-wrap flex-row" v-if="WebuntisPasswordFieldShow">
-              <div class="mr-5">
-                <input
-                  class="shadow appearance-none border border-htl_rot rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="password"
-                  type="password"
-                  placeholder="Webuntis-Passwort"
-                  v-model="WebuntisPasswordFieldInput"
-                />
-              </div>
-              <br />
-              <button
-                @click="anmeldenMitUntisdaten"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white transform ease-in-out bg-htl_rot hover:bg-htl_hellrot ring-red-700 hover:scale-110 focus:ring-red-700"
-              >
-                Weiter
-              </button>
-            </div>
-
             <TransitionRoot as="template" :show="WebuntisPasswordFieldShow">
               <Dialog
                 as="div"
@@ -163,6 +144,15 @@
                                   class="shadow-sm focus:ring-htl_rot focus:border-htl_hellrot block w-full sm:text-sm border-gray-300 rounded-md"
                                   placeholder="*******"
                                 />
+                              </div>
+
+                              <div class="mt-1">
+                                <a
+                                  href="https://melpomene.webuntis.com/WebUntis/?school=htlwienwest#/basic/resetPassword"
+                                  class="flex justify-self-self text-htl_hellrot hover:text-htl_rot underline text-sm"
+                                >
+                                  Passwort vergessen?
+                                </a>
                               </div>
                             </div>
                           </div>
