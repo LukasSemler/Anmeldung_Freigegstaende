@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { createRequire } from 'module';
-import { pool, query } from '../DB/index.js';
+import { query } from '../DB/index.js';
 
 import {
   setFristenChangeTimeLineDB,
@@ -8,8 +8,6 @@ import {
   getFristenDB,
   getFaecherFromStudentDB,
 } from '../models/VerwaltungDB.js';
-
-const client = await pool.connect();
 
 const require = createRequire(import.meta.url);
 const WebUntis = require('webuntis');
@@ -93,136 +91,105 @@ const lehrerSchülerAnmelden = async (req, res) => {
     }
   }
 
-  //! Datenbank:
   if (GoogleUser.isLehrer) {
     // Ist ein Lehrer
-    client.query(
-      'SELECT email FROM lehrer_tbl WHERE email = $1',
-      [GoogleUser.email],
-      (error, result) => {
-        if (!error) {
-          // Schauen ob Lehrer schon mal verbunden war
-          if (result.rowCount == 0) {
-            // Wenn der Schüler noch nicht in der Datenbank ist
-            client.query(
-              'INSERT INTO lehrer_tbl (vorname, nachname, email, icon) VALUES ($1, $2, $3, $4)',
-              [
-                GoogleUser.name.split(' ')[0],
-                GoogleUser.name.split(' ')[1],
-                GoogleUser.email,
-                GoogleUser.icon,
-              ],
-              (errorEintrag, resultEintrag) => {
-                if (!errorEintrag) {
-                  // Lehrer nach Eintrag zurückgeben
-                  client.query(
-                    'SELECT * FROM lehrer_tbl WHERE email = $1',
-                    [GoogleUser.email],
-                    (errorSuche, resultSuche) => {
-                      const User = resultSuche.rows[0];
-                      User.isLehrer = true;
+    let isLehrerSchonEingetragen = await query('SELECT email FROM lehrer_tbl WHERE email = $1', [
+      GoogleUser.email,
+    ]);
 
-                      // Server-Result setzen
-                      res.status(200).json(User);
-                    },
-                  );
-                } else {
-                  // Server-Result setzen
-                  res.status(210).send('Fehler beim Eintragen des Lehrer');
-                }
-              },
-            );
-          }
-          // Wenn der Lehrer in der Datenbank gefunden wurde diesen Zurückgeben
-          else {
-            client.query(
-              'SELECT * FROM lehrer_tbl WHERE email = $1',
-              [GoogleUser.email],
-              (errorSuche, resultSuche) => {
-                if (!errorSuche) {
-                  const User = resultSuche.rows[0];
-                  User.isLehrer = true;
+    // Schauen ob Schüler schon mal verbunden war
+    if (isLehrerSchonEingetragen.rowCount == 0) {
+      // Wenn der Schüler noch nicht in der Datenbank ist
+      let LehrerEintragen = await query(
+        'INSERT INTO lehrer_tbl (vorname, nachname, email, icon) VALUES ($1, $2, $3, $4) RETURNING *',
+        [
+          GoogleUser.name.split(' ')[0],
+          GoogleUser.name.split(' ')[1],
+          GoogleUser.email,
+          GoogleUser.icon,
+        ],
+      );
 
-                  // Server-Result setzen
-                  res.status(200).json(User);
-                } else {
-                  // Server-Result setzen
-                  res.status(210).send('Fehler beim Ausgeben des vorhandenen Users');
-                }
-              },
-            );
-          }
-        }
-      },
-    );
+      // Lehrer nach Eintrag zurückgeben
+      if (LehrerEintragen.rows[0]) {
+        let lehrer = LehrerEintragen.rows[0];
+        lehrer.isLehrer = true;
+
+        res.status(200).json(lehrer);
+      } else {
+        // Server-Result setzen
+        res.status(210).send('Fehler beim Eintragen & ausgeben des Lehrers');
+      }
+    }
+    // Wenn der Schüler in der Datenbank gefunden wurde diesen Zurückgeben
+    else {
+      let LehrerGesucht = await query('SELECT * FROM lehrer_tbl WHERE email = $1', [
+        GoogleUser.email,
+      ]);
+
+      if (LehrerGesucht.rows[0]) {
+        const lehrer = LehrerGesucht.rows[0];
+        lehrer.isLehrer = true;
+
+        // Server-Result setzen
+        res.status(200).json(lehrer);
+      } else {
+        // Server-Result setzen
+        res.status(210).send('Fehler beim Ausgeben des vorhandenen Users');
+      }
+    }
   } else {
     // Ist ein Schüler
-    client.query(
-      'SELECT email FROM schueler_tbl WHERE email = $1',
-      [GoogleUser.email],
-      (error, result) => {
-        if (!error) {
-          // Schauen ob Schüler schon mal verbunden war
-          if (result.rowCount == 0) {
-            // Wenn der Schüler noch nicht in der Datenbank ist
-            client.query(
-              'INSERT INTO schueler_tbl (vorname, nachname, email, klasse, icon) VALUES ($1, $2, $3, $4, $5)',
-              [
-                GoogleUser.name.split(' ')[0],
-                GoogleUser.name.split(' ')[1],
-                GoogleUser.email,
-                GoogleUser.klasse,
-                GoogleUser.icon,
-              ],
-              (errorEintrag, resultEintrag) => {
-                if (!errorEintrag) {
-                  // Schüler nach Eintrag zurückgeben
-                  client.query(
-                    'SELECT * FROM schueler_tbl WHERE email = $1',
-                    [GoogleUser.email],
-                    (errorSuche, resultSuche) => {
-                      const User = resultSuche.rows[0];
-                      User.isAdmin = false;
-                      User.isLehrer = false;
+    let isSchuelerchonEingetragen = await query('SELECT email FROM schueler_tbl WHERE email = $1', [
+      GoogleUser.email,
+    ]);
 
-                      // Server-Result setzen
-                      res.status(200).json(User);
-                    },
-                  );
-                } else {
-                  console.log(errorEintrag);
-                  // Server-Result setzen
-                  res.status(210).send('Fehler beim Eintragen des Schülers');
-                }
-              },
-            );
-          }
-          // Wenn der Schüler in der Datenbank gefunden wurde diesen Zurückgeben
-          else {
-            client.query(
-              'SELECT * FROM schueler_tbl WHERE email = $1',
-              [GoogleUser.email],
-              (errorSuche, resultSuche) => {
-                if (!errorSuche) {
-                  const User = resultSuche.rows[0];
-                  User.isAdmin = false;
-                  User.isLehrer = false;
+    // Schauen ob Schüler schon mal verbunden war
+    if (isSchuelerchonEingetragen.rowCount == 0) {
+      // Wenn der Schüler noch nicht in der Datenbank ist
+      let SchuelerEintragen = await query(
+        'INSERT INTO schueler_tbl (vorname, nachname, email, klasse, icon) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [
+          GoogleUser.name.split(' ')[0],
+          GoogleUser.name.split(' ')[1],
+          GoogleUser.email,
+          GoogleUser.klasse,
+          GoogleUser.icon,
+        ],
+      );
 
-                  // Server-Result setzen
-                  res.status(200).json(User);
-                } else {
-                  // Server-Result setzen
-                  res.status(210).send('Fehler beim Ausgeben des vorhandenen Users');
-                }
-              },
-            );
-          }
-        }
-      },
-    );
+      // Schüler nach Eintrag zurückgeben
+      if (SchuelerEintragen.rows[0]) {
+        let Schueler = SchuelerEintragen.rows[0];
+        Schueler.isLehrer = false;
+        Schueler.isAdmin = false;
+
+        res.status(200).json(Schueler);
+      } else {
+        console.log(errorEintrag);
+        // Server-Result setzen
+        res.status(210).send('Fehler beim Eintragen & ausgeben des Schülers');
+      }
+    }
+    // Wenn der Schüler in der Datenbank gefunden wurde diesen Zurückgeben
+    else {
+      let SchuelerGesucht = await query('SELECT * FROM schueler_tbl WHERE email = $1', [
+        GoogleUser.email,
+      ]);
+
+      if (SchuelerGesucht.rows[0]) {
+        const Schueler = SchuelerGesucht.rows[0];
+        Schueler.isAdmin = false;
+        Schueler.isLehrer = false;
+
+        // Server-Result setzen
+        res.status(200).json(Schueler);
+      } else {
+        // Server-Result setzen
+        res.status(210).send('Fehler beim Ausgeben des vorhandenen Users');
+      }
+    }
   }
-  // DB Conn trennen
-  client.release();
 };
 
 const getFaecherFromStudent = async (req, res) => {

@@ -219,7 +219,7 @@ onMounted(async () => {
   output.value = `${aktuellesDatum.getDate()}.${
     aktuellesDatum.getMonth() + 1
   }.${aktuellesDatum.getFullYear()}`;
-  console.log('mounted');
+
   try {
     user.value = store.getAktivenUser;
   } catch (error) {
@@ -237,15 +237,11 @@ function print() {
   let fristEinreichen = frist.original;
   let aktuellesDatum = new Date();
 
-  console.log(fristEinreichen);
-  console.log(aktuellesDatum);
-
   //Schauen ob das Datum vor oder nach der Frist ist
   let erg = moment(fristEinreichen.value).isBefore(aktuellesDatum);
 
-  console.log('Ergebnis', erg);
+  //Überprüfung ob Anmeldefrist
   if (!erg) {
-    console.log('Sie koennen nicht drucken');
     showModalWarning.value = true;
   } else window.print();
 }

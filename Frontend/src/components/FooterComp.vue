@@ -19,7 +19,10 @@
           <component :is="item.icon" class="h-6 w-6" aria-hidden="true" />
         </a>
       </div>
-      <p class="mt-8 text-center text-base text-gray-400">Höhere Technische Lehranstalt Wien West | Thaliastraße 125 | 1160 Wien | Tel: +43 (01) 49 111-113 | Fax: +43 (01) 49 111-199</p>
+      <p class="mt-8 text-center text-base text-gray-400">
+        Höhere Technische Lehranstalt Wien West | Thaliastraße 125 | 1160 Wien | Tel: +43 (01) 49
+        111-113 | Fax: +43 (01) 49 111-199
+      </p>
       <p class="mt-8 text-center text-base text-gray-400">
         &copy; 2022 HTL Wien West, All rights reserved.
       </p>
@@ -33,12 +36,12 @@ import { defineComponent, h } from 'vue';
 const navigation = {
   main: [
     //TODO Link changen
-    { name: 'Home', href: 'http://localhost:8080' },
-    { name: 'Account', href: 'http://localhost:8080/Account' },
+    { name: 'Home', href: '/' },
+    { name: 'Account', href: '/Account' },
     { name: 'Schulwebseite', href: 'https://www.htlwienwest.at/' },
     { name: 'Elternverein', href: 'https://www.htlwienwest-elternverein.at/dark-mode/index.html' },
-    { name: 'Impressum', href: 'http://localhost:8080/Error404' },
-    { name: 'FAQ', href: 'http://localhost:8080/FAQ' },
+    { name: 'Impressum', href: '/Error404' },
+    { name: 'FAQ', href: '/FAQ' },
   ],
   social: [
     {
