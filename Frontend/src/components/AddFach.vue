@@ -113,7 +113,7 @@
                 <label for="titel" class="block text-sm font-medium text-gray-700"> Titel </label>
                 <div class="mt-1 flex rounded-md shadow-sm">
                   <input
-                    v-model="titel"
+                    v-model="stateVariablen.titel"
                     placeholder="Typescript"
                     type="text"
                     name="titel"
@@ -121,6 +121,9 @@
                     class="shadow-sm focus:ring-htl_rot focus:border-htl_rot block w-full sm:text-sm border-gray-300 rounded-md"
                   />
                 </div>
+                <p v-if="v$.titel.$invalid" class="mt-2 text-sm text-red-600" id="email-error">
+                  {{ v$.titel.$silentErrors[0].$message }}
+                </p>
               </div>
               <!-- Beschreibung -->
               <div class="sm:col-span-6">
@@ -129,13 +132,20 @@
                 </label>
                 <div class="mt-1">
                   <textarea
-                    v-model="beschreibung"
+                    v-model="stateVariablen.beschreibung"
                     id="beschreibung"
                     name="beschreibung"
                     rows="5"
                     class="shadow-sm focus:ring-htl_rot focus:border-htl_rot block w-full sm:text-sm border border-gray-300 rounded-md"
                   />
                 </div>
+                <p
+                  v-if="v$.beschreibung.$invalid"
+                  class="mt-2 text-sm text-red-600"
+                  id="email-error"
+                >
+                  {{ v$.beschreibung.$silentErrors[0].$message }}
+                </p>
                 <p class="mt-2 text-sm text-gray-500">
                   Schreiben Sie ein paar Informationen über Ihr Freifach
                 </p>
@@ -205,6 +215,9 @@
                     Bild entfernen
                   </button>
                 </div>
+                <p v-if="!image" class="mt-2 text-sm text-red-600" id="email-error">
+                  Value is required
+                </p>
               </div>
               <!-- ---------------------------------------------------------------------------------------------------------------- -->
               <!-- Anzahlen -->
@@ -239,7 +252,7 @@
                       <input
                         class="shadow-sm focus:ring-htl_rot focus:border-htl_rot block w-full sm:text-sm border-gray-300 rounded-md mx-2"
                         type="number"
-                        v-model="numberMin"
+                        v-model="stateVariablen.numberMin"
                         name="Anzahl"
                       />
                       <!-- Plus Button -->
@@ -290,7 +303,7 @@
                       <input
                         class="shadow-sm focus:ring-htl_rot focus:border-htl_rot block w-full sm:text-sm border-gray-300 rounded-md mx-2"
                         type="number"
-                        v-model="numberMax"
+                        v-model="stateVariablen.numberMax"
                         name="Anzahl"
                       />
                       <!-- Plus Button -->
@@ -315,10 +328,18 @@
                     </div>
                   </div>
                 </div>
+                <p v-if="v$.numberMin.$invalid" class="mt-2 text-sm text-red-600" id="email-error">
+                  <span class="text-black">Min Anzahl: </span
+                  >{{ v$.numberMin.$silentErrors[0].$message }}
+                </p>
+                <p v-if="v$.numberMax.$invalid" class="mt-2 text-sm text-red-600" id="email-error">
+                  <span class="text-black">Max Anzahl: </span
+                  >{{ v$.numberMax.$silentErrors[0].$message }}
+                </p>
               </div>
               <!-- ---------------------------------------------------------------------------------------------------------------- -->
               <div class="sm:col-span-1 mt-5">
-                <Listbox as="div" v-model="selected">
+                <Listbox as="div" v-model="stateVariablen.selected">
                   <ListboxLabel class="block text-sm font-medium text-gray-700">
                     Benötigte Wochenstunden
                   </ListboxLabel>
@@ -326,7 +347,7 @@
                     <ListboxButton
                       class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-htl_rot focus:border-htl_hellrot sm:text-sm"
                     >
-                      <span class="block truncate">{{ selected }}</span>
+                      <span class="block truncate">{{ stateVariablen.selected }}</span>
                       <span
                         class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
                       >
@@ -379,6 +400,9 @@
                     </transition>
                   </div>
                 </Listbox>
+                <p v-if="v$.selected.$invalid" class="mt-2 text-sm text-red-600" id="email-error">
+                  {{ v$.selected.$silentErrors[0].$message }}
+                </p>
               </div>
               <!-- ---------------------------------------------------------------------------------------------------------------- -->
               <!-- Platzhalter div -->
@@ -405,7 +429,7 @@
                       </div>
                       <div class="ml-3 flex items-center h-5">
                         <input
-                          v-model="voraussetzungen"
+                          v-model="stateVariablen.voraussetzungen"
                           :id="`${klasse}`"
                           :name="`${klasse}`"
                           :value="`${klasse}`"
@@ -416,12 +440,19 @@
                     </div>
                   </div>
                 </fieldset>
+                <p
+                  v-if="v$.voraussetzungen.$invalid"
+                  class="mt-2 text-sm text-red-600"
+                  id="email-error"
+                >
+                  {{ v$.voraussetzungen.$silentErrors[0].$message }}
+                </p>
               </div>
               <!-- Platzhalter div -->
               <div class="sm:col-span-5"></div>
               <!-- Gewichtung -->
               <div v-if="admin" class="sm:col-span-1 mt-5">
-                <Listbox as="div" v-model="selectedGewichtung">
+                <Listbox as="div" v-model="stateVariablen.selectedGewichtung">
                   <ListboxLabel class="block text-sm font-medium text-gray-700">
                     Gewichtung
                   </ListboxLabel>
@@ -488,8 +519,16 @@
             <div class="pt-5">
               <div class="flex justify-center">
                 <button
+                  v-if="!checkError"
                   @click="fachErstellen"
                   class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2"
+                >
+                  {{ nameButton }}
+                </button>
+                <button
+                  v-else
+                  :disabled="checkError"
+                  class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2"
                 >
                   {{ nameButton }}
                 </button>
@@ -532,11 +571,44 @@ import {
 } from '@headlessui/vue';
 
 //Ref und Axios impotieren
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive, computed } from 'vue';
 import axios from 'axios';
 
 //Store einbinden
 import { PiniaStore } from '../Store/Store.js';
+
+// Vuelidate
+import useValidate from '@vuelidate/core';
+import { required, numeric, minValue } from '@vuelidate/validators';
+
+//#region Vulidate
+let stateVariablen = reactive({
+  titel: '',
+  beschreibung: '',
+  numberMin: 0,
+  numberMax: 0,
+  selected: 0,
+  image: null,
+  imageSchicken: null,
+  voraussetzungen: [],
+});
+
+// Rules for vuelidate
+const rules = computed(() => {
+  return {
+    titel: { required },
+    beschreibung: { required },
+    numberMin: { required, numeric, minValue: minValue(1) },
+    numberMax: { required, numeric, minValue: minValue(1) },
+    selected: { required, minValue: minValue(1) },
+    voraussetzungen: { required },
+  };
+});
+
+const v$ = useValidate(rules, stateVariablen);
+
+//#endregion
+
 const store = PiniaStore();
 
 //router erstellen
@@ -553,6 +625,7 @@ let selectedGewichtung = ref(1);
 let image = ref(null);
 let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
+
 let showModal = ref(false);
 let state = ref('add');
 let id = ref(null);
@@ -577,18 +650,19 @@ onMounted(() => {
   if (localStorage.getItem('changeFach')) {
     try {
       let fach = JSON.parse(localStorage.getItem('changeFach'));
+      console.log(fach);
       if (fach.admin) {
         admin.value = true;
       }
       //Werte setzen
       id.value = fach.f_id;
-      titel.value = fach.titel;
-      beschreibung.value = fach.beschreibung;
+      stateVariablen.titel = fach.titel;
+      stateVariablen.beschreibung = fach.beschreibung;
       image.value = fach.thumbnail;
-      numberMin.value = fach.min_schueler;
-      numberMax.value = fach.max_schueler;
-      selected.value = fach.anzahl_stunden;
-      voraussetzungen.value = fach.voraussetzungen;
+      stateVariablen.numberMin = fach.min_schueler;
+      stateVariablen.numberMax = fach.max_schueler;
+      stateVariablen.selected = fach.anzahl_stunden;
+      stateVariablen.voraussetzungen = fach.voraussetzungen;
       selectedGewichtung.value = fach.gewichtung;
 
       nameButton.value = 'ändern';
@@ -613,6 +687,7 @@ function onFileChanged(event) {
     imageSchicken.value = event.target.files[0];
 
     const name = imageSchicken.value.name;
+    console.log('name', name);
 
     if (name.includes('.jpg')) {
       datentyp.value = 'jpg';
@@ -656,13 +731,13 @@ async function sendImage() {
 //Sendet eingegebenen Daten an den Server, der diese dann in der DB speichert
 async function sendData() {
   const fachObj = {
-    titel: titel.value,
-    beschreibung: beschreibung.value,
-    numberMin: numberMin.value,
-    numberMax: numberMax.value,
-    selected: selected.value,
-    voraussetzungen: voraussetzungen.value,
-    linkThumbnail: `/images/${titel.value}.${datentyp.value}`,
+    titel: stateVariablen.titel,
+    beschreibung: stateVariablen.beschreibung,
+    numberMin: stateVariablen.numberMin,
+    numberMax: stateVariablen.numberMax,
+    selected: stateVariablen.selected,
+    voraussetzungen: stateVariablen.voraussetzungen,
+    linkThumbnail: `/images/${stateVariablen.titel}.${datentyp.value}`,
     // lehrer: Store.state.aktiverUser,
     lehrer: store.getAktivenUser,
   };
@@ -679,26 +754,26 @@ async function changeData() {
   if (imageSchicken.value != null) {
     fachObj = {
       id: id.value,
-      titel: titel.value,
-      beschreibung: beschreibung.value,
-      numberMin: numberMin.value,
-      numberMax: numberMax.value,
-      selected: selected.value,
-      voraussetzungen: voraussetzungen.value,
+      titel: stateVariablen.titel,
+      beschreibung: stateVariablen.beschreibung,
+      numberMin: stateVariablen.numberMin,
+      numberMax: stateVariablen.numberMax,
+      selected: stateVariablen.selected,
+      voraussetzungen: stateVariablen.voraussetzungen,
       gewichtung: selectedGewichtung.value,
-      linkThumbnail: `/images/${titel.value}.${datentyp.value}`,
+      linkThumbnail: `/images/${stateVariablen.titel}.${datentyp.value}`,
     };
     //Bild schicken
     await sendImage();
   } else {
     fachObj = {
       id: id.value,
-      titel: titel.value,
-      beschreibung: beschreibung.value,
-      numberMin: numberMin.value,
-      numberMax: numberMax.value,
-      selected: selected.value,
-      voraussetzungen: voraussetzungen.value,
+      titel: stateVariablen.titel,
+      beschreibung: stateVariablen.beschreibung,
+      numberMin: stateVariablen.numberMin,
+      numberMax: stateVariablen.numberMax,
+      selected: stateVariablen.selected,
+      voraussetzungen: stateVariablen.voraussetzungen,
       gewichtung: selectedGewichtung.value,
     };
   }
@@ -728,15 +803,29 @@ async function fachErstellen(e) {
   //Facherstellen-Operation starten wenn Frist es erlaubt
   if (state.value == 'add') {
     try {
-      //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
-      sendImage();
-      //Freifachdaten dem Server für Eintrag schicken schicken
-      sendData();
-      e.preventDefault();
+      v$.value.$validate();
 
-      showModal.value = true;
+      if (!v$.value.$error) {
+        if (image.value) {
+          console.log('success');
+          //TODO send Data to Server
+          //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
+          sendImage();
+          //Freifachdaten dem Server für Eintrag schicken schicken
+          sendData();
+
+          showModal.value = true;
+        } else console.log('Bild fehlt');
+      } else {
+        console.log('Fehler');
+      }
+
+      e.preventDefault();
     } catch (error) {
-      console.log(error);
+      e.preventDefault();
+      console.log(error.message);
+    } finally {
+      e.preventDefault();
     }
   } else {
     changeData();
@@ -792,4 +881,13 @@ function increaseMax() {
 function decreaseMax() {
   if (numberMax.value != 0) numberMax.value -= 1;
 }
+
+const checkError = computed(() => {
+  if (v$.value.$invalid == true) {
+    return true;
+  } else {
+    if (image.value) return false;
+    return true;
+  }
+});
 </script>
