@@ -40,7 +40,7 @@ const navigation = {
     { name: 'Account', href: '/Account' },
     { name: 'Schulwebseite', href: 'https://www.htlwienwest.at/' },
     { name: 'Elternverein', href: 'https://www.htlwienwest-elternverein.at/dark-mode/index.html' },
-    { name: 'Impressum', href: '/Error404' },
+    { name: 'Impressum', href: '/impressum' },
     { name: 'FAQ', href: '/FAQ' },
   ],
   social: [

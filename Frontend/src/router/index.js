@@ -11,7 +11,7 @@ import FAQView from '../views/FAQView.vue';
 import printAnmeldungeView from '../views/printAnmeldungView.vue';
 import EasterEggView from '../views/EasterEggView.vue';
 import { PiniaStore } from '../Store/Store';
-
+import impressum from '../views/impressum.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -110,6 +110,11 @@ const router = createRouter({
       path: '/EasterEgg',
       name: '/EasterEgg',
       component: EasterEggView,
+    },
+    {
+      path: '/impressum',
+      name: 'impressum',
+      component: impressum,
     },
     { path: '/:pathmatch(.*)*', name: 'not-found', component: Error404 },
   ],
