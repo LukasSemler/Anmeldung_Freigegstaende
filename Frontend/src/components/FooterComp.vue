@@ -2,9 +2,42 @@
   <footer>
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
       <nav class="-mx-5 -my-2 flex flex-wrap justify-center" aria-label="Footer">
-        <div v-for="item in navigation.main" :key="item.name" class="px-5 py-2">
-          <a @click="$router.push(item.href)" class="text-base text-gray-500 hover:text-gray-900 cursor-pointer">
-            {{ item.name }}
+        <div>
+          <a
+            @click="$router.push('/')"
+            class="text-base text-gray-500 hover:text-gray-900 cursor-pointer px-5 py-2"
+          >
+            Home
+          </a>
+          <a
+            @click="$router.push('/account')"
+            class="text-base text-gray-500 hover:text-gray-900 cursor-pointer px-5 py-2"
+          >
+            Account
+          </a>
+          <a
+            href="https://www.htlwienwest.at/"
+            class="text-base text-gray-500 hover:text-gray-900 cursor-pointer px-5 py-2"
+          >
+            Schulwebseite
+          </a>
+          <a
+            href="https://www.htlwienwest-elternverein.at/dark-mode/index.html"
+            class="text-base text-gray-500 hover:text-gray-900 cursor-pointer px-5 py-2"
+          >
+            Elternverein
+          </a>
+          <a
+            @click="$router.push('/impressum')"
+            class="text-base text-gray-500 hover:text-gray-900 cursor-pointer px-5 py-2"
+          >
+            Impressum
+          </a>
+          <a
+            @click="$router.push('/faq')"
+            class="text-base text-gray-500 hover:text-gray-900 cursor-pointer px-5 py-2"
+          >
+            FAQ
           </a>
         </div>
       </nav>

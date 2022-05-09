@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import express from 'express';
-import asyncHandler from 'express-async-handler'
+import asyncHandler from 'express-async-handler';
 
 import // fachErstellen,
 // fachThumbnail,
@@ -42,7 +42,6 @@ import {
   SchuelerInFreifachAnmelden,
   SchuelerVonFreifachAbmelden,
   getFaecherSchueler,
-  schuelerAbmelden,
 } from '../controllers/Schueler.js';
 
 // ! _______________________________________________________________________________________________
@@ -88,7 +87,6 @@ router.patch('/changeFach/:id', asyncHandler(changeFach));
 router.post('/SchuelerInFreifachAnmelden', asyncHandler(SchuelerInFreifachAnmelden));
 router.post('/SchuelerInFreifachAbmelden', asyncHandler(SchuelerVonFreifachAbmelden));
 router.get('/getFaecherSchueler/:id', asyncHandler(getFaecherSchueler));
-router.delete('/schuelerAbmelden/:id', asyncHandler(schuelerAbmelden));
 
 // ! _______________________________________________________________________________________________
 

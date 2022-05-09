@@ -33,6 +33,8 @@ const SchuelerInFreifachAnmeldenDB = async (s_id, f_id) => {
 //! Schüler von Freifach abmelden
 const SchueleVonFreifachAbmeldenDB = async (s_id, f_id) => {
   try {
+    console.log(`Schüler: ${s_id} UND Lehrer: ${f_id}`);
+
     query('DELETE FROM freifach_bucht WHERE f_fk = $1 AND s_fk = $2;', [f_id, s_id]);
 
     return true;
@@ -40,8 +42,6 @@ const SchueleVonFreifachAbmeldenDB = async (s_id, f_id) => {
     console.log(error.message);
 
     return false;
-  } finally {
-    // client.release();
   }
 };
 
@@ -77,23 +77,8 @@ WHERE s_fk = $1 `,
   }
 };
 
-const schuelerAbmeldenDB = async (s_id) => {
-  try {
-    query('DELETE FROM freifach_bucht WHERE f_fk = $1;', [s_id]);
-
-    return true;
-  } catch (error) {
-    console.log(error.message);
-
-    return false;
-  } finally {
-    // client.release();
-  }
-};
-
 export {
   SchuelerInFreifachAnmeldenDB,
   SchueleVonFreifachAbmeldenDB,
   getFaecherSchuelerDB,
-  schuelerAbmeldenDB,
 };

@@ -266,14 +266,20 @@ async function abmelden(fach) {
   if (erg) {
     showModalWarning.value = true;
   } else {
-    const res = await axios.delete(`/schuelerAbmelden/${fach.f_id}`);
-    if (res.status != 200) {
-      //TODO Fehler Zeigen
+    const res = await axios.post(`/SchuelerInFreifachAbmelden`, {
+      s_id: store.getAktivenUser.s_id,
+      f_id: fach.f_id,
+    });
+
+    if (res.status === 200) {
+      console.log('User erfolgreich aus Freifach abgemeldet!');
+
+      faecher.value = faecher.value.filter((elem) => elem.f_id != fach.f_id);
+
+      showModalSuccess.value = true;
+    } else {
+      console.log('Beim Abmelden aus dem Freifach ist ein Fehler aufgetreten!');
     }
-
-    faecher.value = faecher.value.filter((elem) => elem.f_id != fach.f_id);
-
-    showModalSuccess.value = true;
   }
 }
 </script>

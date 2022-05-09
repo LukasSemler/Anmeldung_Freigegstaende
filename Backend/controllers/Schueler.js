@@ -2,7 +2,6 @@ import {
   SchuelerInFreifachAnmeldenDB,
   SchueleVonFreifachAbmeldenDB,
   getFaecherSchuelerDB,
-  schuelerAbmeldenDB,
 } from '../models/SchuelerDB.js';
 
 import colors from 'colors';
@@ -44,26 +43,4 @@ const getFaecherSchueler = async (req, res) => {
   }
 };
 
-const schuelerAbmelden = async (req, res) => {
-  const { id } = req.params;
-
-  // Schauen ob die ID vorhanden ist
-  if (!id) res.status(404).send('Schüler konnte nicht abgemeldet werden');
-  else {
-    // Wenn die ID vorhanden ist, alles erledigen
-    const erg = await schuelerAbmeldenDB(id);
-
-    if (erg) {
-      res.status(200).send('Schüler wurde erfolgreich abgemeldet');
-    } else {
-      res.status(500).send('Es gab einen Fehler beim Abmelden');
-    }
-  }
-};
-
-export {
-  SchuelerInFreifachAnmelden,
-  SchuelerVonFreifachAbmelden,
-  getFaecherSchueler,
-  schuelerAbmelden,
-};
+export { SchuelerInFreifachAnmelden, SchuelerVonFreifachAbmelden, getFaecherSchueler };
