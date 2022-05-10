@@ -576,7 +576,7 @@ import { PiniaStore } from '../Store/Store.js';
 
 // Vuelidate
 import useValidate from '@vuelidate/core';
-import { required, numeric, minValue, } from '@vuelidate/validators';
+import { required, numeric, minValue } from '@vuelidate/validators';
 
 //#region Vulidate
 let stateVariablen = reactive({
@@ -597,7 +597,7 @@ const rules = computed(() => {
     titel: { required },
     beschreibung: { required },
     numberMin: { required, numeric, minValue: minValue(1) },
-    numberMax: { required, numeric, minValue: minValue(stateVariablen.numberMin +1) },
+    numberMax: { required, numeric, minValue: minValue(stateVariablen.numberMin + 1) },
     selected: { required, minValue: minValue(1) },
     voraussetzungen: { required },
   };
@@ -889,6 +889,5 @@ const checkError = computed(() => {
   }
 });
 </script>
-
 
 >
