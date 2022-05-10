@@ -11,13 +11,16 @@ const getFaecherAdmin = async (req, res) => {
 };
 
 const acceptFach = async (req, res) => {
+  console.log('Accept Fach');
   const { id } = req.params;
   const state = String(req.body.genehmigt);
+
+  console.log(id, state);
 
   const erg = await acceptFachDB(id, state);
 
   if (erg) {
-    res.status(200).send('Der Status wurde geändert');
+    res.status(200).json(erg);
   } else {
     res.status(500).send('Der Status wurde nicht geändert');
   }

@@ -315,6 +315,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 async function annehmen(fach) {
   if (erg.value) {
     try {
+      console.log(fach.f_id);
       const res = await axios.patch(`/acceptFach/${fach.f_id}`, {
         genehmigt: true,
       });

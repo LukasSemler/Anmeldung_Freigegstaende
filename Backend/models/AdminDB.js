@@ -21,7 +21,7 @@ const getFaecherAdminDB = async () => {
          gewichtung
   from freifach_tbl
            JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
-           JOIN lehrer_tbl lt on lt.l_id = fb.l_fk;`);
+           JOIN lehrer_tbl lt on lt.l_id = fb.l_fk ORDER BY titel ASC;`);
 
     return rows;
   } catch (error) {
@@ -35,15 +35,20 @@ const getFaecherAdminDB = async () => {
 
 const acceptFachDB = async (id, state) => {
   try {
-    query('UPDATE freifach_tbl SET genehmigt = $1 WHERE f_id = $2; ', [state, id]);
+    console.log('DB');
+    const { rows } = await query(
+      'UPDATE freifach_tbl SET genehmigt = $1 WHERE f_id = $2 returning *; ',
+      [state, id],
+    );
 
-    return true
+    console.log('Rows');
+    console.log(rows);
+
+    return true;
   } catch (error) {
     console.log(error.message);
 
     return false;
-  } finally {
-    // client.release();
   }
 };
 
