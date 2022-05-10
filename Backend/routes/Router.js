@@ -2,28 +2,6 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
 
-import // fachErstellen,
-// fachThumbnail,
-// getAdminTimeLine,
-// setFristenChangeTimeLine,
-// getFristen,
-// getFreifaecher,
-// // lehrerSchülerAnmelden,
-// getFreifaecherAdmin,
-// acceptFach,
-// adminChangeFach,
-// getSchuelerFaecher,
-// accepDeclineStudent,
-// fachDel,
-// getFreifaecherLehrer,
-// SchuelerInFreifachAnmelden,
-// SchuelerInFreifachAbmelden,
-// getFaecherSchueler,
-// schuelerAbmelden,
-// changeTimeLine,
-// getFaecherFromStudent,
-'../controllers/Fach_alt.js';
-
 // ! _______________________________________________________________________________________________
 
 // Importe für Fach
@@ -52,6 +30,7 @@ import {
   getAdminTimeLine,
   getFristen,
   lehrerSchülerAnmelden,
+  lehrerSchülerAbmelden,
   getFaecherFromStudent,
 } from '../controllers/Verwaltung.js';
 
@@ -74,41 +53,57 @@ import {
 
 const router = express.Router();
 
+const userIsLoggedIn = (req, res, next) => {
+  if (req.session.aktiverUser) next();
+  else {
+    res.send('User is not logged in!');
+  }
+};
+
 //* Routen für Fach:
-router.post('/fachErstellen', asyncHandler(fachErstellen));
-router.post('/fachThumbnail', asyncHandler(fachThumbnailSpeichern));
-router.delete('/delFach/:id', asyncHandler(fachDel));
+router.post('/fachErstellen', userIsLoggedIn, asyncHandler(fachErstellen));
+router.post('/fachThumbnail', userIsLoggedIn, asyncHandler(fachThumbnailSpeichern));
+router.delete('/delFach/:id', userIsLoggedIn, asyncHandler(fachDel));
 router.get('/getFreifaecher', asyncHandler(getFreifaecher));
-router.patch('/changeFach/:id', asyncHandler(changeFach));
+router.patch('/changeFach/:id', userIsLoggedIn, asyncHandler(changeFach));
 
 // ! _______________________________________________________________________________________________
 
 //* Routen für Schüler:
-router.post('/SchuelerInFreifachAnmelden', asyncHandler(SchuelerInFreifachAnmelden));
-router.post('/SchuelerInFreifachAbmelden', asyncHandler(SchuelerVonFreifachAbmelden));
-router.get('/getFaecherSchueler/:id', asyncHandler(getFaecherSchueler));
+router.post(
+  '/SchuelerInFreifachAnmelden',
+  userIsLoggedIn,
+  asyncHandler(SchuelerInFreifachAnmelden),
+);
+router.post(
+  '/SchuelerInFreifachAbmelden',
+  userIsLoggedIn,
+  asyncHandler(SchuelerVonFreifachAbmelden),
+);
+router.get('/getFaecherSchueler/:id', userIsLoggedIn, asyncHandler(getFaecherSchueler));
 
 // ! _______________________________________________________________________________________________
 
 // *Routen für Lehrer
-router.get('/getFreifaecherLehrer', asyncHandler(getFreifaecherLehrer));
-router.patch('/accepDeclineStudent/:id', asyncHandler(accepDeclineStudent));
-router.get('/getSchuelerFaecher', asyncHandler(getSchuelerFaecher));
+router.get('/getFreifaecherLehrer', userIsLoggedIn, asyncHandler(getFreifaecherLehrer));
+router.patch('/accepDeclineStudent/:id', userIsLoggedIn, asyncHandler(accepDeclineStudent));
+router.get('/getSchuelerFaecher', userIsLoggedIn, asyncHandler(getSchuelerFaecher));
 
 // ! _______________________________________________________________________________________________
 
 //* Routen für Admin
-router.get('/getFaecherAdmin', asyncHandler(getFaecherAdmin));
-router.patch('/acceptFach/:id', asyncHandler(acceptFach));
+router.get('/getFaecherAdmin', userIsLoggedIn, asyncHandler(getFaecherAdmin));
+router.patch('/acceptFach/:id', userIsLoggedIn, asyncHandler(acceptFach));
 
 // ! _______________________________________________________________________________________________
 
 //* Routen für Verwaltung
-router.post('/setFristenChangeTimeLine', asyncHandler(setFristenChangeTimeLine));
-router.get('/getAdminTimeLine', asyncHandler(getAdminTimeLine));
+router.post('/setFristenChangeTimeLine', userIsLoggedIn, asyncHandler(setFristenChangeTimeLine));
+router.get('/getAdminTimeLine', userIsLoggedIn, asyncHandler(getAdminTimeLine));
 router.get('/getFristen', asyncHandler(getFristen));
 router.post('/lehrerSchuelerAnmelden', asyncHandler(lehrerSchülerAnmelden));
-router.get('/getFaecherFromStudent/:id', asyncHandler(getFaecherFromStudent));
+router.post('/lehrerSchuelerAbmelden', asyncHandler(lehrerSchülerAbmelden));
+router.get('/getFaecherFromStudent/:id', userIsLoggedIn, asyncHandler(getFaecherFromStudent));
 
 // ! _______________________________________________________________________________________________
 

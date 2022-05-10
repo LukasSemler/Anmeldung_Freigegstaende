@@ -115,6 +115,10 @@ const lehrerSchülerAnmelden = async (req, res) => {
         let lehrer = LehrerEintragen.rows[0];
         lehrer.isLehrer = true;
 
+        //Express Session setzen
+        req.session.aktiverUser = lehrer;
+
+        //Server-Feedback
         res.status(200).json(lehrer);
       } else {
         // Server-Result setzen
@@ -131,7 +135,10 @@ const lehrerSchülerAnmelden = async (req, res) => {
         const lehrer = LehrerGesucht.rows[0];
         lehrer.isLehrer = true;
 
-        // Server-Result setzen
+        //Express Session setzen
+        req.session.aktiverUser = lehrer;
+
+        //Server-Feedback
         res.status(200).json(lehrer);
       } else {
         // Server-Result setzen
@@ -164,6 +171,10 @@ const lehrerSchülerAnmelden = async (req, res) => {
         Schueler.isLehrer = false;
         Schueler.isAdmin = false;
 
+        //Express Session setzen
+        req.session.aktiverUser = Schueler;
+
+        //Server-Feedback
         res.status(200).json(Schueler);
       } else {
         console.log(errorEintrag);
@@ -182,13 +193,26 @@ const lehrerSchülerAnmelden = async (req, res) => {
         Schueler.isAdmin = false;
         Schueler.isLehrer = false;
 
-        // Server-Result setzen
+        //Express Session setzen
+        req.session.aktiverUser = Schueler;
+
+        //Server-Feedback
         res.status(200).json(Schueler);
       } else {
         // Server-Result setzen
         res.status(210).send('Fehler beim Ausgeben des vorhandenen Users');
       }
     }
+  }
+};
+
+const lehrerSchülerAbmelden = (req, res) => {
+  try{
+    req.session.destroy();
+    res.status(200).send('Erfolgreich abgemeldet');
+  }
+  catch{
+    res.status(210).send('Fehler beim Abmelden');
   }
 };
 
@@ -208,5 +232,6 @@ export {
   getAdminTimeLine,
   getFristen,
   lehrerSchülerAnmelden,
+  lehrerSchülerAbmelden,
   getFaecherFromStudent,
 };

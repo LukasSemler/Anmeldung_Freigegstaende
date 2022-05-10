@@ -3,6 +3,8 @@ import path from 'path';
 import morgan from 'morgan';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
+import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import { ErrorHandler, NotFoundHandler, HttpsRedirectHandler } from './middleware/index.js';
 
 // require('dotenv').config();
@@ -15,9 +17,12 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 app.use(morgan('dev'));
 app.use(cors());
 app.use(fileUpload());
+app.use(cookieParser());
 
 const dirname = path.resolve();
 
@@ -25,8 +30,18 @@ app.use(express.static(path.join(dirname, 'public')));
 app.use(express.json()); // body parser
 app.use(express.urlencoded({ extended: false }));
 
-//Middwar-Route
+//Middware-Route
 app.use(HttpsRedirectHandler); //Wenn der User versucht auf dei Heroku-HTTP-URL zuzugreifen, wird er auf die HTTPS-URL umgeleitet
+
+//Express-Sessions
+app.use(
+  session({
+    secret: 'FreifaecherAmeldung',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 },
+  }),
+);
 
 //Normale Server-Routen
 app.use('/', customerRoutes);

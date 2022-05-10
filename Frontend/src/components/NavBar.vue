@@ -292,6 +292,9 @@ async function abmelden() {
   store.aktivenUserAbmelden();
   store.$reset();
 
+  //Express-Session am Server beenden
+  await axios.post('/lehrerSchuelerAbmelden', {});
+
   store.$dispose();
 }
 
