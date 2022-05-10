@@ -168,28 +168,31 @@
   </TransitionRoot>
 
   <div>
-    <h1 class="text-center text-4xl mt-3">Fristen setzen</h1>
-    <div class="flex flex-col justify-center">
-      <div class="w-2/3" v-if="!datenVorhanden">
-        <label for="einreichen">Frist für das Einreichen von Fächern</label>
-        <input v-model="fristEinreichen" type="date" id="einreichen" name="einreichen" />
-        <label for="einreichen">Frist für das Anmelden von Fächern</label>
-        <input v-model="fristAnmelden" type="date" id="einreichen" name="einreichen" />
-        <button
-          @click="setFristen"
-          class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
-        >
-          Fristen setzen
-        </button>
+    <h1 class="text-center text-4xl mt-3 font-bold">Fristen setzen</h1>
+    <div class="flex flex-row justify-center mt-6">
+      <div class="w-60" v-if="!datenVorhanden">
+        <p>Frist Einreichen:</p>
+        <Datepicker v-model="fristEinreichen"></Datepicker>
+        <p class="mt-4">Frist Anmelden:</p>
+        <Datepicker v-model="fristAnmelden"></Datepicker>
+
+        <div class="flex justify-center">
+          <button
+            @click="setFristen"
+            class="mt-4 mb-8 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+          >
+            Fristen setzen
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="mt-3" v-if="datenVorhanden">
-    <h1>Endzeitpunkt fürs Einreichen</h1>
+    <h1 class="text-center text-2xl font-bold mb-4">Endzeitpunkt fürs Einreichen</h1>
     <CountDown :endzeitpunkt="fristEinreichenFormated"></CountDown>
-
-    <h1>Endzeitpunkt fürs Anmelden</h1>
+    <br />
+    <h1 class="text-center text-2xl font-bold my-4">Endzeitpunkt fürs Anmelden</h1>
     <CountDown :endzeitpunkt="fristAnmeldenFormated"></CountDown>
   </div>
 </template>

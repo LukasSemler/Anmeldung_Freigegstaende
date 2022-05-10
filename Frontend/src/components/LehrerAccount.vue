@@ -250,13 +250,13 @@
     Willkommen {{ aktiverUser.vorname }} {{ aktiverUser.nachname }}
   </h1>
   <br />
-  <p class="text-center text-">
+  <p class="text-center mx-4">
     Hier können Sie alle Ihre Freifächer und deren Status anzeigen. Außerdem können Sie neue
     Freifächer hinzufügen und bereits erstelle Fächer ändern
   </p>
   <br />
   <br />
-  <h3 class="max-w-6xl mx-auto text-2xl font-bold">Ihre Freifächer:</h3>
+  <h3 class="max-w-6xl mx-auto text-2xl font-bold ml-4">Ihre Freifächer:</h3>
   <br />
   <div v-if="showAddFach" class="text-center">
     <svg
@@ -289,7 +289,7 @@
   </div>
   <div v-else class="flex flex-wrap justify-center">
     <div class="relative max-w-7xl mx-auto">
-      <div class="mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
+      <div class="mt-12 max-w-lg grid gap-5 lg:grid-cols-3 lg:max-w-none mx-4">
         <div
           v-for="fach of faecher"
           :key="fach.f_id"
@@ -368,7 +368,7 @@
             </div>
           </div>
           <div
-            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center"
+            class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 flex justify-center gap-2"
           >
             <button
               @click="detail(fach)"

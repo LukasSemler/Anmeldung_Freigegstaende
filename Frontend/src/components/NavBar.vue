@@ -133,16 +133,17 @@
                             </p>
 
                             <div>
-                              <label for="email" class="block text-sm font-bold text-gray-700 mt-3"
+                              <label
+                                for="webuntisPassword"
+                                class="block text-sm font-bold text-gray-700 mt-3"
                                 >Webuntis Passwort</label
                               >
                               <div class="mt-1">
                                 <input
-                                  type="Password"
+                                  type="password"
                                   name="webuntisPassword"
                                   v-model="WebuntisPasswordFieldInput"
                                   class="shadow-sm focus:ring-htl_rot focus:border-htl_hellrot block w-full sm:text-sm border-gray-300 rounded-md"
-                                  placeholder="*******"
                                 />
                               </div>
 
@@ -360,3 +361,9 @@ async function anmeldenMitUntisdaten() {
   }
 }
 </script>
+
+<style scoped>
+input[type='password'] {
+  font-family: 'Verdana';
+}
+</style>

@@ -28,8 +28,6 @@ const getFaecherAdminDB = async () => {
     console.log(error.message);
 
     return false;
-  } finally {
-    // client.release();
   }
 };
 

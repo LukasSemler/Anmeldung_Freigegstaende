@@ -180,7 +180,7 @@
                         for="thumbnail"
                         class="relative cursor-pointer bg-white rounded-md font-medium text-htl_rot hover:text-htl_hellrot focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-htl_rot"
                       >
-                        <span>Upload a file</span>
+                        <span class="text-center">Upload a file</span>
                         <input
                           id="thumbnail"
                           name="thumbnail"
@@ -190,9 +190,8 @@
                           accept="image/*"
                         />
                       </label>
-                      <p class="pl-1">or drag and drop</p>
                     </div>
-                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                    <p class="text-xs text-gray-500">PNG, JPG, JPEG</p>
                   </div>
                   <div v-else>
                     <div class="flex justify-center">
@@ -451,7 +450,7 @@
               <!-- Platzhalter div -->
               <div class="sm:col-span-5"></div>
               <!-- Gewichtung -->
-              <div v-if="admin" class="sm:col-span-1 mt-5">
+              <div v-if="admin" class="sm:col-span-3 mt-5">
                 <Listbox as="div" v-model="stateVariablen.selectedGewichtung">
                   <ListboxLabel class="block text-sm font-medium text-gray-700">
                     Gewichtung
@@ -460,7 +459,7 @@
                     <ListboxButton
                       class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-htl_rot focus:border-htl_hellrot sm:text-sm"
                     >
-                      <span class="block truncate">{{ selectedGewichtung }}</span>
+                      <span class="block truncate">{{ stateVariablen.selectedGewichtung }}</span>
                       <span
                         class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
                       >
@@ -491,7 +490,7 @@
                           >
                             <span
                               :class="[
-                                selectedGewichtung ? 'font-semibold' : 'font-normal',
+                                stateVariablen.selectedGewichtung ? 'font-semibold' : 'font-normal',
                                 'block truncate',
                               ]"
                             >
@@ -499,7 +498,7 @@
                             </span>
 
                             <span
-                              v-if="selectedGewichtung"
+                              v-if="stateVariablen.selectedGewichtung"
                               :class="[
                                 active ? 'text-white' : 'text-htl_rot',
                                 'absolute inset-y-0 right-0 flex items-center pr-4',
@@ -519,19 +518,17 @@
             <div class="pt-5">
               <div class="flex justify-center">
                 <button
-                  v-if="!checkError"
                   @click="fachErstellen"
-                  class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2"
-                >
-                  {{ nameButton }}
-                </button>
-                <button
-                  v-else
+                  :class="
+                    !checkError
+                      ? 'ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-htl_rot hover:bg-htl_hellrot focus:outline-none focus:ring-2 focus:ring-offset-2'
+                      : 'disabled ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2'
+                  "
                   :disabled="checkError"
-                  class="ml-3 inline-flex justify-center py-2 px-9 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2"
                 >
                   {{ nameButton }}
                 </button>
+
                 <button
                   v-if="state == 'change'"
                   @click="abbrechen"
@@ -579,18 +576,19 @@ import { PiniaStore } from '../Store/Store.js';
 
 // Vuelidate
 import useValidate from '@vuelidate/core';
-import { required, numeric, minValue } from '@vuelidate/validators';
+import { required, numeric, minValue, } from '@vuelidate/validators';
 
 //#region Vulidate
 let stateVariablen = reactive({
   titel: '',
   beschreibung: '',
-  numberMin: 0,
-  numberMax: 0,
-  selected: 0,
+  numberMin: 1,
+  numberMax: 2,
+  selected: 1,
   image: null,
   imageSchicken: null,
   voraussetzungen: [],
+  selectedGewichtung: null,
 });
 
 // Rules for vuelidate
@@ -599,7 +597,7 @@ const rules = computed(() => {
     titel: { required },
     beschreibung: { required },
     numberMin: { required, numeric, minValue: minValue(1) },
-    numberMax: { required, numeric, minValue: minValue(1) },
+    numberMax: { required, numeric, minValue: minValue(stateVariablen.numberMin +1) },
     selected: { required, minValue: minValue(1) },
     voraussetzungen: { required },
   };
@@ -721,7 +719,7 @@ async function sendImage() {
   formData.append('titel', titel.value);
   formData.append('datentyp', datentyp.value);
   console.log(imageSchicken.value);
-  axios.post(`http://localhost:2410/fachThumbnail`, formData, {
+  axios.post(`/fachThumbnail`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -742,7 +740,7 @@ async function sendData() {
     lehrer: store.getAktivenUser,
   };
 
-  let { status } = axios.post('http://localhost:2410/fachErstellen', fachObj);
+  let { status } = axios.post('/fachErstellen', fachObj);
   if (status == 210) {
     throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
   }
@@ -778,7 +776,7 @@ async function changeData() {
     };
   }
 
-  const res = await axios.patch(`http://localhost:2410/changeFach/${fachObj.id}`, fachObj);
+  const res = await axios.patch(`/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist
   if (res.status == 200) {
@@ -868,18 +866,18 @@ function ClearAllInputs() {
 
 //Min
 function increaseMin() {
-  numberMin.value += 1;
+  stateVariablen.numberMin += 1;
 }
 function decreaseMin() {
-  if (numberMin.value != 0) numberMin.value -= 1;
+  if (stateVariablen.numberMin != 0) stateVariablen.numberMin -= 1;
 }
 
 //Max
 function increaseMax() {
-  numberMax.value += 1;
+  stateVariablen.numberMax += 1;
 }
 function decreaseMax() {
-  if (numberMax.value != 0) numberMax.value -= 1;
+  if (stateVariablen.numberMax != 0) stateVariablen.numberMax -= 1;
 }
 
 const checkError = computed(() => {
@@ -891,3 +889,6 @@ const checkError = computed(() => {
   }
 });
 </script>
+
+
+>

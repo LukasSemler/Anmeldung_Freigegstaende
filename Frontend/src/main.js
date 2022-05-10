@@ -7,6 +7,9 @@ import router from './router';
 import gAuthPlguin from './googleLoginScript';
 import axios from 'axios';
 
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 const app = createApp(App);
 
 //Router
@@ -30,5 +33,7 @@ app.use(gAuthPlguin, {
   scope: 'email',
   prompt: 'consent',
 });
+
+app.component('Datepicker', Datepicker);
 
 app.mount('#app');

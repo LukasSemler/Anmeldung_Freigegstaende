@@ -8,7 +8,7 @@ const setFristenChangeTimeLineDB = async (changeTimeLine, setFristen) => {
     let querys = [];
 
     //Transaktion beginnnen
-    await client.query('BEGINN');
+    await client.query('BEGIN');
 
     //Ersten Befehl pushen
     querys.push(

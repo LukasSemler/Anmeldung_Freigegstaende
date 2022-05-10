@@ -107,7 +107,7 @@
     <div class="flex flex-row justify-center flex-wrap">
       <div
         v-for="fach of faecher"
-        class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-2 my-4 w-4/12"
+        class="bg-white shadow-xl border overflow-hidden sm:rounded-lg w-500 mx-4 md:w-4/12 my-4"
       >
         <div class="flex-shrink-0">
           <img
