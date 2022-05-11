@@ -159,7 +159,7 @@
               href="http://sg.geodatenzentrum.de/web_bkg_webmap/cookietest/enable.html"
               class="block text-center"
             >
-              Ich brauche Hilfe?
+              Brauchst du Hilfe?
             </a>
           </div>
           <button
