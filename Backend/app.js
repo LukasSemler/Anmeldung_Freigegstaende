@@ -3,14 +3,17 @@ import path from 'path';
 import morgan from 'morgan';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
-import session from 'express-session';
-import cookieParser from 'cookie-parser';
 import { ErrorHandler, NotFoundHandler, HttpsRedirectHandler } from './middleware/index.js';
 
-// require('dotenv').config();
+//Session
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
+
+//Dotenv.
 import { config } from 'dotenv';
 config();
 
+//Routen
 import customerRoutes from './routes/Router.js';
 
 const PORT = process.env.PORT || 5000;
@@ -36,7 +39,7 @@ app.use(HttpsRedirectHandler); //Wenn der User versucht auf dei Heroku-HTTP-URL 
 //Express-Sessions
 app.use(
   session({
-    secret: 'FreifachAnmeldung',
+    name: "FreifachAnmeldung",
     secret: 'FreifaecherAmeldung',
     resave: true,
     saveUninitialized: true,

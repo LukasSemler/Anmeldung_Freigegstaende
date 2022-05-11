@@ -3,3 +3,10 @@ GET http://localhost:2410/getFreifaecher
 
 #####
 GET http://localhost:2410/getFreifaecherLehrer?freifachname=JavaScript
+
+
+#####Anmelden
+GET http://localhost:2410/testAnmelden
+
+#####Abmelden
+GET http://localhost:2410/testAbmelden

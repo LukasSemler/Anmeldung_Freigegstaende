@@ -54,14 +54,10 @@ import {
 const router = express.Router();
 
 const userIsLoggedIn = (req, res, next) => {
-  console.log(req.session.aktiverUser);
-
-  // if (req.session.aktiverUser) next();
-  // else {
-  //   res.send('User is not logged in!');
-  // }
-
-  next();
+  if (req.session.aktiverUser) next();
+  else {
+    res.send('User is not logged in!');
+  }
 };
 
 //* Routen für Fach:
@@ -110,5 +106,8 @@ router.post('/lehrerSchuelerAbmelden', asyncHandler(lehrerSchülerAbmelden));
 router.get('/getFaecherFromStudent/:id', userIsLoggedIn, asyncHandler(getFaecherFromStudent));
 
 // ! _______________________________________________________________________________________________
+
+//TESTROUTE UM ZU SCHAUEN OB DIE SESSION NOCH AN IST
+router.get('/isSessionAktiv', (req, res) => res.send(req.session.aktiverUser));
 
 export default router;
