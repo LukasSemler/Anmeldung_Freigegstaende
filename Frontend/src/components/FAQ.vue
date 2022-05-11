@@ -17,7 +17,7 @@
               <dt class="text-lg leading-6 font-bold text-gray-900">
                 {{ faq.question }}
               </dt>
-              <dd class="mt-2 text-base text-gray-600 font-medium ">
+              <dd class="mt-2 text-base text-gray-600 font-medium">
                 {{ faq.answer }}
               </dd>
             </div>
@@ -31,18 +31,18 @@
 <script setup>
 const faqs = [
   {
-    question: 'Was geschieht, wenn es mehr anmeldungen auf das Freifach gibt, als Plätze?',
+    question: 'Was geschieht, wenn es mehr Anmeldungen für das Freifach gibt, als Plätze?',
     answer:
-      'Wenn es mehr Anmeldungen als Plätze gibt, entscheidet der Lehrer oder die Lehrerin welche Schüler*innen teilnehmen dürfen und welche nicht. Dies wird häufig nach dem Notendurchschnitt entschieden. ',
+      'Wenn es mehr Anmeldungen als Plätze gibt, entscheidet der Lehrer/ die Lehrerin welche Schüler*innen teilnehmen dürfen und welche nicht. Dies wird häufig nach dem Notendurchschnitt entschieden. ',
   },
   {
     question: 'Was ist, wenn ich draufkomme, dass mir das Freifach nicht gefällt?',
-    answer: 'Ein frühzeitiges beenden bzw. abmelden von dem Freifach ist leider nicht möglich.',
+    answer: 'Ein frühzeitiges Beenden bzw. Abmelden von dem Freifach ist leider nicht möglich.',
   },
   {
-    question: 'Wie ist, wenn ich eine fehle?',
+    question: 'Wie ist, wenn ich eine Stunde fehle?',
     answer:
-      'Wenn du bei deinem angemeldetet Freifach fehlst, musst du ganz normal eine Entschuldigung bei deinem Klassenvorstand einreichen.',
+      'Wenn du bei deinem angemeldeteten Freifach fehlst, musst du ganz normal eine Entschuldigung bei deinem Klassenvorstand einreichen.',
   },
   {
     question: 'Welche Technologien verwenden für bei den Freifächern?',
@@ -55,14 +55,13 @@ const faqs = [
       'Ja, Freifächer sind prinzipell kostenlos. Falls es aber doch vorkommt, dass Materialen benötigt werden, welche nicht in der Schule zu verfügen stehen und etwas kosten, wird dies vom Lehrer mitgeteilt.',
   },
   {
-    question: 'Bekomme ich eine Note im Zeugniss oder der Schulnachricht?',
+    question: 'Bekomme ich eine Note im Zeugnis oder in der Schulnachricht?',
     answer:
       'Ja, du bekommst nicht nur ein "Teilgenommen", sondern eine Note, deswegen herrscht auch eine Anwesenheitspflicht.',
   },
   {
     question: 'Darf ich auf meinem eigenen Notebook arbeiten? ',
-    answer:
-      'Ja natürlich, ist sogar erwünscht :)',
+    answer: 'Ja natürlich, ist sogar erwünscht :)',
   },
   {
     question: 'Wieso gibt es bei manchen Freifächern eine limitierung der Teilnehmer?',

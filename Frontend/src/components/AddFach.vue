@@ -737,7 +737,7 @@ async function sendData() {
     numberMax: stateVariablen.numberMax,
     selected: stateVariablen.selected,
     voraussetzungen: stateVariablen.voraussetzungen,
-    linkThumbnail: `/images/${stateVariablen.titel}.${datentyp.value}`,
+    linkThumbnail: `/images/${stateVariablen.titel}.${stateVariablen.imageSchicken.datentyp}`,
     // lehrer: Store.state.aktiverUser,
     lehrer: store.getAktivenUser,
   };
