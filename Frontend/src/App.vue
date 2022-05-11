@@ -145,35 +145,32 @@
           <div class="mt-12">
             <h1
               role="main"
-              class="text-3xl dark:text-white lg:text-4xl font-semibold leading-7 lg:leading-9 text-center text-gray-800"
+              class="text-3xl lg:text-4xl font-semibold leading-7 lg:leading-9 text-center text-white"
             >
               Achtung!
             </h1>
           </div>
           <div class="mt">
-            <p class="mt-6 sm:w-80 text-base dark:text-white leading-7 text-center text-gray-800">
+            <p class="mt-6 sm:w-80 text-base text-white leading-7 text-center">
               Um diese Seite zu nutzen, müssen die Thrid-Party-Cookies im Browser von dir erlaubt
               sein!
             </p>
             <a
-              href="http://sg.geodatenzentrum.de/web_bkg_webmap/cookietest/enable.html"
-              class="block text-center"
+              @click="
+                thirdPartyCookiesAlert = false;
+                $router.push('/thirdPartyCookiesView');
+              "
+              class="block text-center underline text-gray-800 cursor-pointer"
             >
               Brauchst du Hilfe?
             </a>
           </div>
           <button
             @click="acceptCookiesClick"
-            class="w-full rounded-lg text-gray-800 dark:hover:bg-gray-100 dark:bg-white sm:w-auto mt-14 text-base leading-4 text-center py-6 px-16 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white bg-gray-800 hover:bg-black"
+            class="w-full rounded-lg text-white bg-htl_hellrot sm:w-auto mt-14 text-base leading-4 text-center py-6 px-16 focus:outline-none focus:ring-offset-2 ring-gray-800 ring-1 shadow-xl focus:shadow-gray-800 ring-offset-gray-800"
           >
             Verstanden!
           </button>
-
-          <button
-            onclick="showMenu(true)"
-            class="text-gray-800 dark:text-gray-400 absolute top-8 right-8 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800"
-            aria-label="close"
-          ></button>
         </div>
       </div>
     </div>
@@ -202,7 +199,7 @@ import { PiniaStore } from './Store/Store.js';
 const store = PiniaStore();
 
 //Variablen
-const thirdPartyCookiesAlert = ref(true);
+const thirdPartyCookiesAlert = ref(false);
 
 //Funktione
 onMounted(async () => {
@@ -231,8 +228,6 @@ onMounted(async () => {
   //CHECK IF THIRD PARTY COOKIES ARE ALLOWED
   if (!localStorage.getItem('AnmeldungFreigegenstaendeFirstTime'))
     thirdPartyCookiesAlert.value = true;
-
-  console.log('Cookies are enabled: ' + navigator.cookieEnabled);
 });
 
 function acceptCookiesClick() {

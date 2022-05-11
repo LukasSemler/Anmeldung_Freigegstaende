@@ -54,10 +54,11 @@ const fachErstellen = async (req, res) => {
 
 //! Thumbnail vom Fach speichern
 const fachThumbnailSpeichern = async (req, res) => {
-  console.log('Fach bekommen');
   try {
     const { titel, datentyp } = req.body;
-    console.log(titel, datentyp);
+
+    console.log('Titel: ' + titel, '| Datentyp: ' + datentyp);
+
     const uniqueImageName = path.join(dirname, `public/images/${titel}.${datentyp}`);
     //schauen ob das Bild schon existiert, wenn ja löschen und neu erstellen
     if (fs.existsSync(`${dirname}/public/images/${titel}.${datentyp}`)) {

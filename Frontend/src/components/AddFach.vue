@@ -682,18 +682,18 @@ function onFileChanged(event) {
   {
     // Reference to the DOM input element
     let input = event.target;
-    imageSchicken.value = event.target.files[0];
+    stateVariablen.imageSchicken = event.target.files[0];
 
-    const name = imageSchicken.value.name;
-    console.log('name', name);
+    const name = stateVariablen.imageSchicken.name;
 
     if (name.includes('.jpg')) {
-      datentyp.value = 'jpg';
+      stateVariablen.imageSchicken.datentyp = 'jpg';
     } else if (name.includes('.png')) {
-      datentyp.value = 'png';
+      stateVariablen.imageSchicken.datentyp = 'png';
     } else if (name.includes('.jpeg')) {
-      datentyp.value = 'jpeg';
+      stateVariablen.imageSchicken.datentyp = 'jpeg';
     } else {
+      console.log('IMAGE-DATENTYP NICHT ZULÄSSIG');
     }
 
     // Ensure that you have a file before attempting to read it
@@ -714,11 +714,13 @@ function onFileChanged(event) {
 
 //Daten + Bild an Backend schicken
 async function sendImage() {
+  //FormData bauen
   let formData = new FormData();
-  formData.append('image', imageSchicken.value);
-  formData.append('titel', titel.value);
-  formData.append('datentyp', datentyp.value);
-  console.log(imageSchicken.value);
+  formData.append('image', stateVariablen.imageSchicken);
+  formData.append('titel', stateVariablen.titel);
+  formData.append('datentyp', stateVariablen.imageSchicken.datentyp);
+
+  //an server schicken
   axios.post(`/fachThumbnail`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -806,7 +808,6 @@ async function fachErstellen(e) {
       if (!v$.value.$error) {
         if (image.value) {
           console.log('success');
-          //TODO send Data to Server
           //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
           sendImage();
           //Freifachdaten dem Server für Eintrag schicken schicken

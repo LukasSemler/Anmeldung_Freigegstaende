@@ -116,6 +116,11 @@ const router = createRouter({
       name: 'impressum',
       component: impressum,
     },
+    {
+      path: '/thirdPartyCookiesView',
+      name: 'ThirdPartyCookieHelper',
+      component: () => import('../views/thridPartyCookiesView.vue'),
+    },
     { path: '/:pathmatch(.*)*', name: 'not-found', component: Error404 },
   ],
 });
