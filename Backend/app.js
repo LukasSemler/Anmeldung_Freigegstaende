@@ -36,9 +36,10 @@ app.use(HttpsRedirectHandler); //Wenn der User versucht auf dei Heroku-HTTP-URL 
 //Express-Sessions
 app.use(
   session({
+    secret: 'FreifachAnmeldung',
     secret: 'FreifaecherAmeldung',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   }),
 );

@@ -207,11 +207,10 @@ const lehrerSchülerAnmelden = async (req, res) => {
 };
 
 const lehrerSchülerAbmelden = (req, res) => {
-  try{
+  try {
     req.session.destroy();
     res.status(200).send('Erfolgreich abgemeldet');
-  }
-  catch{
+  } catch {
     res.status(210).send('Fehler beim Abmelden');
   }
 };

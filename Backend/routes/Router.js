@@ -54,10 +54,14 @@ import {
 const router = express.Router();
 
 const userIsLoggedIn = (req, res, next) => {
-  if (req.session.aktiverUser) next();
-  else {
-    res.send('User is not logged in!');
-  }
+  console.log(req.session.aktiverUser);
+
+  // if (req.session.aktiverUser) next();
+  // else {
+  //   res.send('User is not logged in!');
+  // }
+
+  next();
 };
 
 //* Routen für Fach:

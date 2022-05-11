@@ -231,14 +231,14 @@ onMounted(async () => {
 
 function print() {
   //Frist aus dem Store holen
-  const frist = store.getFristEinreichen;
+  const frist = store.getFristAnmelden;
 
   //Daten holen
-  let fristEinreichen = frist.original;
+  let getFristAnmelden = frist.original;
   let aktuellesDatum = new Date();
 
   //Schauen ob das Datum vor oder nach der Frist ist
-  let erg = moment(fristEinreichen.value).isBefore(aktuellesDatum);
+  let erg = moment(getFristAnmelden).isBefore(aktuellesDatum);
 
   //Überprüfung ob Anmeldefrist
   if (!erg) {
