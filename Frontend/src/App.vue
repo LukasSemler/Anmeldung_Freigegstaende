@@ -155,6 +155,12 @@
               Um diese Seite zu nutzen, müssen die Thrid-Party-Cookies im Browser von dir erlaubt
               sein!
             </p>
+            <a
+              href="http://sg.geodatenzentrum.de/web_bkg_webmap/cookietest/enable.html"
+              class="block text-center"
+            >
+              Ich brauche Hilfe?
+            </a>
           </div>
           <button
             @click="acceptCookiesClick"
@@ -196,7 +202,7 @@ import { PiniaStore } from './Store/Store.js';
 const store = PiniaStore();
 
 //Variablen
-const thirdPartyCookiesAlert = ref(false);
+const thirdPartyCookiesAlert = ref(true);
 
 //Funktione
 onMounted(async () => {
