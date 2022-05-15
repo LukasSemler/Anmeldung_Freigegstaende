@@ -531,6 +531,8 @@ async function fachDel() {
     console.log(res);
   }
 
+  faecher.value = faecher.value.filter((fach) => fach.f_id != fachZuDel.f_id);
+
   showModalDel.value = false;
 }
 

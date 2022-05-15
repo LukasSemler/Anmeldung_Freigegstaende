@@ -190,7 +190,10 @@ const changeFachDB = async (id, body) => {
 };
 
 const fachThumbnailEntfernen = async (fachID) => {
-  return await query('SELECT thumbnail from freifach_tbl where f_id = $1;', [fachID]);
+  console.log('FachID: ' + fachID);
+  const { rows } = await query('SELECT thumbnail from freifach_tbl where f_id = $1;', [fachID]);
+
+  return rows[0].thumbnail;
 };
 
 export { fachErstellenDB, fachLöschenDB, fachThumbnailEntfernen, getFreifaecherDB, changeFachDB };

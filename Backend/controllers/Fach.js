@@ -80,10 +80,14 @@ const fachDel = async (req, res) => {
   const { lehrerID } = req.query;
 
   if (id && lehrerID) {
-    if (await fachLöschenDB(id, lehrerID)) {
+    const resultThumbnail = await fachThumbnailEntfernen(id);
+    console.log('Thumbnail: ' + resultThumbnail);
+    const erg = await fachLöschenDB(id, lehrerID);
+
+    if (erg) {
       try {
-        const result = await fachThumbnailEntfernen(id);
-        let thumbnailLink = result.rows[0].thumbnail;
+        console.log('Result: ', resultThumbnail);
+        let thumbnailLink = resultThumbnail;
         //change image path to /public/images/
         thumbnailLink = thumbnailLink.replace('/images/', '/public/images/');
         //remove everything before the /public
@@ -97,16 +101,15 @@ const fachDel = async (req, res) => {
             console.log('File deleted!');
           }
         });
-        res.status(200).send('Fach wurde erfolgreich gelöscht');
+        return res.status(200).send('Fach wurde erfolgreich gelöscht');
       } catch (error) {
         //Fehler ausgeben
         console.log(error.message);
         //Fehler zurückschicken
-        res.status(500).send('Fehler beim Thumbnail löschen');
+        return res.status(500).send('Fehler beim Thumbnail löschen');
       }
-      console.log('Success beim löschen des Fachs');
     } else {
-      res.status(500).send('Es ist ein Fehler beim löschen des Fachs aufgetreten');
+      return res.status(500).send('Es ist ein Fehler beim löschen des Fachs aufgetreten');
     }
   }
 };
