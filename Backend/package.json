@@ -11,6 +11,7 @@
   "author": "Benjamin Stauf & Lukas Semler",
   "license": "ISC",
   "dependencies": {
+    "apicache": "^1.6.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
