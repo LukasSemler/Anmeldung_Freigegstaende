@@ -283,8 +283,12 @@ import { onMounted, ref, computed } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 
-//Store einbinden
 import { PiniaStore } from '../Store/Store.js';
+
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
+
+//Store einbinden
 const store = PiniaStore();
 
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
@@ -300,7 +304,7 @@ let angenommen = ref([]);
 onMounted(async () => {
   try {
     //Freifach aus dem LS holen
-    const freifach = JSON.parse(localStorage.getItem('detailAnsichtLehrer'));
+    const freifach = JSON.parse(Encrypt.decryptString(localStorage.getItem('detailAnsichtLehrer')));
     freifachRef.value = freifach;
 
     //Frist aus dem Store holen

@@ -193,9 +193,12 @@ import NavBar from './components/NavBar.vue';
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import FooterComp from './components/FooterComp.vue';
+import { PiniaStore } from './Store/Store.js';
+
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
 
 //Store einbinden
-import { PiniaStore } from './Store/Store.js';
 const store = PiniaStore();
 
 //Variablen
@@ -205,7 +208,7 @@ const thirdPartyCookiesAlert = ref(false);
 onMounted(async () => {
   //Den Store beim Reload mit den gespeicherten Daten füllen
   if (localStorage.getItem(store.$id)) {
-    store.$state = JSON.parse(localStorage.getItem(store.$id));
+    store.$state = JSON.parse(Encrypt.decryptString(localStorage.getItem(store.$id)));
   }
 
   //Fristen holen und setzen

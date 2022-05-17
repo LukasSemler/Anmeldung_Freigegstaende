@@ -358,7 +358,6 @@
               </div>
             </div>
           </div>
-          
 
           <br />
           <br />
@@ -388,6 +387,8 @@ import {
 import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { PiniaStore } from '../Store/Store.js';
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
 
 const Store = PiniaStore();
 
@@ -429,9 +430,10 @@ onMounted(async () => {
   }
 
   //Freifach wird aus dem LS geladen
-  let ausgaehltesFreifach = JSON.parse(localStorage.getItem('AuswahlFreifach'));
+  let ausgaehltesFreifach = JSON.parse(
+    Encrypt.decryptString(localStorage.getItem('AuswahlFreifach')),
+  );
   Object.assign(FreifachDatenObjekt, ausgaehltesFreifach);
-
 
   //Leitender Lehrer bekommen
   let { data: Lehrerdata, status } = await axios.get(

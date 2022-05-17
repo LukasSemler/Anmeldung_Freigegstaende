@@ -578,6 +578,9 @@ import { PiniaStore } from '../Store/Store.js';
 import useValidate from '@vuelidate/core';
 import { required, numeric, minValue } from '@vuelidate/validators';
 
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
+
 //#region Vulidate
 let stateVariablen = reactive({
   titel: '',
@@ -647,7 +650,7 @@ let admin = ref(null);
 onMounted(() => {
   if (localStorage.getItem('changeFach')) {
     try {
-      let fach = JSON.parse(localStorage.getItem('changeFach'));
+      let fach = JSON.parse(Encrypt.decryptString(localStorage.getItem('changeFach')));
       console.log(fach);
       if (fach.admin) {
         admin.value = true;

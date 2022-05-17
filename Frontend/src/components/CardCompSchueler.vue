@@ -217,6 +217,9 @@ import { useRouter } from 'vue-router';
 import moment from 'moment';
 
 import { PiniaStore } from '../Store/Store.js';
+import { EncryptStorage } from 'encrypt-storage';
+
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
 
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let faecher = ref([]);
@@ -250,7 +253,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 function detail(fach) {
   try {
     localStorage.removeItem('AuswahlFreifach');
-    localStorage.setItem('AuswahlFreifach', JSON.stringify(fach));
+    localStorage.setItem('AuswahlFreifach', Encrypt.encryptString(JSON.stringify(fach)));
     router.push('/freifachDetail');
   } catch (error) {}
 }

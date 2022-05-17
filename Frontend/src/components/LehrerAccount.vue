@@ -418,8 +418,12 @@ import moment from 'moment';
 //Router impotieren
 import { useRouter } from 'vue-router';
 
-//Store einbinden
 import { PiniaStore } from '../Store/Store.js';
+
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
+
+//Store einbinden
 const store = PiniaStore();
 
 //Router erstellen
@@ -476,10 +480,10 @@ function bearbeiten(fach) {
       try {
         //Fach entfernen falls gesetzt
         localStorage.removeItem('changeFach');
-        localStorage.setItem('changeFach', JSON.stringify(fach));
+        localStorage.setItem('changeFach', Encrypt.encryptString(JSON.stringify(fach)));
         router.push('/addFach');
       } catch (error) {
-        localStorage.setItem('changeFach', JSON.stringify(fach));
+        localStorage.setItem('changeFach', Encrypt.encryptString(JSON.stringify(fach)));
         router.push('/addFach');
         console.log(error);
       }
@@ -537,7 +541,7 @@ async function fachDel() {
 }
 
 function detail(fach) {
-  localStorage.setItem('detailAnsichtLehrer', JSON.stringify(fach));
+  localStorage.setItem('detailAnsichtLehrer', Encrypt.encryptString(JSON.stringify(fach)));
   router.push('/freifachDetailLehrer');
 }
 </script>

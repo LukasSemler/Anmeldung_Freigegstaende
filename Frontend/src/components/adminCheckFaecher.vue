@@ -258,8 +258,12 @@ import {
 } from '@headlessui/vue';
 import { ExclamationIcon } from '@heroicons/vue/outline';
 
-//Store einbinden
 import { PiniaStore } from '../Store/Store.js';
+
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
+
+//Store einbinden
 const store = PiniaStore();
 
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
@@ -349,10 +353,10 @@ function change(fach) {
     try {
       localStorage.clearItem('changeFach');
       fach.admin = true;
-      localStorage.setItem('changeFach', JSON.stringify(fach));
+      localStorage.setItem('changeFach', Encrypt.encryptString(JSON.stringify(fach)));
     } catch {
       fach.admin = true;
-      localStorage.setItem('changeFach', JSON.stringify(fach));
+      localStorage.setItem('changeFach', Encrypt.encryptString(JSON.stringify(fach)));
       router.push('/addFach');
     }
   } else {

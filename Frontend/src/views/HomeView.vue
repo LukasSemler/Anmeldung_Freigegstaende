@@ -329,6 +329,8 @@ import { computed, onMounted, ref } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { PiniaStore } from '../Store/Store.js';
+import { EncryptStorage } from 'encrypt-storage';
+const Encrypt = new EncryptStorage('AnmeldungFreigegenstaende_EncryptKEY');
 
 const serverAdress = import.meta.env.VITE_SERVER_ADRESS;
 let Freifaecherliste = ref([]);
@@ -437,7 +439,7 @@ function VoraussetzungenVonDbNutzbarMachen() {
 function detail(freifachItem) {
   //Freifach im LocalStorage setzen
   localStorage.removeItem('AuswahlFreifach');
-  localStorage.setItem('AuswahlFreifach', JSON.stringify(freifachItem));
+  localStorage.setItem('AuswahlFreifach', Encrypt.encryptString(JSON.stringify(freifachItem)));
 
   //Weiterleitung auf Detailseite
   router.push('/freifachDetail');
