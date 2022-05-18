@@ -137,11 +137,11 @@
       <div v-if="faecher.length > 0" class="max-w-7xl mx-auto">
         <div>
           <div class="flex flex-row">
-            <div class="flex flex-row justify-center flex-wrap">
+            <div class="flex flex-row justify-center flex-wrap bg-red-200">
               <div
                 v-for="(fach, i) of faecher"
                 :key="i"
-                class="bg-white shadow-xl border overflow-hidden sm:rounded-lg mx-2 my-4 w-4/12"
+                class="bg-white shadow-xl border overflow-hidden rounded-lg mx-2 my-4 md:w-4/12 sm:w-7/12"
               >
                 <div class="flex-shrink-0">
                   <img

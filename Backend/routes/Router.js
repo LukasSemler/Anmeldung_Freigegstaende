@@ -87,7 +87,7 @@ router.get('/getFaecherSchueler/:id', userIsLoggedIn, asyncHandler(getFaecherSch
 // ! _______________________________________________________________________________________________
 
 // *Routen für Lehrer
-router.get('/getFreifaecherLehrer', userIsLoggedIn, asyncHandler(getFreifaecherLehrer));
+router.get('/getFreifaecherLehrer', asyncHandler(getFreifaecherLehrer));
 router.patch('/accepDeclineStudent/:id', userIsLoggedIn, asyncHandler(accepDeclineStudent));
 router.get('/getSchuelerFaecher', userIsLoggedIn, asyncHandler(getSchuelerFaecher));
 
