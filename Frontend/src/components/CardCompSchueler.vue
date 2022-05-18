@@ -137,7 +137,7 @@
       <div v-if="faecher.length > 0" class="max-w-7xl mx-auto">
         <div>
           <div class="flex flex-row">
-            <div class="flex flex-row justify-center flex-wrap bg-red-200">
+            <div class="flex flex-row justify-center flex-wrap ">
               <div
                 v-for="(fach, i) of faecher"
                 :key="i"
