@@ -768,6 +768,8 @@ async function changeData() {
     };
   }
 
+
+  console.log(fachObj);
   const res = await axios.patch(`/changeFach/${fachObj.id}`, fachObj);
 
   //schauen ob der status 200 ist

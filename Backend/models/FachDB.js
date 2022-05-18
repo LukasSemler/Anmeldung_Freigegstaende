@@ -113,7 +113,8 @@ const getFreifaecherDB = async (email) => {
            nachname,
            email, 
            voraussetzungen, 
-           icon
+           icon,
+           gewichtung
     from freifach_tbl
              JOIN freifach_betreut fb on freifach_tbl.f_id = fb.f_fk
              JOIN lehrer_tbl lt on lt.l_id = fb.l_fk WHERE email = $1;`,
@@ -160,7 +161,7 @@ const changeFachDB = async (id, body) => {
           body.voraussetzungen,
           body.linkThumbnail,
           body.gewichtung,
-          id,
+          Number(id),
         ],
       );
     } else {
@@ -174,7 +175,7 @@ const changeFachDB = async (id, body) => {
           body.numberMin,
           body.voraussetzungen,
           body.gewichtung,
-          id,
+          Number(id),
         ],
       );
     }

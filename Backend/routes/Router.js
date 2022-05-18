@@ -66,7 +66,8 @@ const userIsLoggedIn = (req, res, next) => {
 router.post('/fachErstellen', userIsLoggedIn, asyncHandler(fachErstellen));
 router.post('/fachThumbnail', userIsLoggedIn, asyncHandler(fachThumbnailSpeichern));
 router.delete('/delFach/:id', userIsLoggedIn, asyncHandler(fachDel));
-router.get('/getFreifaecher', cache('5 minutes'), asyncHandler(getFreifaecher));
+// router.get('/getFreifaecher', cache('5 minutes'), asyncHandler(getFreifaecher));
+router.get('/getFreifaecher', asyncHandler(getFreifaecher));
 router.patch('/changeFach/:id', userIsLoggedIn, asyncHandler(changeFach));
 
 // ! _______________________________________________________________________________________________
@@ -102,7 +103,8 @@ router.patch('/acceptFach/:id', userIsLoggedIn, asyncHandler(acceptFach));
 //* Routen für Verwaltung
 router.post('/setFristenChangeTimeLine', userIsLoggedIn, asyncHandler(setFristenChangeTimeLine));
 router.get('/getAdminTimeLine', userIsLoggedIn, asyncHandler(getAdminTimeLine));
-router.get('/getFristen', cache('5 minutes'), asyncHandler(getFristen));
+// router.get('/getFristen', cache('5 minutes'), asyncHandler(getFristen));
+router.get('/getFristen', asyncHandler(getFristen));
 router.post('/lehrerSchuelerAnmelden', asyncHandler(lehrerSchülerAnmelden));
 router.post('/lehrerSchuelerAbmelden', asyncHandler(lehrerSchülerAbmelden));
 router.get('/getFaecherFromStudent/:id', userIsLoggedIn, asyncHandler(getFaecherFromStudent));
