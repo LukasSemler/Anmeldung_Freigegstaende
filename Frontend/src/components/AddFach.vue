@@ -739,9 +739,11 @@ async function sendData() {
 }
 
 async function changeData() {
+  // leeres Fach Objekt erstellen
   let fachObj;
 
-  if (imageSchicken.value != null) {
+  // Schauen ob ein Bild hochgeladen wurde
+  if (stateVariablen.imageSchicken.value == null) {
     fachObj = {
       id: id.value,
       titel: stateVariablen.titel,
@@ -767,7 +769,6 @@ async function changeData() {
       gewichtung: selectedGewichtung.value,
     };
   }
-
 
   console.log(fachObj);
   const res = await axios.patch(`/changeFach/${fachObj.id}`, fachObj);
