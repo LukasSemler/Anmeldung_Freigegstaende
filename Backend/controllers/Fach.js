@@ -17,8 +17,6 @@ const fachErstellen = async (req, res) => {
   console.log('Die Route wurde aufgerufen');
   const body = req.body;
 
-  console.log(body);
-
   if (!body) {
     res.status(500).send('Keine Daten im Body bekommen');
   } else {
@@ -33,21 +31,25 @@ const fachErstellen = async (req, res) => {
       lehrer,
     } = body;
 
-    if (
-      await fachErstellenDB(
-        titel,
-        beschreibung,
-        linkThumbnail,
-        selected,
-        numberMin,
-        numberMax,
-        voraussetzungen,
-        lehrer,
-      )
-    ) {
-      res.status(200).send('Fach wurde erfolgreich eingefügt');
+    let result = await fachErstellenDB(
+      titel,
+      beschreibung,
+      linkThumbnail,
+      selected,
+      numberMin,
+      numberMax,
+      voraussetzungen,
+      lehrer,
+    );
+
+    console.log(result);
+
+    if (result) {
+      return res.status(200).send('Fach wurde erfolgreich eingefügt');
+    } else if (result == null) {
+      return res.status(409).send('Fach existiert bereits');
     } else {
-      res.status(500).send('Es ist ein Fehler beim einfügen des Fachs aufgetreten');
+      return res.status(500).send('Es ist ein Fehler beim einfügen des Fachs aufgetreten');
     }
   }
 };

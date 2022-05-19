@@ -25,22 +25,32 @@ const fachErstellenDB = async (
       lehrer.email,
     ]);
 
+    // Schaue ob das Freifach schon vorhanden ist
+    const { rows: vorhanden } = await client.query(
+      'SELECT titel from freifach_tbl where titel = $1;',
+      [titel],
+    );
+
+    if (vorhanden[0]) return null;
+
     //Freifach erstellen
-    await client.query(
-      'INSERT INTO freifach_tbl (titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, voraussetzungen) VALUES ($1, $2, $3, $4, $5, $6, $7);',
+    const { rows } = await client.query(
+      'INSERT INTO freifach_tbl (titel, beschreibung, thumbnail, anzahl_stunden, min_schueler, max_schueler, voraussetzungen) VALUES ($1, $2, $3, $4, $5, $6, $7) returning *;',
       [titel, beschreibung, linkThumbnail, selected, numberMin, numberMax, voraussetzungen],
     );
 
+    const fachID = rows[0].f_id;
+
     //ID vom Fach bekommen
-    const fachID = await client.query('SELECT f_id FROM freifach_tbl WHERE titel = $1;', [titel]);
+    // const fachID = await client.query('SELECT f_id FROM freifach_tbl WHERE titel = $1;', [titel]);
 
     console.log('LehrerID: ' + lehrerID.rows[0].l_id);
-    console.log('FachID: ' + fachID.rows[0].f_id);
+    console.log('FachID: ' + fachID);
 
     //Freifach zu Lehrer hinzufügen
     await client.query('INSERT INTO freifach_betreut (l_fk, f_fk) VALUES ($1, $2);', [
       lehrerID.rows[0].l_id,
-      fachID.rows[0].f_id,
+      fachID,
     ]);
 
     //Transaktion abschließen

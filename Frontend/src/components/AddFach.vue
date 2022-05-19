@@ -90,6 +90,72 @@
       </Dialog>
     </TransitionRoot>
 
+    <!--Modal delete -->
+    <TransitionRoot as="template" :show="showModalErr">
+      <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="showModalErr = false">
+        <div
+          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+        >
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+          >
+            <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </TransitionChild>
+
+          <!-- This element is to trick the browser into centering the modal contents. -->
+          <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true"
+            >&#8203;</span
+          >
+          <TransitionChild
+            as="template"
+            enter="ease-out duration-300"
+            enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            enter-to="opacity-100 translate-y-0 sm:scale-100"
+            leave="ease-in duration-200"
+            leave-from="opacity-100 translate-y-0 sm:scale-100"
+            leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+          >
+            <div
+              class="relative inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
+            >
+              <div class="sm:flex sm:items-start">
+                <div
+                  class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+                >
+                  <ExclamationIcon class="h-6 w-6 text-red-600" aria-hidden="true" />
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                  <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">
+                    Error
+                  </DialogTitle>
+                  <div class="mt-2">
+                    <p class="text-sm text-gray-500">
+                      Es ist ein Fehler aufgetreten, möglicherweiße gibt es schon ein Freifach mit
+                      diesem Namen
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 sm:ml-3 sm:w-auto sm:text-sm"
+                  @click="showModalErr = false"
+                >
+                  Verstanden
+                </button>
+              </div>
+            </div>
+          </TransitionChild>
+        </div>
+      </Dialog>
+    </TransitionRoot>
     <div class="flex justify-center mt-6">
       <div class="mx-6 w-2/3">
         <form class="space-y-8 divide-y divide-gray-300">
@@ -545,7 +611,7 @@ import {
   ListboxOptions,
 } from '@headlessui/vue';
 import { CheckIcon, SelectorIcon } from '@heroicons/vue/solid';
-import { TrashIcon } from '@heroicons/vue/solid';
+import { TrashIcon, ExclamationIcon } from '@heroicons/vue/solid';
 import {
   Dialog,
   DialogOverlay,
@@ -615,6 +681,7 @@ let imageSchicken = ref(null);
 let voraussetzungen = ref([]);
 
 let showModal = ref(false);
+let showModalErr = ref(false);
 let state = ref('add');
 let id = ref(null);
 let textModal = ref('Das Freifach wurde erfolgreich beim Abteilungvorstand eingereicht');
@@ -704,37 +771,53 @@ function onFileChanged(event) {
 
 //Daten + Bild an Backend schicken
 async function sendImage() {
-  //FormData bauen
-  let formData = new FormData();
-  formData.append('image', stateVariablen.imageSchicken);
-  formData.append('titel', stateVariablen.titel);
-  formData.append('datentyp', stateVariablen.imageSchicken.datentyp);
+  try {
+    //FormData bauen
+    let formData = new FormData();
+    formData.append('image', stateVariablen.imageSchicken);
+    formData.append('titel', stateVariablen.titel);
+    formData.append('datentyp', stateVariablen.imageSchicken.datentyp);
 
-  //an server schicken
-  axios.post(`/fachThumbnail`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+    //an server schicken
+    await axios.post(`/fachThumbnail`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+
+    return true;
+  } catch (error) {
+    console.log(error.message);
+
+    return false;
+  }
 }
 
 //Sendet eingegebenen Daten an den Server, der diese dann in der DB speichert
 async function sendData() {
-  const fachObj = {
-    titel: stateVariablen.titel,
-    beschreibung: stateVariablen.beschreibung,
-    numberMin: stateVariablen.numberMin,
-    numberMax: stateVariablen.numberMax,
-    selected: stateVariablen.selected,
-    voraussetzungen: stateVariablen.voraussetzungen,
-    linkThumbnail: `/images/${stateVariablen.titel}.${stateVariablen.imageSchicken.datentyp}`,
-    // lehrer: Store.state.aktiverUser,
-    lehrer: store.getAktivenUser,
-  };
+  try {
+    const fachObj = {
+      titel: stateVariablen.titel,
+      beschreibung: stateVariablen.beschreibung,
+      numberMin: stateVariablen.numberMin,
+      numberMax: stateVariablen.numberMax,
+      selected: stateVariablen.selected,
+      voraussetzungen: stateVariablen.voraussetzungen,
+      linkThumbnail: `/images/${stateVariablen.titel}.${stateVariablen.imageSchicken.datentyp}`,
+      lehrer: store.getAktivenUser,
+    };
 
-  let { status } = axios.post('/fachErstellen', fachObj);
-  if (status == 210) {
-    throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
+    let { status } = await axios.post('/fachErstellen', fachObj);
+    if (status == 210) {
+      throw 'Fehler beim Fach erstellen, auf der Datenbankseite';
+    }
+
+    return true;
+  } catch (error) {
+    console.log('____________________>');
+    showModalErr.value = true;
+
+    return false;
   }
 }
 
@@ -786,13 +869,7 @@ async function changeData() {
 
 //Funktion wenn man auf Erstellen klickt, diese wählt ob gechanched oder neu erstellt wird
 async function fachErstellen(e) {
-  //Frist aus dem Store holen
-  // let fristEinreichen = store.getFristEinreichen.original;
-  // let aktuellesDatum = new Date();
-
-  //Schauen ob das Datum vor oder nach der Frist ist
-  // let erg = moment(fristEinreichen).isBefore(aktuellesDatum);
-
+  e.preventDefault();
   //Facherstellen-Operation starten wenn Frist es erlaubt
   if (state.value == 'add') {
     try {
@@ -800,13 +877,17 @@ async function fachErstellen(e) {
 
       if (!v$.value.$error) {
         if (image.value) {
-          console.log('success');
-          //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
-          sendImage();
           //Freifachdaten dem Server für Eintrag schicken schicken
-          sendData();
+          const ergData = await sendData();
+          let ergImage;
 
-          showModal.value = true;
+          if (ergData) {
+            //Dem Server das ImageSchicken, damit dieser es im Public speichern kann
+            ergImage = await sendImage();
+          }
+
+          if (ergImage && ergData) showModal.value = true;
+          else showModalErr.value = true;
         } else console.log('Bild fehlt');
       } else {
         console.log('Fehler');
@@ -814,8 +895,8 @@ async function fachErstellen(e) {
 
       e.preventDefault();
     } catch (error) {
+      showModal.value = true;
       e.preventDefault();
-      console.log(error.message);
     } finally {
       e.preventDefault();
     }
