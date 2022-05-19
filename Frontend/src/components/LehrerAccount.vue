@@ -218,7 +218,7 @@
           <a
             v-for="tab in tabs"
             :key="tab.name"
-            @click="router.push(tab.link)"
+            @click="changeSite(tab.link)"
             :class="[
               tab.current
                 ? 'border-htl_rot text-htl_rot'
@@ -530,5 +530,19 @@ async function fachDel() {
 function detail(fach) {
   localStorage.setItem('detailAnsichtLehrer', Encrypt.encryptString(JSON.stringify(fach)));
   router.push('/freifachDetailLehrer');
+}
+
+function changeSite(to) {
+  //Frist aus dem Store holen
+  fristEinreichen.value = store.getFristEinreichen.original;
+  let aktuellesDatum = new Date();
+
+  //Schauen ob das Datum vor oder nach der Frist ist
+  let erg = moment(fristEinreichen.value).isBefore(aktuellesDatum);
+  if (erg) {
+    showModalWarning.value = true;
+  } else {
+    router.push(to);
+  }
 }
 </script>
