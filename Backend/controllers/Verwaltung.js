@@ -44,10 +44,10 @@ const lehrerSchülerAnmelden = async (req, res) => {
   const GoogleUser = req.body;
 
   // Checken ob User, ein HTLWienwest-Mitglied ist
-  // if (!GoogleUser.email.includes('@htlwienwest.at')) {
-  //   res.status(210).send('Du bist leider kein Mitglied der HTL WienWest!');
-  //   return;
-  // }
+  if (!GoogleUser.email.includes('@htlwienwest.at')) {
+    res.status(210).send('Du bist leider kein Mitglied der HTL WienWest!');
+    return;
+  }
 
   // Schülerklasse herausfinden
   const SchuelerKlasseHerausfinden = async () => {
