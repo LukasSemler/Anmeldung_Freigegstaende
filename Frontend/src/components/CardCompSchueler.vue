@@ -134,14 +134,14 @@
     </TransitionRoot>
 
     <div class="flex-row flex-wrap flex justify-center mt-8">
-      <div v-if="faecher.length > 0" class="max-w-7xl mx-auto">
+      <div v-if="faecher.length > 0" class="">
         <div>
           <div class="flex flex-row">
-            <div class="flex flex-row justify-center flex-wrap ">
+            <div class="flex flex-row justify-center flex-wrap w-full">
               <div
                 v-for="(fach, i) of faecher"
                 :key="i"
-                class="bg-white shadow-xl border overflow-hidden rounded-lg mx-2 my-4 md:w-4/12 sm:w-7/12"
+                class="bg-white shadow-xl border overflow-hidden rounded-lg mx-2 my-4 sm:w-4/12 w-full"
               >
                 <div class="flex-shrink-0">
                   <img
